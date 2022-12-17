@@ -9,16 +9,21 @@ public class UnitManager : MonoBehaviour
     [SerializeField] private Transform moveTransformPosition;
     private NavMeshAgent navMeshAgent;
     public int unitHP;
-    public int movementSpeed;
+    public float movementSpeed;
+    public int damage;
+
     // Start is called before the first frame update
     private void Awake() {
         this.navMeshAgent = this.GetComponent<NavMeshAgent>();
-        this.unitModel = new Unit(this.name, 10, movementSpeed, UnitState.MOVING, ZONE.RIGHTZONE);
+        this.unitModel = new Unit(this.name, movementSpeed, unitHP, UnitState.MOVING, ZONE.RIGHTZONE, damage);
         this.unitModel.hp = unitHP;
     }
     void Start()
     {
-        this.moveTransformPosition = GameObject.Find("Pos1").transform;
+        if(moveTransformPosition == null)
+            this.moveTransformPosition = GameObject.Find("Pos1").transform;
+
+        navMeshAgent.speed = movementSpeed;
     }
 
     // Update is called once per frame
@@ -29,10 +34,18 @@ public class UnitManager : MonoBehaviour
         }
     }
 
+    public void InflictDamage(int damage) {
+        this.unitModel.hp -= damage;
+    }
+
+    public int getHP() {
+        return unitModel.hp;
+    }
+
     void LateUpdate()
     {
-        if(unitModel.hp < 0){
-            Destroy(this);
+        if(unitModel.hp <= 0){
+            Destroy(this.gameObject);
         }
     }
 }

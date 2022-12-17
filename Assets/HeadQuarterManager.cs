@@ -9,7 +9,7 @@ public class HeadQuarterManager : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        buidlingModel = new Building(this.name, this.hp, BuildingType.HQ);
+        buidlingModel = new Building(this.name, this.hp, BuildingType.HQ, 0);
     }
 
     // Update is called once per frame
