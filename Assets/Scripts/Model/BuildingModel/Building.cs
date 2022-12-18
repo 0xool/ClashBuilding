@@ -9,8 +9,8 @@ public class Building {
 
         this.damage = damage;
     }
-    string name;
-    int hp;
-    int damage;
-    BuildingType buildingType;
+    public string name;
+    public int hp;
+    public int damage;
+    public BuildingType buildingType;
 }

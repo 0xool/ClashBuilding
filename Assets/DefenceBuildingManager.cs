@@ -2,16 +2,14 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class DefenceBuildingManager : MonoBehaviour
+public class DefenceBuildingManager : MonoBehaviour, IUnit
 {
     public Building buildingModel;
     public int hp;
     public int damage;
     private List<GameObject> enemiesInRange;
     public GameObject bulletPrefab;
-    private float reloadTime = 0;
-    public float reloadCooldown = 10;
-    private bool isReloading = false;
+    public int reloadTime = 0;
 
     // Start is called before the first frame update
     void Awake()
@@ -26,40 +24,50 @@ public class DefenceBuildingManager : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if(enemiesInRange.Count > 0 && !isReloading){
-            // We Attack
-            BulletHandler bullet = Instantiate(bulletPrefab, this.transform.position, this.transform.rotation).GetComponent<BulletHandler>();
-            bullet.target = enemiesInRange[0];
-            bullet.bulletDamage = this.damage;
-            if(enemiesInRange[0].GetComponent<UnitManager>().getHP() - damage <= 0){
-                enemiesInRange.RemoveAt(0);
+            if(enemiesInRange.Count > 0){
+                GameObject enemy = enemiesInRange[0];
+                var gun = this.gameObject.GetComponentInChildren<GunHandler>();
+
+                if(gun.CanShoot()){
+                    gun.Shoot(enemy, bulletPrefab, this.buildingModel.damage);
+                    if(enemy.GetComponent<IUnit>().GetHP() - damage <= 0 ){
+                        RemoveEnemy(enemy);
+                    }
+                }
             }
-
-            isReloading = true;
-        }
-
-        if(isReloading){
-            if(reloadTime < reloadCooldown){
-                reloadTime += Time.deltaTime;
-            }else{
-                isReloading = false;
-                reloadTime = 0;
-            }
-        }
-
     }
 
-    void OnTriggerEnter(Collider collisionInfo)
-    {
-        if(collisionInfo.gameObject.CompareTag("Player2")){
-            enemiesInRange.Add(collisionInfo.gameObject);
-        }
+    public int GetReloadTime() {
+        return this.reloadTime;
     }
 
-        void OnTriggerExit(Collider collisionInfo)
-    {
-        if(collisionInfo.gameObject.CompareTag("Player2")){
-            enemiesInRange.Remove(collisionInfo.gameObject);
+    void LateUpdate() {
+        if(this.buildingModel.hp <= 0){
+            Destroy(this.gameObject);
+        }    
+    }
+
+    public int GetHP() {
+        return this.buildingModel.hp;
+    }
+
+    public void AttackEnemy(GameObject enemy) {
+        enemiesInRange.Add(enemy);
+    }
+
+        public void RemoveEnemy(GameObject enemy) {
+        enemiesInRange.Remove(enemy);
+    }
+
+    public void InflictDamage(int damage) {
+        this.buildingModel.hp -= damage;
+    }
+
+    string GetEnemyTag() {
+        if(this.gameObject.CompareTag("Player1")){
+            return "Player2";
         }
+
+        return "Player1";
     }
 }

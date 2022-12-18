@@ -14,6 +14,10 @@ public class BuildingManager : MonoBehaviour
         
     }
 
+    public int GetHP() {
+        return 0;
+    }
+
     // Update is called once per frame
     void Update()
     {
