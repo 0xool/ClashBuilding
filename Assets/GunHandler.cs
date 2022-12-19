@@ -4,14 +4,6 @@ using UnityEngine;
 
 public class GunHandler : MonoBehaviour
 {
-    public enum GunType {
-        UNIT,
-        BUILDING
-    }
-
-    public GunType gunType;
-    UnitManager unitManager;
-    DefenceBuildingManager buildingManager;
     private float reloadTime = 0;
     public float reloadCooldown = 10;
     private bool isReloading = false;
@@ -19,12 +11,6 @@ public class GunHandler : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        if(gunType == GunType.UNIT){
-            unitManager = this.gameObject.GetComponentInParent<UnitManager>();
-        }else{
-            buildingManager = this.gameObject.GetComponentInParent<DefenceBuildingManager>();
-        }
-
         reloadCooldown = this.transform.parent.GetComponent<IUnit>().GetReloadTime();
     }
 
@@ -42,6 +28,7 @@ public class GunHandler : MonoBehaviour
     }
 
     public void Shoot(GameObject target, GameObject bulletPrefab, int damage) {
+        Debug.Log(target.name);
         BulletHandler bullet = Instantiate(bulletPrefab, this.transform.position, this.transform.rotation).GetComponent<BulletHandler>();
         bullet.target = target;
         bullet.enemyTag = GetEnemyTag();
@@ -64,26 +51,14 @@ public class GunHandler : MonoBehaviour
     void OnTriggerEnter(Collider collisionInfo)
     {
         if(collisionInfo.CompareTag(GetEnemyTag())){
-            if(this.gunType == GunType.UNIT){
-                unitManager.AttackEnemy(collisionInfo.gameObject);
-            }
-
-            if(this.gunType == GunType.BUILDING){
-                buildingManager.AttackEnemy(collisionInfo.gameObject);
-            }
+            this.transform.parent.GetComponent<IUnit>().AttackEnemy(collisionInfo.gameObject);            
         }
     }
 
     void OnTriggerExit(Collider collisionInfo)
     {
         if(collisionInfo.gameObject.CompareTag(GetEnemyTag())){
-            if(this.gunType == GunType.UNIT){
-                unitManager.RemoveEnemy(collisionInfo.gameObject);
-            }
-
-            if(this.gunType == GunType.BUILDING){
-                buildingManager.RemoveEnemy(collisionInfo.gameObject);
-            }
+            this.transform.parent.GetComponent<IUnit>().RemoveEnemyAsTarget(collisionInfo.gameObject);
         }
     }
 }

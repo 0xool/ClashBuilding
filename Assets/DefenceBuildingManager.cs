@@ -31,7 +31,7 @@ public class DefenceBuildingManager : MonoBehaviour, IUnit
                 if(gun.CanShoot()){
                     gun.Shoot(enemy, bulletPrefab, this.buildingModel.damage);
                     if(enemy.GetComponent<IUnit>().GetHP() - damage <= 0 ){
-                        RemoveEnemy(enemy);
+                        RemoveEnemyAsTarget(enemy);
                     }
                 }
             }
@@ -55,7 +55,7 @@ public class DefenceBuildingManager : MonoBehaviour, IUnit
         enemiesInRange.Add(enemy);
     }
 
-    public void RemoveEnemy(GameObject enemy) {
+    public void RemoveEnemyAsTarget(GameObject enemy) {
         enemiesInRange.Remove(enemy);
     }
 

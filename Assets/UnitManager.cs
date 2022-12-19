@@ -35,6 +35,14 @@ public class UnitManager : MonoBehaviour, IUnit
     // Update is called once per frame
     void Update()
     {   
+        if(enemiesInRange.Count == 0){
+            this.navMeshAgent.isStopped = false;
+            this.unitModel.unitState = UnitState.MOVING;
+        }else{
+            this.navMeshAgent.isStopped = true;
+            this.unitModel.unitState = UnitState.ATTACKING;
+        }
+
         if(unitModel.unitState == UnitState.MOVING){
             float deltaPosToDestinationX = Mathf.Abs(this.transform.position.x - moveTransformPosition.position.x);
             float deltaPosToDestinationY =  Mathf.Abs(this.transform.position.y - moveTransformPosition.position.y);
@@ -48,16 +56,13 @@ public class UnitManager : MonoBehaviour, IUnit
             this.navMeshAgent.isStopped = true;          
             GameObject enemy = enemiesInRange[0];
             if(enemy == null){
-                RemoveEnemy(enemy);
+                RemoveEnemyAsTarget(enemy);
                 return;
             }
             var gun = this.gameObject.GetComponentInChildren<GunHandler>();
 
             if(gun.CanShoot()){
                 gun.Shoot(enemy, bulletPrefab, this.unitModel.damage);
-                   if(enemy.GetComponent<IUnit>().GetHP() - damage <= 0){
-                        RemoveEnemy(enemy);
-                    }
             }
 
         }
@@ -107,17 +112,12 @@ public class UnitManager : MonoBehaviour, IUnit
     }
 
     public void AttackEnemy(GameObject enemy) {
-        this.unitModel.unitState = UnitState.ATTACKING;
         enemiesInRange.Add(enemy);
     }
 
-    public void RemoveEnemy(GameObject enemy){
+    public void RemoveEnemyAsTarget(GameObject enemy){
         this.unitModel.unitState = UnitState.MOVING;
         enemiesInRange.Remove(enemy);
-        if(enemiesInRange.Count == 0){
-            this.navMeshAgent.isStopped = false;
-            this.unitModel.unitState = UnitState.MOVING;
-        }
     }
 
 }
