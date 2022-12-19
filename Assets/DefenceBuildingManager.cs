@@ -55,7 +55,7 @@ public class DefenceBuildingManager : MonoBehaviour, IUnit
         enemiesInRange.Add(enemy);
     }
 
-        public void RemoveEnemy(GameObject enemy) {
+    public void RemoveEnemy(GameObject enemy) {
         enemiesInRange.Remove(enemy);
     }
 

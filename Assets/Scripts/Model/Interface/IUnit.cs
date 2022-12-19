@@ -5,4 +5,4 @@ public interface IUnit {
     public void AttackEnemy(GameObject enemy);
     public void InflictDamage(int bulletDamage);
     public int GetReloadTime();
-}
+    }

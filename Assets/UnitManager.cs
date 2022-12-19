@@ -5,28 +5,7 @@ using UnityEngine.AI;
 
 public class UnitManager : MonoBehaviour, IUnit
 {
-    private Unit _unitModel;
-    private Unit unitModel{
-        get{
-            return _unitModel;
-        }set{
-            if(_unitModel != null){
-                if(value.unitState == UnitState.MOVING && _unitModel.unitState == UnitState.ATTACKING){
-                    navMeshAgent.isStopped = true;
-                    Debug.Log("ATTACIKNG");
-                }
-
-                if(value.unitState == UnitState.ATTACKING && _unitModel.unitState == UnitState.MOVING){
-                    navMeshAgent.isStopped = false;
-                    Debug.Log("MOVING");
-                }
-            }
-
-            
-
-            _unitModel = value;
-        }
-    }
+    private Unit unitModel;
 
     [SerializeField] private Transform moveTransformPosition;
     private NavMeshAgent navMeshAgent;
@@ -48,31 +27,55 @@ public class UnitManager : MonoBehaviour, IUnit
     }
     void Start()
     {
-        if(moveTransformPosition == null)
-            this.moveTransformPosition = GameObject.Find("Pos1").transform;
+        SetupMovmentDestination();
 
         navMeshAgent.speed = movementSpeed;
     }
 
     // Update is called once per frame
     void Update()
-    {    
+    {   
         if(unitModel.unitState == UnitState.MOVING){
+            float deltaPosToDestinationX = Mathf.Abs(this.transform.position.x - moveTransformPosition.position.x);
+            float deltaPosToDestinationY =  Mathf.Abs(this.transform.position.y - moveTransformPosition.position.y);
+            if(deltaPosToDestinationX + deltaPosToDestinationY < 3){
+                SetupMovmentDestinationHQ();
+            }
             navMeshAgent.destination = moveTransformPosition.position;
         }
 
         if(unitModel.unitState == UnitState.ATTACKING){  
             this.navMeshAgent.isStopped = true;          
             GameObject enemy = enemiesInRange[0];
+            if(enemy == null){
+                RemoveEnemy(enemy);
+                return;
+            }
             var gun = this.gameObject.GetComponentInChildren<GunHandler>();
 
             if(gun.CanShoot()){
                 gun.Shoot(enemy, bulletPrefab, this.unitModel.damage);
-                if(enemy.GetComponent<IUnit>().GetHP() - damage <= 0 ){
-                    RemoveEnemy(enemy);
-                }
+                   if(enemy.GetComponent<IUnit>().GetHP() - damage <= 0){
+                        RemoveEnemy(enemy);
+                    }
             }
 
+        }
+    }
+
+    void SetupMovmentDestination() {
+        if(this.gameObject.CompareTag("Player1")){
+            this.moveTransformPosition = GameObject.Find(UnitMovmentLocation.ZoneEnemyLeft).transform;
+        }else if (this.gameObject.CompareTag("Player2")) {
+            this.moveTransformPosition = GameObject.Find(UnitMovmentLocation.ZoneFriendlyLeft).transform;
+        }
+    }
+
+        void SetupMovmentDestinationHQ() {
+        if(this.gameObject.CompareTag("Player1")){
+            this.moveTransformPosition = GameObject.Find(UnitMovmentLocation.ZoneEnemyHQ).transform;
+        }else if (this.gameObject.CompareTag("Player2")) {
+            this.moveTransformPosition = GameObject.Find(UnitMovmentLocation.ZoneFriendlyHQ).transform;
         }
     }
 

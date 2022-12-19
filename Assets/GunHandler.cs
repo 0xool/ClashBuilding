@@ -46,7 +46,6 @@ public class GunHandler : MonoBehaviour
         bullet.target = target;
         bullet.enemyTag = GetEnemyTag();
         bullet.bulletDamage = damage;
-        Instantiate(bullet, this.transform.position, this.transform.rotation);
         isReloading = true;
     }
 
@@ -64,15 +63,12 @@ public class GunHandler : MonoBehaviour
 
     void OnTriggerEnter(Collider collisionInfo)
     {
-        Debug.Log(collisionInfo.name);
         if(collisionInfo.CompareTag(GetEnemyTag())){
             if(this.gunType == GunType.UNIT){
-                Debug.Log("UNIT"); 
                 unitManager.AttackEnemy(collisionInfo.gameObject);
             }
 
             if(this.gunType == GunType.BUILDING){
-                Debug.Log("BUILDING"); 
                 buildingManager.AttackEnemy(collisionInfo.gameObject);
             }
         }

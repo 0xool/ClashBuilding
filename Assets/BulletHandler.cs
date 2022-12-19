@@ -8,6 +8,7 @@ public class BulletHandler : MonoBehaviour
     public float bulletSpeed = 10;
     public int bulletDamage = 10;
     public string enemyTag;
+    private bool bulletHit = false;
     // Start is called before the first frame update
     void Start()
     {
@@ -17,20 +18,20 @@ public class BulletHandler : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-            if(target == null){
-                Destroy(this.gameObject);
-            }
-
-            transform.position = Vector3.MoveTowards(transform.position, target.transform
-            .position, bulletSpeed * Time.deltaTime);
+        if(target == null){
+            Destroy(this.gameObject);
+        }else{
+            transform.position = Vector3.MoveTowards(transform.position, target.transform.position, bulletSpeed * Time.deltaTime);
+        }
     }
 
     void OnTriggerEnter(Collider collisionInfo)
     {
-        if(collisionInfo.CompareTag(enemyTag)){
+        if(collisionInfo.CompareTag(enemyTag) && !bulletHit){
             IUnit unit = collisionInfo.gameObject.GetComponent<IUnit>();
-            unit.InflictDamage(bulletDamage);
             Destroy(this.gameObject);
+            unit.InflictDamage(bulletDamage);
+            bulletHit = true;
         }
     }
 }

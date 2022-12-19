@@ -27,12 +27,14 @@ public class GameManager : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if(playerOne.mainBaseHp == 0){
-            // Player One Loses
-        }
 
-        if(playerTwo.mainBaseHp == 0){
-            // Player Two Loses
+    }
+
+    public void GameOver(string player){
+        if(player == "Player1"){
+            Debug.Log("Game Over for Player1 and Player2 won.");
+        }else if (player == "Player2"){
+            Debug.Log("Game Over for Player2 and Player1 won.");
         }
     }
 }

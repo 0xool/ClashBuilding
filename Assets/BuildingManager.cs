@@ -22,7 +22,8 @@ public class BuildingManager : MonoBehaviour
     void Update()
     {
         if(timer > spawnInterval){
-            Instantiate(unit, new Vector3(this.transform.position.x - offsetSpawn,this.transform.position.y - (this.transform.localScale.x/2 - unit.transform.localScale.x/2),this.transform.position.z), this.transform.rotation);
+            var newUnit = Instantiate(unit, new Vector3(this.transform.position.x - offsetSpawn,this.transform.position.y - (this.transform.localScale.x/2 - unit.transform.localScale.x/2),this.transform.position.z), this.transform.rotation);
+            newUnit.tag = this.gameObject.tag;
             timer = 0;
         }else{
             timer += Time.deltaTime;
