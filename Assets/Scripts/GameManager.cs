@@ -1,14 +1,19 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 using GameModel;
+using TMPro;
 
 public class GameManager : MonoBehaviour
 {
     private Player playerOne;
     private Player playerTwo;
+    
+    float resourceTimer = 0;
+    public float addResourceInterval = 1;
     //============================================================================================================
-    private void SetTestPLayers()
+    private void SetTestPlayers()
     { 
         playerOne.name = "Tom";
         playerTwo.name = "Jack";
@@ -22,19 +27,60 @@ public class GameManager : MonoBehaviour
     }
     void Start()
     {
-        SetTestPLayers();
+        SetTestPlayers();
     }
     // Update is called once per frame
     void Update()
     {
+        if (resourceTimer >= addResourceInterval) {
+            resourceTimer = resourceTimer - addResourceInterval;
+            ManageTheResources();
+        }
 
+        resourceTimer += Time.deltaTime;
+    }
+
+    void ManageTheResources() {
+        Debug.Log(playerTwo.resourceValue.ToString());
+        playerOne.AddResources();
+        playerTwo.AddResources();
+        GameObject.Find("ResourcePanel").GetComponentInChildren<TMP_Text>().text = playerTwo.resourceValue.ToString();
     }
 
     public void GameOver(string player){
+        GameObject.Find("GameOverPlayerName").GetComponent<TMP_Text>().enabled = true;
+        GameObject.Find("GameOverText").GetComponent<TMP_Text>().enabled = true ;
+
         if(player == "Player1"){
-            Debug.Log("Game Over for Player1 and Player2 won.");
+            GameObject.Find("GameOverPlayerName").GetComponent<TMP_Text>().text = "Player Two Won";
         }else if (player == "Player2"){
-            Debug.Log("Game Over for Player2 and Player1 won.");
+            GameObject.Find("GameOverPlayerName").GetComponent<TMP_Text>().text = "Player One Won";
         }
+    }
+
+    public int GetPlayerResource(string playerTag) {
+        if(playerTag == "Player1"){
+            return playerOne.resourceValue;
+        }
+        if(playerTag == "Player2"){
+            return playerTwo.resourceValue;
+        }
+
+        return 0;
+    }
+
+    public bool UseResource(int amount, string playerTag) {
+        
+        if(playerTag == "Player1"){
+            if(playerOne.resourceValue < amount) return false;
+            playerOne.resourceValue -= amount;
+        }
+
+        if(playerTag == "Player2"){
+            if(playerTwo.resourceValue < amount) return false;
+            playerTwo.resourceValue -= amount;
+        }
+
+        return false;
     }
 }

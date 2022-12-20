@@ -33,6 +33,16 @@ namespace GameModel
             }
         }
 
+        private int _currentResourcePower = 100;
+        public int currentResourcePower {
+            set{
+                _currentResourcePower = value;
+            }
+            get{
+                return _currentResourcePower;
+            }
+        }
+
         private int _mainBaseHP = 100;
         public int mainBaseHp
         {
@@ -57,6 +67,10 @@ namespace GameModel
             {
                 _unitCount = value;
             }
+        }
+
+        public void AddResources() {
+            this.resourceValue += this._currentResourcePower;
         }
     }
 }
