@@ -12,6 +12,7 @@ public class GameManager : MonoBehaviour
     
     float resourceTimer = 0;
     public float addResourceInterval = 1;
+    private TMP_Text playerResourceText;
     //============================================================================================================
     private void SetTestPlayers()
     { 
@@ -28,6 +29,7 @@ public class GameManager : MonoBehaviour
     void Start()
     {
         SetTestPlayers();
+        this.playerResourceText = GameObject.Find("ResourcePanel").GetComponentInChildren<TMP_Text>();
     }
     // Update is called once per frame
     void Update()
@@ -35,16 +37,19 @@ public class GameManager : MonoBehaviour
         if (resourceTimer >= addResourceInterval) {
             resourceTimer = resourceTimer - addResourceInterval;
             ManageTheResources();
+            SetResourceText();
         }
 
         resourceTimer += Time.deltaTime;
     }
 
     void ManageTheResources() {
-        Debug.Log(playerTwo.resourceValue.ToString());
         playerOne.AddResources();
         playerTwo.AddResources();
-        GameObject.Find("ResourcePanel").GetComponentInChildren<TMP_Text>().text = playerTwo.resourceValue.ToString();
+    }
+
+    private void SetResourceText() {
+        playerResourceText.text = playerTwo.resourceValue.ToString();
     }
 
     public void GameOver(string player){
@@ -74,13 +79,15 @@ public class GameManager : MonoBehaviour
         if(playerTag == "Player1"){
             if(playerOne.resourceValue < amount) return false;
             playerOne.resourceValue -= amount;
+            SetResourceText();
         }
 
         if(playerTag == "Player2"){
             if(playerTwo.resourceValue < amount) return false;
             playerTwo.resourceValue -= amount;
+            SetResourceText();
         }
-
+    
         return false;
     }
 }

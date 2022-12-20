@@ -19,6 +19,12 @@ public enum UnitState {
     ATTACKING
 }
 
+public enum BuildingMode{
+    CONSTRUCTION,
+    SPAWNING,
+    DESTRUCTION
+}
+
 public static class UnitMovmentLocation
 {
     public static readonly string ZoneEnemyLeft = "Enemy_Zone_Left";

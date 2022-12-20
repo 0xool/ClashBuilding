@@ -33,7 +33,7 @@ namespace GameModel
             }
         }
 
-        private int _currentResourcePower = 100;
+        private int _currentResourcePower = 50;
         public int currentResourcePower {
             set{
                 _currentResourcePower = value;

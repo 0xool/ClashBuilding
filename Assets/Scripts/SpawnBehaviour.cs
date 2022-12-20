@@ -11,12 +11,14 @@ public abstract class SpawnBehaviour : MonoBehaviour, IUnit
     public int cost = 200;
     public int hp = 500;
     public float spawnInterval = 5.0f;
-
+    
 
 
 
     public void Spawn(){
-        if(GameObject.FindWithTag("MainCamera").GetComponent<GameManager>().GetPlayerResource(this.gameObject.tag) < buildingModel.spawnCost) return;
+        GameManager gameManager = GameObject.FindWithTag("MainCamera").GetComponent<GameManager>();
+        if(gameManager.GetPlayerResource(this.gameObject.tag) < buildingModel.spawnCost) return;
+        gameManager.UseResource(buildingModel.spawnCost, this.tag);
         var newUnit = Instantiate(unit, new Vector3(this.transform.position.x - offsetSpawn,this.transform.position.y - (this.transform.localScale.x/2 - unit.transform.localScale.x/2),this.transform.position.z), this.transform.rotation);
         newUnit.tag = this.gameObject.tag;
         

@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class CameraManager : MonoBehaviour
+public class TouchManager : MonoBehaviour
 {
     private Vector3 touchPos;
     private Vector3 direction;
@@ -24,6 +24,5 @@ public class CameraManager : MonoBehaviour
             direction = touchPos - Camera.main.ScreenToWorldPoint(Input.mousePosition);
             Camera.main.transform.position += direction;
         }
-
     }
 }
