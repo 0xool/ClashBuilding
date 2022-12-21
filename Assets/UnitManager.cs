@@ -6,7 +6,6 @@ using UnityEngine.AI;
 public class UnitManager : MonoBehaviour, IUnit
 {
     private Unit unitModel;
-
     [SerializeField] private Transform moveTransformPosition;
     private NavMeshAgent navMeshAgent;
     public int unitHP;
@@ -15,6 +14,7 @@ public class UnitManager : MonoBehaviour, IUnit
     private List<GameObject> enemiesInRange;
     public GameObject bulletPrefab;
     public int ReloadTime;
+    RemoveFromTarget removeFromTarget;
 
 
     // Start is called before the first frame update
@@ -35,6 +35,10 @@ public class UnitManager : MonoBehaviour, IUnit
     // Update is called once per frame
     void Update()
     {   
+        if(unitModel.unitState == UnitState.DYING){
+            return;
+        }
+
         if(enemiesInRange.Count == 0){
             this.navMeshAgent.isStopped = false;
             this.unitModel.unitState = UnitState.MOVING;
@@ -76,7 +80,7 @@ public class UnitManager : MonoBehaviour, IUnit
         }
     }
 
-        void SetupMovmentDestinationHQ() {
+    void SetupMovmentDestinationHQ() {
         if(this.gameObject.CompareTag("Player1")){
             this.moveTransformPosition = GameObject.Find(UnitMovmentLocation.ZoneEnemyHQ).transform;
         }else if (this.gameObject.CompareTag("Player2")) {
@@ -107,17 +111,36 @@ public class UnitManager : MonoBehaviour, IUnit
     void LateUpdate()
     {
         if(unitModel.hp <= 0){
-            Destroy(this.gameObject);
+            IsBeingDestroyed();
         }
+    }
+
+    public void IsBeingDestroyed() {
+        this.gameObject.tag = "BeingDestroyed";
+        removeFromTarget(this.gameObject);
+        unitModel.unitState = UnitState.DYING;
+        StartCoroutine(RunBeingDestroyedFunctionality(2));
+    }
+ 
+    IEnumerator RunBeingDestroyedFunctionality(int secs)
+    {
+        yield return new WaitForSeconds(secs);
+        Destroy(this.gameObject);
     }
 
     public void AttackEnemy(GameObject enemy) {
         enemiesInRange.Add(enemy);
+        enemy.GetComponent<IUnit>().AppendRemoveTargetDelegation(RemoveEnemyAsTarget);
+        this.AppendRemoveTargetDelegation(enemy.GetComponent<IUnit>().RemoveEnemyAsTarget);
     }
 
     public void RemoveEnemyAsTarget(GameObject enemy){
         this.unitModel.unitState = UnitState.MOVING;
         enemiesInRange.Remove(enemy);
+    }
+
+    public void AppendRemoveTargetDelegation( RemoveFromTarget removeFromTarget) {
+        this.removeFromTarget += removeFromTarget;
     }
 
 }

@@ -32,21 +32,9 @@ public class DragUIItem :
 
      public void OnBeginDrag(PointerEventData data)
     {
-        RaycastHit hit;
-        Ray ray = Camera.main.ScreenPointToRay(
-        Input.mousePosition);
         isBuilding = true;
-        int mask =  LayerMask.GetMask("MainPlane");
-
-        if (Physics.Raycast(ray, out hit, 1000.0f, mask))
-        {
-            Debug.Log("WTF");
-            if(hit.transform.gameObject.tag == "MainPlane"){
-                Vector3 worldPoint = hit.point;
-                this.build = Instantiate(buildPrefab, worldPoint, Quaternion.identity);            
-                this.build.transform.position += new Vector3(0, this.build.transform.localScale.y / 2, 0);
-            }
-        }
+        this.build = Instantiate(buildPrefab, new Vector3(-100, 0, -100), Quaternion.identity);            
+        this.build.transform.position += new Vector3(0, this.build.transform.localScale.y / 2, 0);
     }
 
     public void OnDrag(PointerEventData data)

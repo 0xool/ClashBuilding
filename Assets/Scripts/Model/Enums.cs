@@ -14,9 +14,16 @@ public enum BuildingType
     SPAWNER
 }
 
+public enum BuildingState
+{
+    IDLE,
+    DYING
+}
+
 public enum UnitState {
     MOVING,
-    ATTACKING
+    ATTACKING,
+    DYING
 }
 
 public enum BuildingMode{

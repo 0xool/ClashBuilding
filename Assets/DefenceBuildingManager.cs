@@ -10,6 +10,8 @@ public class DefenceBuildingManager : MonoBehaviour, IUnit
     private List<GameObject> enemiesInRange;
     public GameObject bulletPrefab;
     public int reloadTime = 0;
+    RemoveFromTarget removeFromTarget;
+
 
     // Start is called before the first frame update
     void Awake()
@@ -24,6 +26,10 @@ public class DefenceBuildingManager : MonoBehaviour, IUnit
     // Update is called once per frame
     void Update()
     {
+            if(buildingModel.buildingState == BuildingState.DYING){
+                return;
+            }
+
             if(enemiesInRange.Count > 0){
                 GameObject enemy = enemiesInRange[0];
                 var gun = this.gameObject.GetComponentInChildren<GunHandler>();
@@ -43,8 +49,21 @@ public class DefenceBuildingManager : MonoBehaviour, IUnit
 
     void LateUpdate() {
         if(this.buildingModel.hp <= 0){
-            Destroy(this.gameObject);
+            IsBeingDestroyed();
         }    
+    }
+
+    public void IsBeingDestroyed() {
+        this.gameObject.tag = "BeingDestroyed";
+        removeFromTarget(this.gameObject);
+        buildingModel.buildingState = BuildingState.DYING;
+        StartCoroutine(RunBeingDestroyedFunctionality(3));
+    }
+ 
+    IEnumerator RunBeingDestroyedFunctionality(int secs)
+    {
+        yield return new WaitForSeconds(secs);
+        Destroy(this.gameObject);
     }
 
     public int GetHP() {
@@ -53,6 +72,8 @@ public class DefenceBuildingManager : MonoBehaviour, IUnit
 
     public void AttackEnemy(GameObject enemy) {
         enemiesInRange.Add(enemy);
+        enemy.GetComponent<IUnit>().AppendRemoveTargetDelegation(RemoveEnemyAsTarget);
+        this.AppendRemoveTargetDelegation(enemy.GetComponent<IUnit>().RemoveEnemyAsTarget);
     }
 
     public void RemoveEnemyAsTarget(GameObject enemy) {
@@ -69,5 +90,9 @@ public class DefenceBuildingManager : MonoBehaviour, IUnit
         }
 
         return "Player1";
+    }
+
+    public void AppendRemoveTargetDelegation( RemoveFromTarget removeFromTarget) {
+        this.removeFromTarget += removeFromTarget;
     }
 }

@@ -6,6 +6,8 @@ public class HeadQuarterManager : MonoBehaviour, IUnit
 {
     private Building buidlingModel;
     public int hp = 500;
+    RemoveFromTarget removeFromTarget;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -34,6 +36,21 @@ public class HeadQuarterManager : MonoBehaviour, IUnit
         return -1;
     }
 
+    public void IsBeingDestroyed() {
+        this.gameObject.tag = "BeingDestroyed";
+        StartCoroutine(RunBeingDestroyedFunctionality(3));
+    }
+ 
+    IEnumerator RunBeingDestroyedFunctionality(int secs)
+    {
+        yield return new WaitForSeconds(secs);
+        Destroy(this.gameObject);
+    }
+
     public void RemoveEnemyAsTarget(GameObject enemy){
+    }
+
+    public void AppendRemoveTargetDelegation( RemoveFromTarget removeFromTarget) {
+        this.removeFromTarget += removeFromTarget;
     }
 }

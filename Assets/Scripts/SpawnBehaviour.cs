@@ -5,6 +5,7 @@ using UnityEngine;
 
 public abstract class SpawnBehaviour : MonoBehaviour, IUnit
 {    
+    RemoveFromTarget removeFromTarget;
     public Building buildingModel;
     public GameObject unit;
     public float offsetSpawn = 2;
@@ -63,9 +64,22 @@ public abstract class SpawnBehaviour : MonoBehaviour, IUnit
     public void InflictDamage(int bulletDamage){
         this.buildingModel.hp -= bulletDamage;
         if (this.buildingModel.hp <= 0){
-            Destroy(this.gameObject);
+            IsBeingDestroyed();
         }
     }
+    
+    public void IsBeingDestroyed() {
+        this.gameObject.tag = "BeingDestroyed";
+        removeFromTarget(this.gameObject);
+        StartCoroutine(RunBeingDestroyedFunctionality(2));
+    }
+ 
+    IEnumerator RunBeingDestroyedFunctionality(int secs)
+    {
+        yield return new WaitForSeconds(secs);
+        Destroy(this.gameObject);
+    }
+
     public int GetReloadTime(){
         return -1;
     }
@@ -83,5 +97,9 @@ public abstract class SpawnBehaviour : MonoBehaviour, IUnit
         }else{
             Destroy(this.gameObject);
         }
+    }
+
+    public void AppendRemoveTargetDelegation( RemoveFromTarget removeFromTarget) {
+        this.removeFromTarget += removeFromTarget;
     }
 }
