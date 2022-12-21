@@ -11,9 +11,39 @@ public abstract class SpawnBehaviour : MonoBehaviour, IUnit
     public int cost = 200;
     public int hp = 500;
     public float spawnInterval = 5.0f;
-    
+    private BuildingMode _buildingMode = BuildingMode.CONSTRUCTION;
+    private ConstructionComponent constructionComponent;
+    private BuildingMode buildingMode{
+        get{
+            return _buildingMode;
+        }set{
+            switch (value)
+            {
+                case BuildingMode.CONSTRUCTION:                    
+                    constructionComponent.EnableConstructionMode();
+                break;
+                
+                case BuildingMode.DESTRUCTION:
+
+                break;
+
+                case BuildingMode.SPAWNING:
+                    constructionComponent.DisableConstructionMode();
+                break;
+
+                default:
+                    break;
+            }
 
 
+            _buildingMode = value;
+        }
+    }
+
+    void Awake() {
+        constructionComponent = this.GetComponentInChildren<ConstructionComponent>();
+        constructionComponent.EnableConstructionMode();
+    }
 
     public void Spawn(){
         GameManager gameManager = GameObject.FindWithTag("MainCamera").GetComponent<GameManager>();
@@ -31,7 +61,6 @@ public abstract class SpawnBehaviour : MonoBehaviour, IUnit
 
     }
     public void InflictDamage(int bulletDamage){
-        Debug.Log(this.buildingModel.hp);
         this.buildingModel.hp -= bulletDamage;
         if (this.buildingModel.hp <= 0){
             Destroy(this.gameObject);
@@ -42,5 +71,17 @@ public abstract class SpawnBehaviour : MonoBehaviour, IUnit
     }
     public void RemoveEnemyAsTarget(GameObject enemy){
 
+    }
+
+    public void MoveBuildingByTouch(Vector3 touchLocation) {
+        this.transform.position = touchLocation;
+    }
+
+    public void Build() {        
+        if(constructionComponent.CanConstruct()){
+            this.buildingMode = BuildingMode.SPAWNING;
+        }else{
+            Destroy(this.gameObject);
+        }
     }
 }

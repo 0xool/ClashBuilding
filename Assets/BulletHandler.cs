@@ -26,7 +26,6 @@ public class BulletHandler : MonoBehaviour
 
     void OnTriggerEnter(Collider collisionInfo)
     {
-        Debug.Log("Collision Name is:" + collisionInfo.name);
         if(collisionInfo.CompareTag(enemyTag) && collisionInfo.gameObject == target){
             IUnit unit = collisionInfo.gameObject.GetComponent<IUnit>();
             unit.InflictDamage(bulletDamage);

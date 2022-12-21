@@ -52,6 +52,24 @@ public class ConstructionComponent : MonoBehaviour
         }
     }
 
+    public void EnableConstructionMode() {
+        EnableMeshComponents();
+    }
+
+    public void DisableConstructionMode() {
+        DisableMeshComponents();
+    }
+
+    private void EnableMeshComponents() {
+        this.gameObject.GetComponent<MeshCollider>().enabled = true;
+        this.gameObject.GetComponent<MeshRenderer>().enabled = true;
+    }
+
+    private void DisableMeshComponents(){ 
+        this.gameObject.GetComponent<MeshCollider>().enabled = false;
+        this.gameObject.GetComponent<MeshRenderer>().enabled = false;
+    }
+
     void OnTriggerExit(Collider collider) {
         if(collider != this.gameObject){
             if(collider.CompareTag(Utilities.GetEnemyTag(this.transform.parent.tag)) || (collider.GetComponent<SpawnBehaviour>() != null)){
