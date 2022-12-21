@@ -28,7 +28,6 @@ public class GunHandler : MonoBehaviour
     }
 
     public void Shoot(GameObject target, GameObject bulletPrefab, int damage) {
-        Debug.Log(target.name);
         BulletHandler bullet = Instantiate(bulletPrefab, this.transform.position, this.transform.rotation).GetComponent<BulletHandler>();
         bullet.target = target;
         bullet.enemyTag = GetEnemyTag();

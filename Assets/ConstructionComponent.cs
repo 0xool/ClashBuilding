@@ -5,13 +5,23 @@ using UnityEngine;
 public class ConstructionComponent : MonoBehaviour
 {
     // Start is called before the first frame update
-    public bool _canConstruct = true;
-    public bool canConstruct{
+    public bool _inConstructZone = false;
+    public bool inConstructZone{
         get{
-            return _canConstruct;
+            return _inConstructZone;
         }
         set{
-            _canConstruct = value;
+            _inConstructZone = value;
+            ChangeConstructionPlaneMaterial();
+        }
+    }
+    public bool _canConstructWithoutCollision = true;
+    public bool canConstructWithoutCollision{
+        get{
+            return _canConstructWithoutCollision;
+        }
+        set{
+            _canConstructWithoutCollision = value;
             ChangeConstructionPlaneMaterial();
         }
     }
@@ -29,7 +39,7 @@ public class ConstructionComponent : MonoBehaviour
     }
 
     private void ChangeConstructionPlaneMaterial() {
-        if(canConstruct){
+        if(canConstructWithoutCollision && inConstructZone){
             this.gameObject.GetComponent<MeshRenderer>().material = CanConstructMaterial;
         }else{
             this.gameObject.GetComponent<MeshRenderer>().material = CanNotConstructMaterial;
@@ -37,7 +47,7 @@ public class ConstructionComponent : MonoBehaviour
     }
 
     public bool CanConstruct() {
-        return canConstruct;
+        return canConstructWithoutCollision && inConstructZone;
     }
 
 
@@ -45,9 +55,14 @@ public class ConstructionComponent : MonoBehaviour
     {
         if(collider != this.gameObject){
 
+            if(collider.CompareTag(Utilities.GetLeftFriendlyZoneTag()) || collider.CompareTag(Utilities.GetRightFriendlyZoneTag())){
+                inConstructZone = true;
+                return;
+            }
+
             if(collider.CompareTag(Utilities.GetEnemyTag(this.transform.parent.tag)) || (collider.GetComponent<SpawnBehaviour>() != null)){
                 collisionNumber++;
-                canConstruct = false;
+                canConstructWithoutCollision = false;
             }
         }
     }
@@ -72,9 +87,15 @@ public class ConstructionComponent : MonoBehaviour
 
     void OnTriggerExit(Collider collider) {
         if(collider != this.gameObject){
+
+            if(collider.CompareTag(Utilities.GetLeftFriendlyZoneTag()) || collider.CompareTag(Utilities.GetRightFriendlyZoneTag())){
+                inConstructZone = false;
+                return;
+            }
+
             if(collider.CompareTag(Utilities.GetEnemyTag(this.transform.parent.tag)) || (collider.GetComponent<SpawnBehaviour>() != null)){
                 collisionNumber--;
-                if(collisionNumber == 0) canConstruct = true;
+                if(collisionNumber == 0) canConstructWithoutCollision = true;
             }
         }
     }

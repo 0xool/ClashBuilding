@@ -111,7 +111,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e90a3ca30f4904f75910d77902fa2f69, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _canConstruct: 1
+  _inConstructZone: 0
+  _canConstructWithoutCollision: 1
   CanConstructMaterial: {fileID: 2100000, guid: fc9af0ccc638f45999444e4839aa7ae6,
     type: 2}
   CanNotConstructMaterial: {fileID: 2100000, guid: 8ea9a44cc0ba548588a112b795e58334,
@@ -132,7 +133,7 @@ GameObject:
   - component: {fileID: 729348343}
   m_Layer: 0
   m_Name: Infantry Building
-  m_TagString: Player1
+  m_TagString: Construction
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -151,7 +152,7 @@ Transform:
   m_Children:
   - {fileID: 1101745291}
   m_Father: {fileID: 0}
-  m_RootOrder: 8
+  m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!33 &4585007793258763727
 MeshFilter:
