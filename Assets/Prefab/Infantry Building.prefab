@@ -250,3 +250,4 @@ MonoBehaviour:
   cost: 200
   hp: 300
   spawnInterval: 5
+  constructionCost: 700

@@ -7,11 +7,12 @@ public class HeadQuarterManager : MonoBehaviour, IUnit
     private Building buidlingModel;
     public int hp = 500;
     RemoveFromTarget removeFromTarget;
+    public int constructionCost = 500;
 
     // Start is called before the first frame update
     void Start()
     {
-        buidlingModel = new Building(this.name, this.hp, BuildingType.HQ, 0);
+        buidlingModel = new Building(this.name, this.hp, BuildingType.HQ, 0, constructionCost);
     }
 
     // Update is called once per frame

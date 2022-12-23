@@ -10,6 +10,7 @@ public class DefenceBuildingManager : MonoBehaviour, IUnit
     private List<GameObject> enemiesInRange;
     public GameObject bulletPrefab;
     public int reloadTime = 0;
+    public int constructionCost = 500;
     RemoveFromTarget removeFromTarget;
 
 
@@ -20,7 +21,7 @@ public class DefenceBuildingManager : MonoBehaviour, IUnit
     }
     void Start()
     {
-       buildingModel = new Building(this.name, hp, BuildingType.DEFENSE, damage);
+       buildingModel = new Building(this.name, hp, BuildingType.DEFENSE, damage, constructionCost);
     }
 
     // Update is called once per frame

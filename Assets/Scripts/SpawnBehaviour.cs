@@ -12,8 +12,9 @@ public abstract class SpawnBehaviour : MonoBehaviour, IUnit
     public int cost = 200;
     public int hp = 500;
     public float spawnInterval = 5.0f;
-    private BuildingMode _buildingMode = BuildingMode.CONSTRUCTION;
+    public int constructionCost = 500;
     private ConstructionComponent constructionComponent;
+    private BuildingMode _buildingMode = BuildingMode.CONSTRUCTION;
     private BuildingMode buildingMode{
         get{
             return _buildingMode;
@@ -36,23 +37,23 @@ public abstract class SpawnBehaviour : MonoBehaviour, IUnit
                     break;
             }
 
-
             _buildingMode = value;
         }
     }
 
+    private GameManager gameManager;
+
     void Awake() {
         constructionComponent = this.GetComponentInChildren<ConstructionComponent>();
         constructionComponent.EnableConstructionMode();
+        gameManager = GameObject.FindWithTag("MainCamera").GetComponent<GameManager>();
     }
 
     public void Spawn(){
-        GameManager gameManager = GameObject.FindWithTag("MainCamera").GetComponent<GameManager>();
         if(gameManager.GetPlayerResource(this.gameObject.tag) < buildingModel.spawnCost) return;
         gameManager.UseResource(buildingModel.spawnCost, this.tag);
         var newUnit = Instantiate(unit, new Vector3(this.transform.position.x - offsetSpawn,this.transform.position.y - (this.transform.localScale.x/2 - unit.transform.localScale.x/2),this.transform.position.z), this.transform.rotation);
-        newUnit.tag = this.gameObject.tag;
-        
+        newUnit.tag = this.gameObject.tag; 
     }
     public int GetHP() {
         return this.buildingModel.hp;
@@ -92,7 +93,9 @@ public abstract class SpawnBehaviour : MonoBehaviour, IUnit
     }
 
     public void Build() {        
-        if(constructionComponent.CanConstruct()){
+        if(constructionComponent.CanConstruct() && (gameManager.GetPlayerResource(this.gameObject.tag) < buildingModel.constructionCost))
+        {
+            gameManager.UseResource(buildingModel.constructionCost, this.tag);
             this.buildingMode = BuildingMode.SPAWNING;
         }else{
             Destroy(this.gameObject);

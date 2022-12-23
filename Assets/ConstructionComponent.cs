@@ -30,7 +30,7 @@ public class ConstructionComponent : MonoBehaviour
     public Material CanNotConstructMaterial;
     void Start()
     {
-        
+        this.gameObject.GetComponent<MeshRenderer>().material = CanNotConstructMaterial;
     }
 
     // Update is called once per frame
@@ -48,23 +48,6 @@ public class ConstructionComponent : MonoBehaviour
 
     public bool CanConstruct() {
         return canConstructWithoutCollision && inConstructZone;
-    }
-
-
-    void OnTriggerEnter(Collider collider)
-    {
-        if(collider != this.gameObject){
-
-            if(collider.CompareTag(Utilities.GetLeftFriendlyZoneTag()) || collider.CompareTag(Utilities.GetRightFriendlyZoneTag())){
-                inConstructZone = true;
-                return;
-            }
-
-            if(collider.CompareTag(Utilities.GetEnemyTag(this.transform.parent.tag)) || (collider.GetComponent<SpawnBehaviour>() != null)){
-                collisionNumber++;
-                canConstructWithoutCollision = false;
-            }
-        }
     }
 
     public void EnableConstructionMode() {
@@ -96,6 +79,22 @@ public class ConstructionComponent : MonoBehaviour
             if(collider.CompareTag(Utilities.GetEnemyTag(this.transform.parent.tag)) || (collider.GetComponent<SpawnBehaviour>() != null)){
                 collisionNumber--;
                 if(collisionNumber == 0) canConstructWithoutCollision = true;
+            }
+        }
+    }
+
+    void OnTriggerEnter(Collider collider)
+    {
+        if(collider != this.gameObject){
+
+            if(collider.CompareTag(Utilities.GetLeftFriendlyZoneTag()) || collider.CompareTag(Utilities.GetRightFriendlyZoneTag())){
+                inConstructZone = true;
+                return;
+            }
+
+            if(collider.CompareTag(Utilities.GetEnemyTag(this.transform.parent.tag)) || (collider.GetComponent<SpawnBehaviour>() != null)){
+                collisionNumber++;
+                canConstructWithoutCollision = false;
             }
         }
     }

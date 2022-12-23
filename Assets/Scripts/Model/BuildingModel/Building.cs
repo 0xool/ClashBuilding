@@ -1,8 +1,7 @@
 
 
 public class Building {
-
-    public Building(string name, int hp, BuildingType bt, int damage, int spawnCost) {
+    public Building(string name, int hp, BuildingType bt, int damage, int spawnCost, int constructionCost) {
         this.name = name;
         this.hp = hp;
         this.buildingType = bt;
@@ -10,15 +9,18 @@ public class Building {
         this.damage = damage;
         this.spawnCost = spawnCost;
         this.buildingState = BuildingState.IDLE;
+
+        this.constructionCost = constructionCost;
     }
 
-    public Building(string name, int hp, BuildingType bt, int damage) {
+    public Building(string name, int hp, BuildingType bt, int damage, int constructionCost) {
         this.name = name;
         this.hp = hp;
         this.buildingType = bt;
 
         this.damage = damage;
         this.buildingState = BuildingState.IDLE;
+        this.constructionCost = constructionCost;
     }
     
     public string name;
@@ -27,4 +29,5 @@ public class Building {
     public BuildingType buildingType;
     public BuildingState buildingState;
     public int spawnCost;
+    public int constructionCost;
 }

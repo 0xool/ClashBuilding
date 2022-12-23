@@ -48,9 +48,6 @@ public class TouchManager : MonoBehaviour
                 touchPos = Input.mousePosition;
                 if(touchPos.x < widthMovmentLimit ){
                     // go left
-                    Debug.Log("WTF");
-                    Debug.Log(direction);
-                    Debug.Log(Input.mousePosition);
                     direction = new Vector3(cameraMovmentSpeed, 0, 0);
                     Camera.main.transform.position -= direction;
                 }
