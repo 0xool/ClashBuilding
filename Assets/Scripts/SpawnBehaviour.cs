@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 
-public abstract class SpawnBehaviour : MonoBehaviour, IUnit
+public abstract class SpawnBehaviour : MonoBehaviour, IUnit, IConstructable
 {    
     RemoveFromTarget removeFromTarget;
     public Building buildingModel;
@@ -14,6 +14,7 @@ public abstract class SpawnBehaviour : MonoBehaviour, IUnit
     public float spawnInterval = 5.0f;
     public int constructionCost = 500;
     private ConstructionComponent constructionComponent;
+    public BuildingType buildingType = BuildingType.SPAWNER;
     private BuildingMode _buildingMode = BuildingMode.CONSTRUCTION;
     private BuildingMode buildingMode{
         get{
@@ -46,6 +47,7 @@ public abstract class SpawnBehaviour : MonoBehaviour, IUnit
     void Awake() {
         constructionComponent = this.GetComponentInChildren<ConstructionComponent>();
         constructionComponent.EnableConstructionMode();
+        constructionComponent.SetBuildingType(this.buildingType);
         gameManager = GameObject.FindWithTag("MainCamera").GetComponent<GameManager>();
     }
 
@@ -93,10 +95,14 @@ public abstract class SpawnBehaviour : MonoBehaviour, IUnit
     }
 
     public void Build() {        
-        if(constructionComponent.CanConstruct() && (gameManager.GetPlayerResource(this.gameObject.tag) < buildingModel.constructionCost))
+        if(constructionComponent.CanConstruct() && (gameManager.GetPlayerResource("Player2") > buildingModel.constructionCost))
         {
-            gameManager.UseResource(buildingModel.constructionCost, this.tag);
-            this.buildingMode = BuildingMode.SPAWNING;
+            if(gameManager.UseResource(buildingModel.constructionCost, "Player2")){
+                this.buildingMode = BuildingMode.SPAWNING;
+                this.tag = "Player2";
+            }
+            else
+                Destroy(this.gameObject);
         }else{
             Destroy(this.gameObject);
         }

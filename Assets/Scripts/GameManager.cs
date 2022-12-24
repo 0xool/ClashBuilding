@@ -73,19 +73,22 @@ public class GameManager : MonoBehaviour
 
         return 0;
     }
-
+    // TODO: Remove all toghether player1 and player2.
+    // Enemy Can't call resource network will handel it.
     public bool UseResource(int amount, string playerTag) {
         
         if(playerTag == "Player1"){
             if(playerOne.resourceValue < amount) return false;
             playerOne.resourceValue -= amount;
             SetResourceText();
+            return true;
         }
 
         if(playerTag == "Player2"){
             if(playerTwo.resourceValue < amount) return false;
             playerTwo.resourceValue -= amount;
             SetResourceText();
+            return true;
         }
     
         return false;

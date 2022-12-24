@@ -29,6 +29,7 @@ public enum UnitState {
 public enum BuildingMode{
     CONSTRUCTION,
     SPAWNING,
+    ATTACKING,
     DESTRUCTION
 }
 

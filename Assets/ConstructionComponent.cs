@@ -28,6 +28,7 @@ public class ConstructionComponent : MonoBehaviour
     private int collisionNumber = 0;
     public Material CanConstructMaterial;
     public Material CanNotConstructMaterial;
+    private BuildingType buildingType;
     void Start()
     {
         this.gameObject.GetComponent<MeshRenderer>().material = CanNotConstructMaterial;
@@ -68,10 +69,14 @@ public class ConstructionComponent : MonoBehaviour
         this.gameObject.GetComponent<MeshRenderer>().enabled = false;
     }
 
+    public void SetBuildingType(BuildingType buildingType) {
+        this.buildingType = buildingType;
+    }
+
     void OnTriggerExit(Collider collider) {
         if(collider != this.gameObject){
 
-            if(collider.CompareTag(Utilities.GetLeftFriendlyZoneTag()) || collider.CompareTag(Utilities.GetRightFriendlyZoneTag())){
+            if(collider.CompareTag(Utilities.GetLeftFriendlyZoneTag(this.buildingType)) || collider.CompareTag(Utilities.GetRightFriendlyZoneTag(this.buildingType))){
                 inConstructZone = false;
                 return;
             }
@@ -87,7 +92,7 @@ public class ConstructionComponent : MonoBehaviour
     {
         if(collider != this.gameObject){
 
-            if(collider.CompareTag(Utilities.GetLeftFriendlyZoneTag()) || collider.CompareTag(Utilities.GetRightFriendlyZoneTag())){
+            if(collider.CompareTag(Utilities.GetLeftFriendlyZoneTag(this.buildingType)) || collider.CompareTag(Utilities.GetRightFriendlyZoneTag(this.buildingType))){
                 inConstructZone = true;
                 return;
             }

@@ -4,18 +4,18 @@ public static class Utilities {
         return (tag == "Player1") ? "Player2" : "Player1";
     }
 
-    public static string GetLeftFriendlyZoneTag() {
-        return "ZoneLeftFriendly";
+    public static string GetLeftFriendlyZoneTag(BuildingType buildingType) {
+        return (buildingType == BuildingType.SPAWNER) ? "ZoneLeftFriendly" : "ZoneLeftFriendlyDefence";
     }
 
-        public static string GetRightFriendlyZoneTag() {
-        return "ZoneRightFriendly";
+        public static string GetRightFriendlyZoneTag(BuildingType buildingType) {
+        return (buildingType == BuildingType.SPAWNER) ? "ZoneRightFriendly" : "ZoneRightFriendlyDefence";
     }
-        public static string GetRightEnemyZoneTag() {
-        return "ZoneRightEnemy";
+        public static string GetRightEnemyZoneTag(BuildingType buildingType) {
+        return (buildingType == BuildingType.SPAWNER) ? "ZoneRightEnemy" : "";
     }
 
-        public static string GetLeftEnemyZoneTag() {
-        return "ZoneLeftEnemy";
+        public static string GetLeftEnemyZoneTag(BuildingType buildingType) {
+        return (buildingType == BuildingType.SPAWNER) ? "ZoneLeftEnemy" : "";
     }
 }

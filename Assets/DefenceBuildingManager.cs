@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class DefenceBuildingManager : MonoBehaviour, IUnit
+public class DefenceBuildingManager : MonoBehaviour, IUnit, IConstructable
 {
     public Building buildingModel;
     public int hp;
@@ -12,12 +12,43 @@ public class DefenceBuildingManager : MonoBehaviour, IUnit
     public int reloadTime = 0;
     public int constructionCost = 500;
     RemoveFromTarget removeFromTarget;
+    private ConstructionComponent constructionComponent;
+    private GameManager gameManager;
+    public BuildingType buildingType = BuildingType.DEFENSE;
+    private BuildingMode _buildingMode = BuildingMode.CONSTRUCTION;
+    private BuildingMode buildingMode{
+        get{
+            return _buildingMode;
+        }set{
+            switch (value)
+            {
+                case BuildingMode.CONSTRUCTION:                    
+                    constructionComponent.EnableConstructionMode();
+                break;
 
+                case BuildingMode.ATTACKING:
+                    constructionComponent.DisableConstructionMode();
+                    break;
+                
+                case BuildingMode.DESTRUCTION:
+                    // Animate
+                break;
 
+                default:
+                    break;
+            }
+
+            _buildingMode = value;
+        }
+    }
     // Start is called before the first frame update
     void Awake()
     {
         enemiesInRange = new List<GameObject>();
+        constructionComponent = this.GetComponentInChildren<ConstructionComponent>();
+        constructionComponent.EnableConstructionMode();
+        constructionComponent.SetBuildingType(this.buildingType);
+        gameManager = GameObject.FindWithTag("MainCamera").GetComponent<GameManager>();
     }
     void Start()
     {
@@ -91,6 +122,22 @@ public class DefenceBuildingManager : MonoBehaviour, IUnit
         }
 
         return "Player1";
+    }
+
+    public void Build() {           
+        if(constructionComponent.CanConstruct() && (gameManager.GetPlayerResource("Player2") > buildingModel.constructionCost))
+        {
+            Debug.Log("WTF");
+            if(gameManager.UseResource(buildingModel.constructionCost, "Player2")){
+                Debug.Log("WTF1");
+                this.buildingMode = BuildingMode.ATTACKING;
+                this.tag = "Player2";
+            }
+            else
+                Destroy(this.gameObject);
+        }else{
+            Destroy(this.gameObject);
+        }
     }
 
     public void AppendRemoveTargetDelegation( RemoveFromTarget removeFromTarget) {

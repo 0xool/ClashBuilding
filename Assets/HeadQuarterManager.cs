@@ -28,6 +28,7 @@ public class HeadQuarterManager : MonoBehaviour, IUnit
     }
     public void InflictDamage(int bulletDamage){
         this.buidlingModel.hp -= bulletDamage;
+        Debug.Log("Damage is being done.");
         if(this.buidlingModel.hp <= 0){
             //Game Over for this player
             GameObject.Find("Main Camera").GetComponent<GameManager>().GameOver(this.gameObject.tag);

@@ -4,7 +4,7 @@ using System;
 using System.Collections;
 
 
-public class DragUIItem : 
+public class BuildingMenuItem : 
   MonoBehaviour, 
   IBeginDragHandler, 
   IDragHandler,
@@ -48,7 +48,7 @@ public class DragUIItem :
 
     public void OnEndDrag(PointerEventData eventData)
     {
-        SpawnBehaviour sb = this.build.GetComponent<SpawnBehaviour>();
+        IConstructable sb = this.build.GetComponent<IConstructable>();
         touchManager.SetTouchState(TouchManager.TouchState.NORMAL);
         sb.Build();
         isBuilding = false;
