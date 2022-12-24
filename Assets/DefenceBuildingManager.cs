@@ -127,9 +127,7 @@ public class DefenceBuildingManager : MonoBehaviour, IUnit, IConstructable
     public void Build() {           
         if(constructionComponent.CanConstruct() && (gameManager.GetPlayerResource("Player2") > buildingModel.constructionCost))
         {
-            Debug.Log("WTF");
             if(gameManager.UseResource(buildingModel.constructionCost, "Player2")){
-                Debug.Log("WTF1");
                 this.buildingMode = BuildingMode.ATTACKING;
                 this.tag = "Player2";
             }
