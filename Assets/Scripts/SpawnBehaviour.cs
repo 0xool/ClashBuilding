@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 
-public abstract class SpawnBehaviour : MonoBehaviour, IUnit, IConstructable
+public abstract class SpawnBehaviour : MonoBehaviour, IUnit, IConstructable, ISelectable
 {    
     RemoveFromTarget removeFromTarget;
     public Building buildingModel;
@@ -30,6 +30,10 @@ public abstract class SpawnBehaviour : MonoBehaviour, IUnit, IConstructable
 
                 break;
 
+                case BuildingMode.IDLE:
+
+                break;
+
                 case BuildingMode.SPAWNING:
                     constructionComponent.DisableConstructionMode();
                 break;
@@ -52,7 +56,7 @@ public abstract class SpawnBehaviour : MonoBehaviour, IUnit, IConstructable
     }
 
     public void Spawn(){
-        if(gameManager.GetPlayerResource(this.gameObject.tag) < buildingModel.spawnCost) return;
+        if(gameManager.GetPlayerResource(this.gameObject.tag) < buildingModel.spawnCost || buildingMode != BuildingMode.SPAWNING) return;
         gameManager.UseResource(buildingModel.spawnCost, this.tag);
         var newUnit = Instantiate(unit, new Vector3(this.transform.position.x - offsetSpawn,this.transform.position.y - (this.transform.localScale.x/2 - unit.transform.localScale.x/2),this.transform.position.z), this.transform.rotation);
         newUnit.tag = this.gameObject.tag; 
@@ -106,6 +110,14 @@ public abstract class SpawnBehaviour : MonoBehaviour, IUnit, IConstructable
         }else{
             Destroy(this.gameObject);
         }
+    }
+
+    public void SelectUnit() {
+
+    }
+
+    public void UnSelectUnit() {
+
     }
 
     public void AppendRemoveTargetDelegation( RemoveFromTarget removeFromTarget) {

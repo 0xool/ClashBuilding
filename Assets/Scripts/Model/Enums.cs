@@ -30,7 +30,8 @@ public enum BuildingMode{
     CONSTRUCTION,
     SPAWNING,
     ATTACKING,
-    DESTRUCTION
+    DESTRUCTION,
+    IDLE,
 }
 
 public static class UnitMovmentLocation

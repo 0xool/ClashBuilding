@@ -12,6 +12,10 @@ TagManager:
   - ZoneLeftFriendly
   - ZoneRightFriendly
   - Construction
+  - ZoneRightFriendlyDefence
+  - ZoneLeftFriendlyDefence
+  - BeingDestroyed
+  - UnitMenuHandler
   layers:
   - Default
   - TransparentFX
@@ -20,7 +24,7 @@ TagManager:
   - Water
   - UI
   - MainPlane
-  - 
+  - Unit
   - 
   - 
   - 

@@ -103,9 +103,13 @@ public class DefenceBuildingManager : MonoBehaviour, IUnit, IConstructable
     }
 
     public void AttackEnemy(GameObject enemy) {
-        enemiesInRange.Add(enemy);
-        enemy.GetComponent<IUnit>().AppendRemoveTargetDelegation(RemoveEnemyAsTarget);
-        this.AppendRemoveTargetDelegation(enemy.GetComponent<IUnit>().RemoveEnemyAsTarget);
+        Debug.Log(enemy.name);
+        Debug.Log(enemy.GetComponent<DefenceBuildingManager>());
+        if(enemy.GetComponent<DefenceBuildingManager>() == null){
+            enemiesInRange.Add(enemy);
+            enemy.GetComponent<IUnit>().AppendRemoveTargetDelegation(RemoveEnemyAsTarget);
+            this.AppendRemoveTargetDelegation(enemy.GetComponent<IUnit>().RemoveEnemyAsTarget);
+        }
     }
 
     public void RemoveEnemyAsTarget(GameObject enemy) {
