@@ -4,6 +4,8 @@ using UnityEngine;
 
 public class UnitMenuHandler : MonoBehaviour
 {
+    public GameObject unitMenuPrefab;
+    private TouchManager touchManager;
     // Start is called before the first frame update
     void Start()
     {
@@ -15,6 +17,15 @@ public class UnitMenuHandler : MonoBehaviour
         
     }
 
+    public void CreateSelectUnitMenuItems(GameObject[] units){
+        foreach (var unit in units)
+        {
+            Transform contentPanel = this.transform.GetChild(0).GetChild(0);
+            GameObject menuItem = Instantiate(unitMenuPrefab, this.transform.position, this.transform.rotation, contentPanel);
+            menuItem.GetComponent<UnitMenuItem>().SetUnit(unit);
+        }
+    }
+
     public void AnimateInMenu() {
         LeanTween.moveX(this.GetComponent<RectTransform>(), 0 , 0.25f).setEaseLinear();
     }
@@ -22,4 +33,7 @@ public class UnitMenuHandler : MonoBehaviour
     public void AnimateOutMenu() {
         LeanTween.moveX(this.GetComponent<RectTransform>(), -125 , 0.25f).setEaseLinear();
     }
+
+     
+
 }

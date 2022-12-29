@@ -7,16 +7,16 @@ public abstract class SpawnBehaviour : MonoBehaviour, IUnit, IConstructable, ISe
 {    
     RemoveFromTarget removeFromTarget;
     public Building buildingModel;
-    public GameObject unit;
+    private GameObject unit;
     public float offsetSpawn = 2;
-    public int cost = 200;
     public int hp = 500;
     public float spawnInterval = 5.0f;
     public int constructionCost = 500;
+    public GameObject[] units;
     private ConstructionComponent constructionComponent;
     public BuildingType buildingType = BuildingType.SPAWNER;
-    private BuildingMode _buildingMode = BuildingMode.CONSTRUCTION;
-    private BuildingMode buildingMode{
+    public BuildingMode _buildingMode = BuildingMode.CONSTRUCTION;
+    public BuildingMode buildingMode{
         get{
             return _buildingMode;
         }set{
@@ -53,13 +53,14 @@ public abstract class SpawnBehaviour : MonoBehaviour, IUnit, IConstructable, ISe
         constructionComponent.EnableConstructionMode();
         constructionComponent.SetBuildingType(this.buildingType);
         gameManager = GameObject.FindWithTag("MainCamera").GetComponent<GameManager>();
+        unit = units[0];
     }
 
     public void Spawn(){
-        if(gameManager.GetPlayerResource(this.gameObject.tag) < buildingModel.spawnCost || buildingMode != BuildingMode.SPAWNING) return;
+        if(gameManager.GetPlayerResource(this.gameObject.tag) < GetUnitCost() || buildingMode != BuildingMode.SPAWNING) return;
         gameManager.UseResource(buildingModel.spawnCost, this.tag);
         var newUnit = Instantiate(unit, new Vector3(this.transform.position.x - offsetSpawn,this.transform.position.y - (this.transform.localScale.x/2 - unit.transform.localScale.x/2),this.transform.position.z), this.transform.rotation);
-        newUnit.tag = this.gameObject.tag; 
+        newUnit.tag = this.gameObject.tag;
     }
     public int GetHP() {
         return this.buildingModel.hp;
@@ -73,6 +74,14 @@ public abstract class SpawnBehaviour : MonoBehaviour, IUnit, IConstructable, ISe
         if (this.buildingModel.hp <= 0){
             IsBeingDestroyed();
         }
+    }
+
+    public int GetUnitCost() {
+        return this.unit.GetComponent<IUnit>().GetCost();
+    }
+
+    public int GetCost() {
+        return this.constructionCost;
     }
     
     public void IsBeingDestroyed() {
@@ -112,12 +121,18 @@ public abstract class SpawnBehaviour : MonoBehaviour, IUnit, IConstructable, ISe
         }
     }
 
-    public void SelectUnit() {
-
+    public void SelectUnit(GameObject unit) {
+        this.unit = unit;
+        UnSelectBuilding();
+        this.buildingMode = BuildingMode.SPAWNING;
     }
 
-    public void UnSelectUnit() {
+    public void SelectBuilding() {
+        GameObject.FindGameObjectWithTag("UnitMenuHandler").GetComponent<UnitMenuHandler>().CreateSelectUnitMenuItems(this.units);
+    }
 
+    public void UnSelectBuilding() {
+        // hide 
     }
 
     public void AppendRemoveTargetDelegation( RemoveFromTarget removeFromTarget) {

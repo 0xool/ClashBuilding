@@ -17,7 +17,7 @@ public class TouchManager : MonoBehaviour
     private RaycastHit hit;
     private Ray ray;
     private int selectableMask;
-    private ISelectable selectedUnit;
+    public ISelectable selectedUnit;
     private UnitMenuHandler unitMenuHandler;
     // Start is called before the first frame update
     void Awake() {
@@ -42,13 +42,12 @@ public class TouchManager : MonoBehaviour
                 if (Input.GetMouseButtonDown(0))
                 {
                     ray = Camera.main.ScreenPointToRay(Input.mousePosition);
-                    Debug.Log(ray);
                     if (Physics.Raycast(ray, out hit, 1000.0f, selectableMask))
                     {
                         this.selectedUnit = hit.transform.gameObject.GetComponent<ISelectable>();
                         if(selectedUnit != null){
                             this.touchState = TouchState.UNITSELECT;
-                            this.selectedUnit.SelectUnit();
+                            this.selectedUnit.SelectBuilding();
                             this.unitMenuHandler.AnimateInMenu();
                             return;
                         }
@@ -56,16 +55,25 @@ public class TouchManager : MonoBehaviour
 
                     touchPos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
                 }
+
                 if(Input.GetMouseButton(0)){
                     direction = touchPos - Camera.main.ScreenToWorldPoint(Input.mousePosition);
                     Camera.main.transform.position += direction;
                 }
+
+                
+
                 break;
+
             case TouchState.UNITSELECT:
-                if (Input.GetMouseButtonDown(0))
+
+                if(Input.GetMouseButtonDown(0)){
+                    touchPos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+                }
+
+                if (Input.GetMouseButtonUp(0))
                 {
                     ray = Camera.main.ScreenPointToRay(Input.mousePosition);
-
                     if (Physics.Raycast(ray, out hit, 1000.0f, selectableMask))
                     {
                         ISelectable selectableUnit = hit.transform.gameObject.GetComponent<ISelectable>();
@@ -75,10 +83,21 @@ public class TouchManager : MonoBehaviour
                     }
 
                     this.touchState = TouchState.NORMAL;
-                    this.selectedUnit.UnSelectUnit();
+                    this.selectedUnit.UnSelectBuilding();
+                    foreach (Transform child in this.unitMenuHandler.transform.GetChild(0).GetChild(0)) {
+                        GameObject.Destroy(child.gameObject);
+                    }
                     this.selectedUnit = null;
                     this.unitMenuHandler.AnimateOutMenu();
+
+                    return;
                 }
+
+                if(Input.GetMouseButton(0)){
+                    direction = touchPos - Camera.main.ScreenToWorldPoint(Input.mousePosition);
+                    Camera.main.transform.position += direction;
+                }
+
                 break;
 
             case TouchState.CONSTRUCTION:

@@ -2153,24 +2153,10 @@ PrefabInstance:
     serializedVersion: 2
     m_TransformParent: {fileID: 0}
     m_Modifications:
-    - target: {fileID: 1101745290, guid: 0980c1441ef6f4d83abdc92d77d2cdb0, type: 3}
-      propertyPath: m_Layer
-      value: 7
-      objectReference: {fileID: 0}
     - target: {fileID: 4585007793258763715, guid: 0980c1441ef6f4d83abdc92d77d2cdb0,
         type: 3}
       propertyPath: m_Name
       value: Infantry_Building_Enemy
-      objectReference: {fileID: 0}
-    - target: {fileID: 4585007793258763715, guid: 0980c1441ef6f4d83abdc92d77d2cdb0,
-        type: 3}
-      propertyPath: m_Layer
-      value: 7
-      objectReference: {fileID: 0}
-    - target: {fileID: 4585007793258763715, guid: 0980c1441ef6f4d83abdc92d77d2cdb0,
-        type: 3}
-      propertyPath: m_TagString
-      value: Player2
       objectReference: {fileID: 0}
     - target: {fileID: 4585007793258763720, guid: 0980c1441ef6f4d83abdc92d77d2cdb0,
         type: 3}

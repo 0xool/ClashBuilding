@@ -102,6 +102,10 @@ public class DefenceBuildingManager : MonoBehaviour, IUnit, IConstructable
         return this.buildingModel.hp;
     }
 
+    public int GetCost() {
+        return this.constructionCost;
+    }
+
     public void AttackEnemy(GameObject enemy) {
         Debug.Log(enemy.name);
         Debug.Log(enemy.GetComponent<DefenceBuildingManager>());

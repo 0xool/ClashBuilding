@@ -1,4 +1,6 @@
+using UnityEngine;
 public interface ISelectable {
-    public void SelectUnit();
-    public void UnSelectUnit();
+    public void SelectUnit(GameObject unit);
+    public void UnSelectBuilding();
+    public void SelectBuilding();
 }

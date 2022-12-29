@@ -11,24 +11,25 @@ public class UnitManager : MonoBehaviour, IUnit
     public int unitHP;
     public float movementSpeed;
     public int damage;
+    public int cost;
     private List<GameObject> enemiesInRange;
     public GameObject bulletPrefab;
-    public int ReloadTime;
+    public int reloadTime;
     RemoveFromTarget removeFromTarget;
 
 
     // Start is called before the first frame update
     private void Awake() {
         this.navMeshAgent = this.GetComponent<NavMeshAgent>();
-        this.unitModel = new Unit(this.name, movementSpeed, unitHP, UnitState.MOVING, ZONE.RIGHTZONE, damage);
+        this.unitModel = new Unit(this.name, movementSpeed, unitHP, UnitState.MOVING, ZONE.RIGHTZONE, damage, cost);
         this.unitModel.hp = unitHP;
+        this.unitModel.cost = cost;
 
         enemiesInRange = new List<GameObject>();
     }
     void Start()
     {
         SetupMovmentDestination();
-
         navMeshAgent.speed = movementSpeed;
     }
 
@@ -89,7 +90,7 @@ public class UnitManager : MonoBehaviour, IUnit
     }
 
     public int GetReloadTime() {
-        return this.ReloadTime;
+        return this.reloadTime;
     }
 
     string GetEnemyTag() {
@@ -106,6 +107,10 @@ public class UnitManager : MonoBehaviour, IUnit
 
     public int GetHP() {
         return unitModel.hp;
+    }
+
+    public int GetCost() {
+        return cost;
     }
 
     void LateUpdate()

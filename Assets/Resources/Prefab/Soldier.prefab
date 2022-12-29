@@ -198,6 +198,7 @@ MonoBehaviour:
   unitHP: 100
   movementSpeed: 5
   damage: 20
+  cost: 200
   bulletPrefab: {fileID: 7934955778438983978, guid: 73a36a310e2eb42719c535b3f84e3964,
     type: 3}
   ReloadTime: 2
