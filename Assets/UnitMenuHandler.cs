@@ -18,12 +18,18 @@ public class UnitMenuHandler : MonoBehaviour
     }
 
     public void CreateSelectUnitMenuItems(GameObject[] units){
+        Transform contentPanel;
+        GameObject menuItem;
         foreach (var unit in units)
         {
-            Transform contentPanel = this.transform.GetChild(0).GetChild(0);
-            GameObject menuItem = Instantiate(unitMenuPrefab, this.transform.position, this.transform.rotation, contentPanel);
+            contentPanel = this.transform.GetChild(0).GetChild(0);
+            menuItem = Instantiate(unitMenuPrefab, this.transform.position, this.transform.rotation, contentPanel);
             menuItem.GetComponent<UnitMenuItem>().SetUnit(unit);
         }
+
+            contentPanel = this.transform.GetChild(0).GetChild(0);
+            menuItem = Instantiate(unitMenuPrefab, this.transform.position, this.transform.rotation, contentPanel);
+            menuItem.GetComponent<UnitMenuItem>().SetUnit(null);
     }
 
     public void AnimateInMenu() {

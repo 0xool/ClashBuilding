@@ -20,6 +20,11 @@ public abstract class SpawnBehaviour : MonoBehaviour, IUnit, IConstructable, ISe
         get{
             return _buildingMode;
         }set{
+            
+            if(value != BuildingMode.CONSTRUCTION){
+                
+            }
+
             switch (value)
             {
                 case BuildingMode.CONSTRUCTION:                    
@@ -27,11 +32,10 @@ public abstract class SpawnBehaviour : MonoBehaviour, IUnit, IConstructable, ISe
                 break;
                 
                 case BuildingMode.DESTRUCTION:
-
                 break;
 
                 case BuildingMode.IDLE:
-
+                    constructionComponent.DisableConstructionMode();
                 break;
 
                 case BuildingMode.SPAWNING:
@@ -57,6 +61,10 @@ public abstract class SpawnBehaviour : MonoBehaviour, IUnit, IConstructable, ISe
     }
 
     public void Spawn(){
+        if(unit == null){
+            this.buildingMode = BuildingMode.IDLE;
+            return;
+        }
         if(gameManager.GetPlayerResource(this.gameObject.tag) < GetUnitCost() || buildingMode != BuildingMode.SPAWNING) return;
         gameManager.UseResource(buildingModel.spawnCost, this.tag);
         var newUnit = Instantiate(unit, new Vector3(this.transform.position.x - offsetSpawn,this.transform.position.y - (this.transform.localScale.x/2 - unit.transform.localScale.x/2),this.transform.position.z), this.transform.rotation);
@@ -111,7 +119,7 @@ public abstract class SpawnBehaviour : MonoBehaviour, IUnit, IConstructable, ISe
         if(constructionComponent.CanConstruct() && (gameManager.GetPlayerResource("Player2") > buildingModel.constructionCost))
         {
             if(gameManager.UseResource(buildingModel.constructionCost, "Player2")){
-                this.buildingMode = BuildingMode.SPAWNING;
+                this.buildingMode = BuildingMode.IDLE;
                 this.tag = "Player2";
             }
             else

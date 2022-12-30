@@ -201,7 +201,7 @@ MonoBehaviour:
   cost: 200
   bulletPrefab: {fileID: 7934955778438983978, guid: 73a36a310e2eb42719c535b3f84e3964,
     type: 3}
-  ReloadTime: 2
+  reloadTime: 3
 --- !u!54 &7730853489994392812
 Rigidbody:
   m_ObjectHideFlags: 0

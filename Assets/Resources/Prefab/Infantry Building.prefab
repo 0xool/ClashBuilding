@@ -245,10 +245,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 118bbff21178a4fe99a58f71db3208b9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  unit: {fileID: 4849996777848911080, guid: b7124fa80f44849feb88a518a13eba7c, type: 3}
   offsetSpawn: 2
-  cost: 200
   hp: 300
   spawnInterval: 5
   constructionCost: 700
+  units:
+  - {fileID: 4849996777848911080, guid: b7124fa80f44849feb88a518a13eba7c, type: 3}
   buildingType: 2
+  _buildingMode: 4
