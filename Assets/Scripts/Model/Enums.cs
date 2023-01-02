@@ -11,7 +11,8 @@ public enum BuildingType
 {
     HQ,
     DEFENSE,
-    SPAWNER
+    SPAWNER,
+    REFINERY
 }
 
 public enum BuildingState

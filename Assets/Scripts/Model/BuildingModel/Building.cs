@@ -30,4 +30,5 @@ public class Building {
     public BuildingState buildingState;
     public int spawnCost;
     public int constructionCost;
+    public int upgradeCost;
 }

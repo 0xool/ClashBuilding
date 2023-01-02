@@ -93,4 +93,12 @@ public class GameManager : MonoBehaviour
     
         return false;
     }
+
+    public void IncreaseResourceIncome(int resource) {
+        this.playerTwo.IncreaseResourcePower(resource);
+    }
+
+    public void DescreaseResourceIncome(int resource) {
+        this.playerTwo.DecreaseResourcePower(resource);
+    }
 }

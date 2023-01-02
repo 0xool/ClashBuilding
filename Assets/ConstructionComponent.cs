@@ -76,6 +76,11 @@ public class ConstructionComponent : MonoBehaviour
     void OnTriggerExit(Collider collider) {
         if(collider != this.gameObject){
 
+
+            if(this.buildingType == BuildingType.REFINERY && collider.CompareTag("Resource")){
+                inConstructZone = false;
+                return;
+            }
             if(collider.CompareTag(Utilities.GetLeftFriendlyZoneTag(this.buildingType)) || collider.CompareTag(Utilities.GetRightFriendlyZoneTag(this.buildingType))){
                 inConstructZone = false;
                 return;
@@ -91,6 +96,11 @@ public class ConstructionComponent : MonoBehaviour
     void OnTriggerEnter(Collider collider)
     {
         if(collider != this.gameObject){
+
+            if(this.buildingType == BuildingType.REFINERY && collider.CompareTag("Resource")){
+                inConstructZone = true;
+                return;
+            }
 
             if(collider.CompareTag(Utilities.GetLeftFriendlyZoneTag(this.buildingType)) || collider.CompareTag(Utilities.GetRightFriendlyZoneTag(this.buildingType))){
                 inConstructZone = true;

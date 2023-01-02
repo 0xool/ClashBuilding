@@ -13,8 +13,11 @@ public class MenuManager : MonoBehaviour
         menuItems = new List<MenuBuildingModel>();
         MenuBuildingModel infantryBuilding = new MenuBuildingModel("Infantry Building", 700);
         MenuBuildingModel turrentBuilding = new MenuBuildingModel("Turrent", 400);
+        MenuBuildingModel refineryBuilding = new MenuBuildingModel("Refinery", 600);
+
         menuItems.Add(infantryBuilding);     
         menuItems.Add(turrentBuilding);
+        menuItems.Add(refineryBuilding);
     }
     // Start is called before the first frame update
     void Start()
@@ -25,12 +28,6 @@ public class MenuManager : MonoBehaviour
             menuItem.GetComponentInChildren<TMP_Text>().text = item.cost.ToString();
             menuItem.buildPrefab = item.GetPrefab();
         }
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
     }
 }
 

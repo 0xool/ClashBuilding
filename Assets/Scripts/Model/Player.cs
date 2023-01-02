@@ -43,6 +43,14 @@ namespace GameModel
             }
         }
 
+        public void IncreaseResourcePower(int resource){
+            currentResourcePower += resource;
+        }
+
+        public void DecreaseResourcePower(int resource){
+            currentResourcePower -= resource;
+        }
+
         private int _mainBaseHP = 100;
         public int mainBaseHp
         {
