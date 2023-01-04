@@ -112,6 +112,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _inConstructZone: 0
+  _inPlayerZone: 0
   _canConstructWithoutCollision: 1
   CanConstructMaterial: {fileID: 2100000, guid: fc9af0ccc638f45999444e4839aa7ae6,
     type: 2}
@@ -133,7 +134,7 @@ GameObject:
   - component: {fileID: 729348343}
   m_Layer: 7
   m_Name: Infantry Building
-  m_TagString: Player2
+  m_TagString: Construction
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0

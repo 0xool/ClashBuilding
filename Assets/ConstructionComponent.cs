@@ -15,6 +15,17 @@ public class ConstructionComponent : MonoBehaviour
             ChangeConstructionPlaneMaterial();
         }
     }
+
+    public bool _inPlayerZone = false;
+    public bool inPlayerZone{
+        get{
+            return _inPlayerZone;
+        }
+        set{
+            _inPlayerZone = value;
+            ChangeConstructionPlaneMaterial();
+        }
+    }
     public bool _canConstructWithoutCollision = true;
     public bool canConstructWithoutCollision{
         get{
@@ -26,6 +37,7 @@ public class ConstructionComponent : MonoBehaviour
         }
     }
     private int collisionNumber = 0;
+    private int refineryContact = 0;
     public Material CanConstructMaterial;
     public Material CanNotConstructMaterial;
     private BuildingType buildingType;
@@ -40,7 +52,7 @@ public class ConstructionComponent : MonoBehaviour
     }
 
     private void ChangeConstructionPlaneMaterial() {
-        if(canConstructWithoutCollision && inConstructZone){
+        if(CanConstruct()){
             this.gameObject.GetComponent<MeshRenderer>().material = CanConstructMaterial;
         }else{
             this.gameObject.GetComponent<MeshRenderer>().material = CanNotConstructMaterial;
@@ -48,7 +60,7 @@ public class ConstructionComponent : MonoBehaviour
     }
 
     public bool CanConstruct() {
-        return canConstructWithoutCollision && inConstructZone;
+        return canConstructWithoutCollision && inConstructZone && inPlayerZone;
     }
 
     public void EnableConstructionMode() {
@@ -76,17 +88,28 @@ public class ConstructionComponent : MonoBehaviour
     void OnTriggerExit(Collider collider) {
         if(collider != this.gameObject){
 
+            if(GameManager.instance.IsPlayerOne()){
+                if(collider.tag == Utilities.PlayerOneZoneTag) inPlayerZone = false;
+            }
 
-            if(this.buildingType == BuildingType.REFINERY && collider.CompareTag("Resource")){
+            if(GameManager.instance.IsPlayerTwo()){
+                if(collider.tag == Utilities.PlayerTwoZoneTag) inPlayerZone = false;
+            }
+
+            if(this.buildingType == BuildingType.REFINERY){
+                if(collider.CompareTag("Resource")){
+                    refineryContact--;
+                    if(refineryContact == 0)
+                        inConstructZone = false;
+                }
+                return;
+            }
+            if(collider.CompareTag(Utilities.GetLeftZoneTag(this.buildingType)) || collider.CompareTag(Utilities.GetRightZoneTag(this.buildingType))){
                 inConstructZone = false;
                 return;
             }
-            if(collider.CompareTag(Utilities.GetLeftFriendlyZoneTag(this.buildingType)) || collider.CompareTag(Utilities.GetRightFriendlyZoneTag(this.buildingType))){
-                inConstructZone = false;
-                return;
-            }
 
-            if(collider.CompareTag(Utilities.GetEnemyTag(this.transform.parent.tag)) || (collider.GetComponent<SpawnBehaviour>() != null)){
+            if(collider.CompareTag(Utilities.GetEnemyTag(this.transform.parent.tag)) || (collider.GetComponent<SpawnBehaviour>() != null) || collider.CompareTag(Utilities.ObstacleTag)){
                 collisionNumber--;
                 if(collisionNumber == 0) canConstructWithoutCollision = true;
             }
@@ -97,17 +120,28 @@ public class ConstructionComponent : MonoBehaviour
     {
         if(collider != this.gameObject){
 
-            if(this.buildingType == BuildingType.REFINERY && collider.CompareTag("Resource")){
+            if(GameManager.instance.IsPlayerOne()){
+                if(collider.tag == Utilities.PlayerOneZoneTag) inPlayerZone = true;
+            }
+
+            if(GameManager.instance.IsPlayerTwo()){
+                if(collider.tag == Utilities.PlayerTwoZoneTag) inPlayerZone = true;
+            }
+
+            if(this.buildingType == BuildingType.REFINERY){
+                if(collider.CompareTag("Resource")){
+                    refineryContact++;
+                    inConstructZone = true;
+                }
+                return;
+            }
+
+            if(collider.CompareTag(Utilities.GetLeftZoneTag(this.buildingType)) || collider.CompareTag(Utilities.GetRightZoneTag(this.buildingType))){
                 inConstructZone = true;
                 return;
             }
 
-            if(collider.CompareTag(Utilities.GetLeftFriendlyZoneTag(this.buildingType)) || collider.CompareTag(Utilities.GetRightFriendlyZoneTag(this.buildingType))){
-                inConstructZone = true;
-                return;
-            }
-
-            if(collider.CompareTag(Utilities.GetEnemyTag(this.transform.parent.tag)) || (collider.GetComponent<SpawnBehaviour>() != null)){
+            if(collider.CompareTag(Utilities.GetEnemyTag(this.transform.parent.tag)) || (collider.GetComponent<SpawnBehaviour>() != null) || collider.CompareTag(Utilities.ObstacleTag)){
                 collisionNumber++;
                 canConstructWithoutCollision = false;
             }

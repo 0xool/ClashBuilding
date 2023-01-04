@@ -4,18 +4,21 @@ public static class Utilities {
         return (tag == "Player1") ? "Player2" : "Player1";
     }
 
-    public static string GetLeftFriendlyZoneTag(BuildingType buildingType) {
-        return (buildingType == BuildingType.SPAWNER) ? "ZoneLeftFriendly" : "ZoneLeftFriendlyDefence";
+    public static string GetLeftZoneTag(BuildingType buildingType) {
+        if(GameManager.instance.IsPlayerTwo())
+            return (buildingType == BuildingType.SPAWNER) ? "ZoneLeftFriendly" : "ZoneFriendlyDefence";
+        else
+            return (buildingType == BuildingType.SPAWNER) ? "ZoneLeftEnemy" : "ZoneEnemyDefence";
     }
 
-        public static string GetRightFriendlyZoneTag(BuildingType buildingType) {
-        return (buildingType == BuildingType.SPAWNER) ? "ZoneRightFriendly" : "ZoneRightFriendlyDefence";
-    }
-        public static string GetRightEnemyZoneTag(BuildingType buildingType) {
-        return (buildingType == BuildingType.SPAWNER) ? "ZoneRightEnemy" : "";
+    public static string GetRightZoneTag(BuildingType buildingType) {
+        if(GameManager.instance.IsPlayerTwo())
+            return (buildingType == BuildingType.SPAWNER) ? "ZoneRightFriendly" : "ZoneFriendlyDefence";
+        else
+            return (buildingType == BuildingType.SPAWNER) ? "ZoneRightEnemy" : "ZoneEnemyDefence";
     }
 
-        public static string GetLeftEnemyZoneTag(BuildingType buildingType) {
-        return (buildingType == BuildingType.SPAWNER) ? "ZoneLeftEnemy" : "";
-    }
+    public static string PlayerOneZoneTag = "PlayerOneZone";
+    public static string PlayerTwoZoneTag = "PlayerTwoZone";
+    public static string ObstacleTag = "Obstacle";
 }

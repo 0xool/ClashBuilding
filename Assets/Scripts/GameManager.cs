@@ -5,11 +5,20 @@ using UnityEngine.UI;
 using GameModel;
 using TMPro;
 
-public class GameManager : MonoBehaviour
+public class GameManager : SingletonBehaviour<GameManager>
 {
+    public string PlayerOneTag = "Player1";
+    public string PlayerTwoTag = "Player2";
     private Player playerOne;
     private Player playerTwo;
-    
+    private string _currentPlayer;
+    public string currentPlayer {
+        get{
+            return _currentPlayer;
+        }set{
+            _currentPlayer = value;
+        }
+    }
     float resourceTimer = 0;
     public float addResourceInterval = 1;
     private TMP_Text playerResourceText;
@@ -21,13 +30,11 @@ public class GameManager : MonoBehaviour
     }
     //============================================================================================================
     // Start is called before the first frame update
-    void Awake()
+    void Start()
     {
         playerOne = new Player();
         playerTwo = new Player();
-    }
-    void Start()
-    {
+        SetCurrentPlayerTwo();
         SetTestPlayers();
         this.playerResourceText = GameObject.Find("ResourcePanel").GetComponentInChildren<TMP_Text>();
     }
@@ -56,18 +63,18 @@ public class GameManager : MonoBehaviour
         GameObject.Find("GameOverPlayerName").GetComponent<TMP_Text>().enabled = true;
         GameObject.Find("GameOverText").GetComponent<TMP_Text>().enabled = true ;
 
-        if(player == "Player1"){
+        if(player == PlayerOneTag){
             GameObject.Find("GameOverPlayerName").GetComponent<TMP_Text>().text = "Player Two Won";
-        }else if (player == "Player2"){
+        }else if (player == PlayerTwoTag){
             GameObject.Find("GameOverPlayerName").GetComponent<TMP_Text>().text = "Player One Won";
         }
     }
 
     public int GetPlayerResource(string playerTag) {
-        if(playerTag == "Player1"){
+        if(playerTag == PlayerOneTag){
             return playerOne.resourceValue;
         }
-        if(playerTag == "Player2"){
+        if(playerTag == PlayerTwoTag){
             return playerTwo.resourceValue;
         }
 
@@ -77,14 +84,14 @@ public class GameManager : MonoBehaviour
     // Enemy Can't call resource network will handel it.
     public bool UseResource(int amount, string playerTag) {
         
-        if(playerTag == "Player1"){
+        if(playerTag == PlayerOneTag){
             if(playerOne.resourceValue < amount) return false;
             playerOne.resourceValue -= amount;
             SetResourceText();
             return true;
         }
 
-        if(playerTag == "Player2"){
+        if(playerTag == PlayerTwoTag){
             if(playerTwo.resourceValue < amount) return false;
             playerTwo.resourceValue -= amount;
             SetResourceText();
@@ -100,5 +107,21 @@ public class GameManager : MonoBehaviour
 
     public void DescreaseResourceIncome(int resource) {
         this.playerTwo.DecreaseResourcePower(resource);
+    }
+
+    public void SetCurrentPlayerOne() {
+        currentPlayer = PlayerOneTag;
+    }
+
+    public void SetCurrentPlayerTwo() {
+        currentPlayer = PlayerTwoTag;
+    }
+
+    public bool IsPlayerOne() {
+        return currentPlayer == PlayerOneTag;
+    }
+
+    public bool IsPlayerTwo() {
+        return currentPlayer == PlayerTwoTag;
     }
 }

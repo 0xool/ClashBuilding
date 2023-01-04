@@ -12,10 +12,16 @@ TagManager:
   - ZoneLeftFriendly
   - ZoneRightFriendly
   - Construction
-  - ZoneRightFriendlyDefence
-  - ZoneLeftFriendlyDefence
   - BeingDestroyed
   - UnitMenuHandler
+  - Resource
+  - ZoneLeftEnemyDefence
+  - ZoneRightEnemyDefence
+  - PlayerOneZone
+  - PlayerTwoZone
+  - Obstacle
+  - ZoneFriendlyDefence
+  - ZoneEnemyDefence
   layers:
   - Default
   - TransparentFX
