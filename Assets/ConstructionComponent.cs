@@ -109,7 +109,7 @@ public class ConstructionComponent : MonoBehaviour
                 return;
             }
 
-            if(collider.CompareTag(Utilities.GetEnemyTag(this.transform.parent.tag)) || (collider.GetComponent<SpawnBehaviour>() != null) || collider.CompareTag(Utilities.ObstacleTag)){
+            if(collider.CompareTag(GameManager.instance.GetEnemyTag()) || (collider.GetComponent<SpawnBehaviour>() != null) || collider.CompareTag(Utilities.ObstacleTag)){
                 collisionNumber--;
                 if(collisionNumber == 0) canConstructWithoutCollision = true;
             }
@@ -141,7 +141,7 @@ public class ConstructionComponent : MonoBehaviour
                 return;
             }
 
-            if(collider.CompareTag(Utilities.GetEnemyTag(this.transform.parent.tag)) || (collider.GetComponent<SpawnBehaviour>() != null) || collider.CompareTag(Utilities.ObstacleTag)){
+            if(collider.CompareTag(GameManager.instance.GetEnemyTag()) || (collider.GetComponent<SpawnBehaviour>() != null) || collider.CompareTag(Utilities.ObstacleTag)){
                 collisionNumber++;
                 canConstructWithoutCollision = false;
             }

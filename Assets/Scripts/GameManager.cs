@@ -34,7 +34,7 @@ public class GameManager : SingletonBehaviour<GameManager>
     {
         playerOne = new Player();
         playerTwo = new Player();
-        SetCurrentPlayerTwo();
+        SetCurrentPlayerOne();
         SetTestPlayers();
         this.playerResourceText = GameObject.Find("ResourcePanel").GetComponentInChildren<TMP_Text>();
     }
@@ -70,11 +70,11 @@ public class GameManager : SingletonBehaviour<GameManager>
         }
     }
 
-    public int GetPlayerResource(string playerTag) {
-        if(playerTag == PlayerOneTag){
+    public int GetPlayerResource() {
+        if(currentPlayer == PlayerOneTag){
             return playerOne.resourceValue;
         }
-        if(playerTag == PlayerTwoTag){
+        if(currentPlayer == PlayerTwoTag){
             return playerTwo.resourceValue;
         }
 
@@ -82,16 +82,16 @@ public class GameManager : SingletonBehaviour<GameManager>
     }
     // TODO: Remove all toghether player1 and player2.
     // Enemy Can't call resource network will handel it.
-    public bool UseResource(int amount, string playerTag) {
+    public bool UseResource(int amount) {
         
-        if(playerTag == PlayerOneTag){
+        if(currentPlayer == PlayerOneTag){
             if(playerOne.resourceValue < amount) return false;
             playerOne.resourceValue -= amount;
             SetResourceText();
             return true;
         }
 
-        if(playerTag == PlayerTwoTag){
+        if(currentPlayer == PlayerTwoTag){
             if(playerTwo.resourceValue < amount) return false;
             playerTwo.resourceValue -= amount;
             SetResourceText();
@@ -111,6 +111,7 @@ public class GameManager : SingletonBehaviour<GameManager>
 
     public void SetCurrentPlayerOne() {
         currentPlayer = PlayerOneTag;
+        this.transform.parent.transform.eulerAngles = new Vector3(30, -135, 0);
     }
 
     public void SetCurrentPlayerTwo() {
@@ -123,5 +124,9 @@ public class GameManager : SingletonBehaviour<GameManager>
 
     public bool IsPlayerTwo() {
         return currentPlayer == PlayerTwoTag;
+    }
+
+    public string GetEnemyTag() {
+        return (currentPlayer == PlayerOneTag) ? PlayerTwoTag : PlayerOneTag;
     }
 }

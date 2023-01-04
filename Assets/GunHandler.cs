@@ -30,7 +30,7 @@ public class GunHandler : MonoBehaviour
     public void Shoot(GameObject target, GameObject bulletPrefab, int damage) {
         BulletHandler bullet = Instantiate(bulletPrefab, this.transform.position, this.transform.rotation).GetComponent<BulletHandler>();
         bullet.target = target;
-        bullet.enemyTag = GetEnemyTag();
+        bullet.enemyTag = GameManager.instance.GetEnemyTag();
         bullet.bulletDamage = damage;
         isReloading = true;
     }
@@ -39,24 +39,16 @@ public class GunHandler : MonoBehaviour
         return !isReloading;
     }
 
-    string GetEnemyTag() {
-        if(this.transform.parent.gameObject.CompareTag("Player1")){
-            return "Player2";
-        }
-
-        return "Player1";
-    }
-
     void OnTriggerEnter(Collider collisionInfo)
     {
-        if(collisionInfo.CompareTag(GetEnemyTag())){
+        if(collisionInfo.CompareTag(GameManager.instance.GetEnemyTag())){
             this.transform.parent.GetComponent<IUnit>().AttackEnemy(collisionInfo.gameObject);            
         }
     }
 
     void OnTriggerExit(Collider collisionInfo)
     {
-        if(collisionInfo.gameObject.CompareTag(GetEnemyTag())){
+        if(collisionInfo.gameObject.CompareTag(GameManager.instance.GetEnemyTag())){
             this.transform.parent.GetComponent<IUnit>().RemoveEnemyAsTarget(collisionInfo.gameObject);
         }
     }

@@ -74,31 +74,23 @@ public class UnitManager : MonoBehaviour, IUnit
     }
 
     void SetupMovmentDestination() {
-        if(this.gameObject.CompareTag("Player1")){
+        if(this.gameObject.CompareTag(GameManager.instance.PlayerOneTag)){
             this.moveTransformPosition = GameObject.Find(UnitMovmentLocation.ZoneEnemyLeft).transform;
-        }else if (this.gameObject.CompareTag("Player2")) {
+        }else if (this.gameObject.CompareTag(GameManager.instance.PlayerTwoTag)) {
             this.moveTransformPosition = GameObject.Find(UnitMovmentLocation.ZoneFriendlyLeft).transform;
         }
     }
 
     void SetupMovmentDestinationHQ() {
-        if(this.gameObject.CompareTag("Player1")){
+        if(this.gameObject.CompareTag(GameManager.instance.PlayerOneTag)){
             this.moveTransformPosition = GameObject.Find(UnitMovmentLocation.ZoneEnemyHQ).transform;
-        }else if (this.gameObject.CompareTag("Player2")) {
+        }else if (this.gameObject.CompareTag(GameManager.instance.PlayerTwoTag)) {
             this.moveTransformPosition = GameObject.Find(UnitMovmentLocation.ZoneFriendlyHQ).transform;
         }
     }
 
     public int GetReloadTime() {
         return this.reloadTime;
-    }
-
-    string GetEnemyTag() {
-        if(this.gameObject.CompareTag("Player1")){
-            return "Player2";
-        }
-
-        return "Player1";
     }
 
     public void InflictDamage(int damage) {

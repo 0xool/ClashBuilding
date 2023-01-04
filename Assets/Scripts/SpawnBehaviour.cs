@@ -49,14 +49,10 @@ public abstract class SpawnBehaviour : MonoBehaviour, IUnit, IConstructable, ISe
             _buildingMode = value;
         }
     }
-
-    private GameManager gameManager;
-
     void Awake() {
         constructionComponent = this.GetComponentInChildren<ConstructionComponent>();
         constructionComponent.EnableConstructionMode();
         constructionComponent.SetBuildingType(this.buildingType);
-        gameManager = GameObject.FindWithTag("MainCamera").GetComponent<GameManager>();
         unit = units[0];
     }
 
@@ -65,8 +61,9 @@ public abstract class SpawnBehaviour : MonoBehaviour, IUnit, IConstructable, ISe
             this.buildingMode = BuildingMode.IDLE;
             return;
         }
-        if(gameManager.GetPlayerResource(this.gameObject.tag) < GetUnitCost() || buildingMode != BuildingMode.SPAWNING) return;
-        gameManager.UseResource(buildingModel.spawnCost, this.tag);
+        if(GameManager.instance.GetPlayerResource() < GetUnitCost() || buildingMode != BuildingMode.SPAWNING) return;
+        
+        GameManager.instance.UseResource(buildingModel.spawnCost);
         var newUnit = Instantiate(unit, new Vector3(this.transform.position.x - offsetSpawn,this.transform.position.y - (this.transform.localScale.x/2 - unit.transform.localScale.x/2),this.transform.position.z), this.transform.rotation);
         newUnit.tag = this.gameObject.tag;
     }
@@ -116,11 +113,11 @@ public abstract class SpawnBehaviour : MonoBehaviour, IUnit, IConstructable, ISe
     }
 
     public void Build() {        
-        if(constructionComponent.CanConstruct() && (gameManager.GetPlayerResource("Player2") > buildingModel.constructionCost))
+        if(constructionComponent.CanConstruct() && (GameManager.instance.GetPlayerResource() > buildingModel.constructionCost))
         {
-            if(gameManager.UseResource(buildingModel.constructionCost, "Player2")){
+            if(GameManager.instance.UseResource(buildingModel.constructionCost)){
                 this.buildingMode = BuildingMode.IDLE;
-                this.tag = "Player2";
+                this.tag = GameManager.instance.currentPlayer;
             }
             else
                 Destroy(this.gameObject);

@@ -31,7 +31,6 @@ public class ResourceManager : MonoBehaviour, IUnit, ISelectable, IConstructable
     }
     private Building buildingModel;
     RemoveFromTarget removeFromTarget;
-    private GameManager gameManager;
     public BuildingType buildingType = BuildingType.REFINERY;
     public BuildingMode _buildingMode = BuildingMode.CONSTRUCTION;
     public BuildingMode buildingMode{
@@ -72,7 +71,6 @@ public class ResourceManager : MonoBehaviour, IUnit, ISelectable, IConstructable
         constructionComponent = this.GetComponentInChildren<ConstructionComponent>();
         constructionComponent.EnableConstructionMode();
         constructionComponent.SetBuildingType(this.buildingType);
-        gameManager = GameObject.FindWithTag("MainCamera").GetComponent<GameManager>();
     }
 
     private void Start() {
@@ -111,7 +109,7 @@ public class ResourceManager : MonoBehaviour, IUnit, ISelectable, IConstructable
     public void IsBeingDestroyed() {
         this.gameObject.tag = "BeingDestroyed";
         removeFromTarget(this.gameObject);
-        gameManager.DescreaseResourceIncome(this.resourceValue);
+        GameManager.instance.DescreaseResourceIncome(this.resourceValue);
         StartCoroutine(RunBeingDestroyedFunctionality(2));
     }
 
@@ -141,11 +139,11 @@ public class ResourceManager : MonoBehaviour, IUnit, ISelectable, IConstructable
     }
 
         public void Build() {        
-        if(constructionComponent.CanConstruct() && (gameManager.GetPlayerResource("Player2") > buildingModel.constructionCost) && onResource)
+        if(constructionComponent.CanConstruct() && (GameManager.instance.GetPlayerResource() > buildingModel.constructionCost) && onResource)
         {
-            if(gameManager.UseResource(buildingModel.constructionCost, "Player2")){
-                gameManager.IncreaseResourceIncome(this.resourceValue);
-                this.tag = "Player2";
+            if(GameManager.instance.UseResource(buildingModel.constructionCost)){
+                GameManager.instance.IncreaseResourceIncome(this.resourceValue);
+                this.tag = GameManager.instance.currentPlayer;
                 this.transform.position = resourceLockOnPos.position;
                 Destroy(resourceLockOnPos.gameObject);
             }

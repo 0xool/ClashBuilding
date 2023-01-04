@@ -13,7 +13,6 @@ public class DefenceBuildingManager : MonoBehaviour, IUnit, IConstructable
     public int constructionCost = 500;
     RemoveFromTarget removeFromTarget;
     private ConstructionComponent constructionComponent;
-    private GameManager gameManager;
     public BuildingType buildingType = BuildingType.DEFENSE;
     private BuildingMode _buildingMode = BuildingMode.CONSTRUCTION;
     private BuildingMode buildingMode{
@@ -48,7 +47,6 @@ public class DefenceBuildingManager : MonoBehaviour, IUnit, IConstructable
         constructionComponent = this.GetComponentInChildren<ConstructionComponent>();
         constructionComponent.EnableConstructionMode();
         constructionComponent.SetBuildingType(this.buildingType);
-        gameManager = GameObject.FindWithTag("MainCamera").GetComponent<GameManager>();
     }
     void Start()
     {
@@ -124,20 +122,12 @@ public class DefenceBuildingManager : MonoBehaviour, IUnit, IConstructable
         this.buildingModel.hp -= damage;
     }
 
-    string GetEnemyTag() {
-        if(this.gameObject.CompareTag("Player1")){
-            return "Player2";
-        }
-
-        return "Player1";
-    }
-
     public void Build() {           
-        if(constructionComponent.CanConstruct() && (gameManager.GetPlayerResource("Player2") > buildingModel.constructionCost))
+        if(constructionComponent.CanConstruct() && (GameManager.instance.GetPlayerResource() > buildingModel.constructionCost))
         {
-            if(gameManager.UseResource(buildingModel.constructionCost, "Player2")){
+            if(GameManager.instance.UseResource(buildingModel.constructionCost)){
                 this.buildingMode = BuildingMode.ATTACKING;
-                this.tag = "Player2";
+                this.tag = GameManager.instance.currentPlayer;
             }
             else
                 Destroy(this.gameObject);

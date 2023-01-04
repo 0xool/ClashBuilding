@@ -1,9 +1,5 @@
 
 public static class Utilities {
-    public static string GetEnemyTag(string tag) {
-        return (tag == "Player1") ? "Player2" : "Player1";
-    }
-
     public static string GetLeftZoneTag(BuildingType buildingType) {
         if(GameManager.instance.IsPlayerTwo())
             return (buildingType == BuildingType.SPAWNER) ? "ZoneLeftFriendly" : "ZoneFriendlyDefence";
