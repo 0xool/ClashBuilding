@@ -22,6 +22,7 @@ public class GameManager : SingletonBehaviour<GameManager>
     float resourceTimer = 0;
     public float addResourceInterval = 1;
     private TMP_Text playerResourceText;
+    private bool gameIsOver = false;
     //============================================================================================================
     private void SetTestPlayers()
     { 
@@ -34,7 +35,7 @@ public class GameManager : SingletonBehaviour<GameManager>
     {
         playerOne = new Player();
         playerTwo = new Player();
-        SetCurrentPlayerOne();
+        SetCurrentPlayerTwo();
         SetTestPlayers();
         this.playerResourceText = GameObject.Find("ResourcePanel").GetComponentInChildren<TMP_Text>();
     }
@@ -60,53 +61,40 @@ public class GameManager : SingletonBehaviour<GameManager>
     }
 
     public void GameOver(string player){
+        if(gameIsOver) return;
         GameObject.Find("GameOverPlayerName").GetComponent<TMP_Text>().enabled = true;
         GameObject.Find("GameOverText").GetComponent<TMP_Text>().enabled = true ;
-
-        if(player == PlayerOneTag){
-            GameObject.Find("GameOverPlayerName").GetComponent<TMP_Text>().text = "Player Two Won";
-        }else if (player == PlayerTwoTag){
-            GameObject.Find("GameOverPlayerName").GetComponent<TMP_Text>().text = "Player One Won";
-        }
+        GameObject.Find("GameOverPlayerName").GetComponent<TMP_Text>().text = (player == PlayerOneTag) ? "Player One Won" : "Player Two Won";
     }
 
     public int GetPlayerResource() {
-        if(currentPlayer == PlayerOneTag){
-            return playerOne.resourceValue;
-        }
-        if(currentPlayer == PlayerTwoTag){
-            return playerTwo.resourceValue;
-        }
-
-        return 0;
+        return GetCurrentPlayer().resourceValue;
     }
     // TODO: Remove all toghether player1 and player2.
     // Enemy Can't call resource network will handel it.
     public bool UseResource(int amount) {
+        var player = GetCurrentPlayer();
+        if(player.resourceValue < amount) return false;
         
-        if(currentPlayer == PlayerOneTag){
-            if(playerOne.resourceValue < amount) return false;
-            playerOne.resourceValue -= amount;
-            SetResourceText();
-            return true;
-        }
-
-        if(currentPlayer == PlayerTwoTag){
-            if(playerTwo.resourceValue < amount) return false;
-            playerTwo.resourceValue -= amount;
-            SetResourceText();
-            return true;
-        }
-    
-        return false;
+        player.resourceValue -= amount;
+        SetResourceText();
+        return true;
     }
 
     public void IncreaseResourceIncome(int resource) {
-        this.playerTwo.IncreaseResourcePower(resource);
+        this.GetCurrentPlayer().IncreaseResourcePower(resource);
+    }
+
+    public void IncreaseResourceValue(int resource) {
+        this.GetCurrentPlayer().IncreaseResourceValue(resource);
     }
 
     public void DescreaseResourceIncome(int resource) {
-        this.playerTwo.DecreaseResourcePower(resource);
+        this.GetCurrentPlayer().DecreaseResourcePower(resource);
+    }
+
+    private Player GetCurrentPlayer() {
+        return (currentPlayer == PlayerOneTag) ? playerOne : playerTwo;
     }
 
     public void SetCurrentPlayerOne() {

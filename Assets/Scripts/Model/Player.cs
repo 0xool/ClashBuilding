@@ -43,14 +43,6 @@ namespace GameModel
             }
         }
 
-        public void IncreaseResourcePower(int resource){
-            currentResourcePower += resource;
-        }
-
-        public void DecreaseResourcePower(int resource){
-            currentResourcePower -= resource;
-        }
-
         private int _mainBaseHP = 100;
         public int mainBaseHp
         {
@@ -79,6 +71,17 @@ namespace GameModel
 
         public void AddResources() {
             this.resourceValue += this._currentResourcePower;
+        }
+
+        public void IncreaseResourcePower(int resource){
+            currentResourcePower += resource;
+        }
+        public void IncreaseResourceValue(int resource){
+            this.resourceValue += resource;
+        }
+
+        public void DecreaseResourcePower(int resource){
+            currentResourcePower -= resource;
         }
     }
 }

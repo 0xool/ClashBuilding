@@ -104,9 +104,7 @@ public class DefenceBuildingManager : MonoBehaviour, IUnit, IConstructable
         return this.constructionCost;
     }
 
-    public void AttackEnemy(GameObject enemy) {
-        Debug.Log(enemy.name);
-        Debug.Log(enemy.GetComponent<DefenceBuildingManager>());
+    public void AttackEnemy(GameObject enemy) {        
         if(enemy.GetComponent<DefenceBuildingManager>() == null){
             enemiesInRange.Add(enemy);
             enemy.GetComponent<IUnit>().AppendRemoveTargetDelegation(RemoveEnemyAsTarget);

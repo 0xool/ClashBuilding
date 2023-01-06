@@ -1,4 +1,4 @@
-
+using UnityEngine;
 public static class Utilities {
     public static string GetLeftZoneTag(BuildingType buildingType) {
         if(GameManager.instance.IsPlayerTwo())
@@ -17,4 +17,11 @@ public static class Utilities {
     public static string PlayerOneZoneTag = "PlayerOneZone";
     public static string PlayerTwoZoneTag = "PlayerTwoZone";
     public static string ObstacleTag = "Obstacle";
+    private static string InGameMenuUiFilePath = "Prefab/UI/UnitInGameMenu";
+    private static GameObject GetGameObjectFromFile(string path) {
+        return (GameObject) Resources.Load(path);
+    }
+    public static GameObject GetInGameMenuUIGameObject() {
+        return GetGameObjectFromFile(InGameMenuUiFilePath);
+    }
 }

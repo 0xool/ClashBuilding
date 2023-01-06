@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 
-public abstract class SpawnBehaviour : MonoBehaviour, IUnit, IConstructable, ISelectable
+public abstract class SpawnBehaviour : MonoBehaviour, IUnit, IConstructable, ISelectable, ISellable
 {    
     RemoveFromTarget removeFromTarget;
     public Building buildingModel;
@@ -49,6 +49,8 @@ public abstract class SpawnBehaviour : MonoBehaviour, IUnit, IConstructable, ISe
             _buildingMode = value;
         }
     }
+
+    private UnitUIManager inGameMenuPrefab;
     void Awake() {
         constructionComponent = this.GetComponentInChildren<ConstructionComponent>();
         constructionComponent.EnableConstructionMode();
@@ -91,11 +93,19 @@ public abstract class SpawnBehaviour : MonoBehaviour, IUnit, IConstructable, ISe
     
     public void IsBeingDestroyed() {
         this.gameObject.tag = "BeingDestroyed";
-        removeFromTarget(this.gameObject);
+        removeFromTarget(this.gameObject);        
+        RunDestructionAnimation();
+    }
+
+    private void RunDestructionAnimation() {
+        StartCoroutine(RunBeingDestroyedFunctionality(2));
+    }
+
+    private void RunSellAnimationAnimation() {
         StartCoroutine(RunBeingDestroyedFunctionality(2));
     }
  
-    IEnumerator RunBeingDestroyedFunctionality(int secs)
+    private IEnumerator RunBeingDestroyedFunctionality(int secs)
     {
         yield return new WaitForSeconds(secs);
         Destroy(this.gameObject);
@@ -134,13 +144,22 @@ public abstract class SpawnBehaviour : MonoBehaviour, IUnit, IConstructable, ISe
 
     public void SelectBuilding() {
         GameObject.FindGameObjectWithTag("UnitMenuHandler").GetComponent<UnitMenuHandler>().CreateSelectUnitMenuItems(this.units);
+        inGameMenuPrefab = Instantiate(Utilities.GetInGameMenuUIGameObject(),this.transform.position,  Quaternion.identity).GetComponentInChildren<UnitUIManager>(); 
+        inGameMenuPrefab.SetUnit(this.gameObject);
     }
 
     public void UnSelectBuilding() {
         // hide 
+        Destroy(inGameMenuPrefab.gameObject.transform.parent.gameObject);
     }
 
     public void AppendRemoveTargetDelegation( RemoveFromTarget removeFromTarget) {
         this.removeFromTarget += removeFromTarget;
+    }
+
+    public void Sell(){
+        GameManager.instance.IncreaseResourceValue(constructionCost / 3);
+        UnSelectBuilding();
+        RunSellAnimationAnimation();
     }
 }

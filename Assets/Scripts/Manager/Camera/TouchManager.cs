@@ -19,9 +19,13 @@ public class TouchManager : MonoBehaviour
     private int selectableMask;
     public ISelectable selectedUnit;
     private UnitMenuHandler unitMenuHandler;
+    private Vector3 cameraPivotDirection;
     // Start is called before the first frame update
     void Awake() {
-        touchState = TouchState.NORMAL;    
+        touchState = TouchState.NORMAL;  
+        cameraPivotDirection = (GameManager.instance.IsPlayerTwo()) ? new Vector3(0, 1, 1) : new Vector3(1, -1, 0);  
+        cameraPivotDirection *= cameraMovmentSpeed; 
+        Debug.Log(cameraPivotDirection);
     }
     void Start()
     {
@@ -60,8 +64,6 @@ public class TouchManager : MonoBehaviour
                     direction = touchPos - Camera.main.ScreenToWorldPoint(Input.mousePosition);
                     Camera.main.transform.position += direction;
                 }
-
-                
 
                 break;
 
@@ -106,23 +108,22 @@ public class TouchManager : MonoBehaviour
                 touchPos = Input.mousePosition;
                 if(touchPos.x < widthMovmentLimit ){
                     // go left
-                    direction = new Vector3(cameraMovmentSpeed, 0, 0);
-                    Camera.main.transform.position -= direction;
+                    Camera.main.transform.position -= cameraPivotDirection;
                 }
 
                 if(Screen.width - touchPos.x < widthMovmentLimit ){
                     // go right
-                    Camera.main.transform.position += new Vector3(cameraMovmentSpeed, 0, 0);
+                    Camera.main.transform.position += cameraPivotDirection;
                 }
 
                 if(touchPos.y < heighthMovmentLimit ){
                     // go up
-                    Camera.main.transform.position -= new Vector3(0, cameraMovmentSpeed, 0);
+                    Camera.main.transform.position -= cameraPivotDirection;
                 }
 
                 if(Screen.height - touchPos.y < heighthMovmentLimit ){
                     // go down
-                    Camera.main.transform.position += new Vector3(0, cameraMovmentSpeed, 0);
+                    Camera.main.transform.position += cameraPivotDirection;
                 }
                 break;
             
