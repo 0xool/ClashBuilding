@@ -35,7 +35,7 @@ public class GameManager : SingletonBehaviour<GameManager>
     {
         playerOne = new Player();
         playerTwo = new Player();
-        SetCurrentPlayerTwo();
+        SetCurrentPlayerOne();
         SetTestPlayers();
         this.playerResourceText = GameObject.Find("ResourcePanel").GetComponentInChildren<TMP_Text>();
     }

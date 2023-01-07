@@ -10,6 +10,10 @@ public class UnitUIManager : MonoBehaviour
     private GameObject unit;
     private bool isUpgradeable = false;
 
+    void Awake() {
+        if(GameManager.instance.IsPlayerOne()) this.transform.parent.transform.eulerAngles = new Vector3(0, 180, 0);
+    }
+
     public void SetUnit(GameObject unit) {
         this.unit = unit;
         this.isUpgradeable = this.unit.GetComponent<IUpgradeable>() != null;

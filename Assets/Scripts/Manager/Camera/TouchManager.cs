@@ -19,14 +19,21 @@ public class TouchManager : SingletonBehaviour<TouchManager>
     private int selectableMask;
     public ISelectable selectedUnit;
     private UnitMenuHandler unitMenuHandler;
-    private Vector3 cameraPivotDirection;
+    private Vector3 cameraPivotDirectionVertical;
+    private Vector3 cameraPivotDirectionHorizontal;
     private bool isUiBlocked = false;
+    private GameObject cameraPivot;
     // Start is called before the first frame update
     protected override void Awake() {
         base.Awake();
         touchState = TouchState.NORMAL;  
-        cameraPivotDirection = (GameManager.instance.IsPlayerTwo()) ? new Vector3(0, 1, 1) : new Vector3(1, -1, 0);  
-        cameraPivotDirection *= cameraMovmentSpeed; 
+        cameraPivotDirectionVertical = (GameManager.instance.IsPlayerTwo()) ? new Vector3(1, 0, 1) : new Vector3(-1, 0, -1);  
+        cameraPivotDirectionVertical *= cameraMovmentSpeed;
+
+        cameraPivotDirectionHorizontal = (GameManager.instance.IsPlayerTwo()) ? new Vector3(1, 0, -1) : new Vector3(-1, 0, 1);  
+        cameraPivotDirectionHorizontal *= cameraMovmentSpeed; 
+
+        cameraPivot = this.transform.parent.gameObject;
     }
     void Start()
     {
@@ -110,22 +117,22 @@ public class TouchManager : SingletonBehaviour<TouchManager>
                 touchPos = Input.mousePosition;
                 if(touchPos.x < widthMovmentLimit ){
                     // go left
-                    Camera.main.transform.position -= cameraPivotDirection;
+                    cameraPivot.transform.position -= cameraPivotDirectionHorizontal;
                 }
 
                 if(Screen.width - touchPos.x < widthMovmentLimit ){
                     // go right
-                    Camera.main.transform.position += cameraPivotDirection;
+                    cameraPivot.transform.position += cameraPivotDirectionHorizontal;
                 }
 
                 if(touchPos.y < heighthMovmentLimit ){
                     // go up
-                    Camera.main.transform.position -= cameraPivotDirection;
+                    cameraPivot.transform.position -= cameraPivotDirectionVertical;
                 }
 
                 if(Screen.height - touchPos.y < heighthMovmentLimit ){
                     // go down
-                    Camera.main.transform.position += cameraPivotDirection;
+                    cameraPivot.transform.position += cameraPivotDirectionVertical;
                 }
                 break;
             
