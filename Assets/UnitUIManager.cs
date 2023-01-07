@@ -9,23 +9,12 @@ public class UnitUIManager : MonoBehaviour
     public GameObject centerIcon;
     private GameObject unit;
 
-    // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
-
     public void SetUnit(GameObject unit) {
         this.unit = unit;   
     }
 
     public void OnRightBtnClockRotate() {
+        TouchManager.instance.SetIsUIBlocked();
         this.unit.transform.Rotate(new Vector3(0, 90, 0));
     }
 

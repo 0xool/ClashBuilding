@@ -142,7 +142,7 @@ public class DefenceBuildingManager : ClashUnitBehaviour, IUnit, IConstructable,
     public void Sell(){
         GameManager.instance.IncreaseResourceValue( constructionCost / Utilities.SellRatio);
         UnSelectBuilding();
-        RunSellAnimationAnimation();
+        //RunSellAnimationAnimation();
     }
 
     public void SelectUnit(GameObject unit) {
@@ -157,6 +157,6 @@ public class DefenceBuildingManager : ClashUnitBehaviour, IUnit, IConstructable,
     }
 
     public void UnSelectBuilding() {
-        inGameMenuPrefab.GetComponentInChildren<UnitUIManager>().RemoveUI();
+        if (inGameMenuPrefab) inGameMenuPrefab.GetComponentInChildren<UnitUIManager>().RemoveUI();
     }
 }

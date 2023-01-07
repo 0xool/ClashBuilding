@@ -2,12 +2,12 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class TouchManager : MonoBehaviour
+public class TouchManager : SingletonBehaviour<TouchManager>
 {
     public enum TouchState {
         NORMAL,
         CONSTRUCTION,
-        UNITSELECT,
+        UNITSELECTED,
     }
     private Vector3 touchPos;
     private Vector3 secondTouchPos;
@@ -20,8 +20,10 @@ public class TouchManager : MonoBehaviour
     public ISelectable selectedUnit;
     private UnitMenuHandler unitMenuHandler;
     private Vector3 cameraPivotDirection;
+    private bool isUiBlocked = false;
     // Start is called before the first frame update
-    void Awake() {
+    protected override void Awake() {
+        base.Awake();
         touchState = TouchState.NORMAL;  
         cameraPivotDirection = (GameManager.instance.IsPlayerTwo()) ? new Vector3(0, 1, 1) : new Vector3(1, -1, 0);  
         cameraPivotDirection *= cameraMovmentSpeed; 
@@ -30,10 +32,6 @@ public class TouchManager : MonoBehaviour
     {
         this.selectableMask =  LayerMask.GetMask("Unit");
         this.unitMenuHandler = GameObject.FindGameObjectWithTag("UnitMenuHandler").GetComponent<UnitMenuHandler>();
-    }
-
-    public void SetTouchState(TouchState touchState){
-        this.touchState = touchState;
     }
 
     // Update is called once per frame
@@ -50,7 +48,7 @@ public class TouchManager : MonoBehaviour
                         if(!hit.transform.gameObject.CompareTag(GameManager.instance.currentPlayer)) break;
                         this.selectedUnit = hit.transform.gameObject.GetComponent<ISelectable>();                        
                         if(selectedUnit != null){
-                            this.touchState = TouchState.UNITSELECT;
+                            this.touchState = TouchState.UNITSELECTED;
                             if (this.selectedUnit.SelectBuildingWithMenu()) this.unitMenuHandler.AnimateInMenu();
                             return;
                         }
@@ -66,7 +64,7 @@ public class TouchManager : MonoBehaviour
 
                 break;
 
-            case TouchState.UNITSELECT:
+            case TouchState.UNITSELECTED:
 
                 if(Input.GetMouseButtonDown(0)){
                     touchPos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
@@ -74,9 +72,14 @@ public class TouchManager : MonoBehaviour
 
                 if (Input.GetMouseButtonUp(0))
                 {
+                    if(isUiBlocked) {
+                        isUiBlocked = !isUiBlocked;
+                        return;
+                    }
                     ray = Camera.main.ScreenPointToRay(Input.mousePosition);
                     if (Physics.Raycast(ray, out hit, 1000.0f, selectableMask))
                     {
+                        if(hit.transform.gameObject.layer == 5) break;
                         ISelectable selectableUnit = hit.transform.gameObject.GetComponent<ISelectable>();
                         if(selectableUnit == selectedUnit){
                             return;
@@ -131,7 +134,13 @@ public class TouchManager : MonoBehaviour
                 break;
 
         }
+    }
 
+    public void SetTouchState(TouchState touchState){
+        this.touchState = touchState;
+    }
 
+    public void SetIsUIBlocked() {
+        isUiBlocked = true;
     }
 }
