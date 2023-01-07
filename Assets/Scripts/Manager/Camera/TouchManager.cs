@@ -25,7 +25,6 @@ public class TouchManager : MonoBehaviour
         touchState = TouchState.NORMAL;  
         cameraPivotDirection = (GameManager.instance.IsPlayerTwo()) ? new Vector3(0, 1, 1) : new Vector3(1, -1, 0);  
         cameraPivotDirection *= cameraMovmentSpeed; 
-        Debug.Log(cameraPivotDirection);
     }
     void Start()
     {
@@ -48,11 +47,11 @@ public class TouchManager : MonoBehaviour
                     ray = Camera.main.ScreenPointToRay(Input.mousePosition);
                     if (Physics.Raycast(ray, out hit, 1000.0f, selectableMask))
                     {
-                        this.selectedUnit = hit.transform.gameObject.GetComponent<ISelectable>();
+                        if(!hit.transform.gameObject.CompareTag(GameManager.instance.currentPlayer)) break;
+                        this.selectedUnit = hit.transform.gameObject.GetComponent<ISelectable>();                        
                         if(selectedUnit != null){
                             this.touchState = TouchState.UNITSELECT;
-                            this.selectedUnit.SelectBuilding();
-                            this.unitMenuHandler.AnimateInMenu();
+                            if (this.selectedUnit.SelectBuildingWithMenu()) this.unitMenuHandler.AnimateInMenu();
                             return;
                         }
                     }

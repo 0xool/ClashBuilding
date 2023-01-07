@@ -149,12 +149,14 @@ public class DefenceBuildingManager : ClashUnitBehaviour, IUnit, IConstructable,
         return;
     }
 
-    public void SelectBuilding() {
+    public bool SelectBuildingWithMenu() {
         inGameMenuPrefab = Instantiate(Utilities.GetInGameMenuUIGameObject(),this.transform.position, Quaternion.identity); 
         inGameMenuPrefab.GetComponentInChildren<UnitUIManager>().SetUnit(this.gameObject);
+
+        return false;
     }
 
     public void UnSelectBuilding() {
-        Destroy(inGameMenuPrefab.transform.parent.gameObject);
+        inGameMenuPrefab.GetComponentInChildren<UnitUIManager>().RemoveUI();
     }
 }

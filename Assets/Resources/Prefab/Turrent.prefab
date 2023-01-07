@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 1844789523610549893}
   - component: {fileID: 1844789523610549915}
   - component: {fileID: 1844789523610549914}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Cube (1)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -94,7 +94,7 @@ GameObject:
   - component: {fileID: 1844789523752555351}
   - component: {fileID: 1844789523752555349}
   - component: {fileID: 1844789523752555348}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Cube (1)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -180,9 +180,9 @@ GameObject:
   - component: {fileID: 1844789523983158997}
   - component: {fileID: 1844789523983159022}
   - component: {fileID: 1844789523983159023}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Turrent
-  m_TagString: Construction
+  m_TagString: Player2
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -205,7 +205,7 @@ Transform:
   - {fileID: 1844789524838643479}
   - {fileID: 4082811358099627413}
   m_Father: {fileID: 0}
-  m_RootOrder: 0
+  m_RootOrder: -1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!33 &1844789523983159016
 MeshFilter:
@@ -316,7 +316,7 @@ GameObject:
   - component: {fileID: 1844789524670911147}
   - component: {fileID: 1844789524670911145}
   - component: {fileID: 1844789524670911144}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Cube (3)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -460,7 +460,7 @@ GameObject:
   - component: {fileID: 1360440264048393994}
   - component: {fileID: 6154729193458677358}
   - component: {fileID: 4081593542416766402}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: BuildCollider
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -475,7 +475,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 9053561169837284134}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: -0.46, z: 0}
+  m_LocalPosition: {x: 0, y: -0.43, z: 0}
   m_LocalScale: {x: 0.39999998, y: 0.31249997, z: 0.39999998}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -559,6 +559,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _inConstructZone: 0
+  _inPlayerZone: 0
   _canConstructWithoutCollision: 1
   CanConstructMaterial: {fileID: 2100000, guid: fc9af0ccc638f45999444e4839aa7ae6,
     type: 2}

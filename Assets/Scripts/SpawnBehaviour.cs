@@ -127,15 +127,16 @@ public abstract class SpawnBehaviour : ClashUnitBehaviour, IUnit, IConstructable
         this.buildingMode = BuildingMode.SPAWNING;
     }
 
-    public void SelectBuilding() {
+    public bool SelectBuildingWithMenu() {
         GameObject.FindGameObjectWithTag("UnitMenuHandler").GetComponent<UnitMenuHandler>().CreateSelectUnitMenuItems(this.units);
         inGameMenuPrefab = Instantiate(Utilities.GetInGameMenuUIGameObject(),this.transform.position,  Quaternion.identity).GetComponentInChildren<UnitUIManager>(); 
         inGameMenuPrefab.SetUnit(this.gameObject);
+
+        return true;
     }
 
     public void UnSelectBuilding() {
-        // hide 
-        Destroy(inGameMenuPrefab.gameObject.transform.parent.gameObject);
+        inGameMenuPrefab.GetComponentInChildren<UnitUIManager>().RemoveUI();
     }
     public void AppendRemoveTargetDelegation( RemoveFromTarget removeFromTarget) {
         this.removeFromTarget += removeFromTarget;

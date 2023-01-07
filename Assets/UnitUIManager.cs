@@ -32,4 +32,8 @@ public class UnitUIManager : MonoBehaviour
     public void OnLeftBtnClockSell() {
         this.unit.GetComponentInParent<ISellable>().Sell();
     }
+
+    public void RemoveUI() {
+        Destroy(this.transform.parent.gameObject);
+    }
 }

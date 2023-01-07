@@ -127,7 +127,8 @@ public class ResourceManager : MonoBehaviour, IUnit, ISelectable, IConstructable
         UnSelectBuilding();
     }
 
-    public void SelectBuilding() {
+    public bool SelectBuildingWithMenu() {
+        return false;
     }
 
     public void UnSelectBuilding() {
