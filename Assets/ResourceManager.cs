@@ -3,8 +3,9 @@ using System;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class ResourceManager : MonoBehaviour, IUnit, ISelectable, IConstructable
+public class ResourceManager : ClashUnitBehaviour, IUnit, ISelectable, IConstructable, ISellable, IUpgradeable
 {
+    private GameObject inGameMenuPrefab;
     private bool onResource = false;
     public int HP = 300;
     private ConstructionComponent constructionComponent;
@@ -111,13 +112,7 @@ public class ResourceManager : MonoBehaviour, IUnit, ISelectable, IConstructable
         removeFromTarget(this.gameObject);
         GameManager.instance.DescreaseResourceIncome(this.resourceValue);
         StartCoroutine(RunBeingDestroyedFunctionality(2));
-    }
-
-        IEnumerator RunBeingDestroyedFunctionality(int secs)
-    {
-        yield return new WaitForSeconds(secs);
-        Destroy(this.gameObject);
-    }   
+    } 
 
     public int GetReloadTime(){
         return -1;
@@ -128,11 +123,14 @@ public class ResourceManager : MonoBehaviour, IUnit, ISelectable, IConstructable
     }
 
     public bool SelectBuildingWithMenu() {
+        inGameMenuPrefab = Instantiate(Utilities.GetInGameMenuUIGameObject(),this.transform.position, Quaternion.identity); 
+        inGameMenuPrefab.GetComponentInChildren<UnitUIManager>().SetUnit(this.gameObject);
+
         return false;
     }
 
     public void UnSelectBuilding() {
-        // hide 
+        if (inGameMenuPrefab) inGameMenuPrefab.GetComponentInChildren<UnitUIManager>().RemoveUI();
     }
 
     public void AppendRemoveTargetDelegation( RemoveFromTarget removeFromTarget) {
@@ -172,5 +170,14 @@ public class ResourceManager : MonoBehaviour, IUnit, ISelectable, IConstructable
             this.onResource = true;
         }
     }
-    
+
+    public void Upgrade(){
+        this.upgradeLevel += 1;
+    }
+
+    public void Sell(){
+        GameManager.instance.IncreaseResourceValue( constructionCost / Utilities.SellRatio);
+        UnSelectBuilding();
+        RunSellAnimationAnimation();
+    }
 }

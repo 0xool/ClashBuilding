@@ -2,9 +2,19 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class DefenceBuildingManager : ClashUnitBehaviour, IUnit, IConstructable, ISellable, ISelectable
+public class DefenceBuildingManager : ClashUnitBehaviour, IUnit, IConstructable, ISellable, ISelectable, IUpgradeable
 {
     private GameObject inGameMenuPrefab;
+    private int upgradeLevel{
+        get{
+            return _upgradeLevel;
+        }set{
+            // MARK : ADD DAMAGE UPGRADE INCREAMENT
+            buildingModel.damage += 20;
+            upgradeLevel = value;
+        }
+    }
+    private int _upgradeLevel = 1;
     public Building buildingModel;
     public int hp;
     public int damage;
@@ -90,12 +100,6 @@ public class DefenceBuildingManager : ClashUnitBehaviour, IUnit, IConstructable,
         buildingModel.buildingState = BuildingState.DYING;
         StartCoroutine(RunBeingDestroyedFunctionality(3));
     }
- 
-    IEnumerator RunBeingDestroyedFunctionality(int secs)
-    {
-        yield return new WaitForSeconds(secs);
-        Destroy(this.gameObject);
-    }
 
     public int GetHP() {
         return this.buildingModel.hp;
@@ -142,7 +146,7 @@ public class DefenceBuildingManager : ClashUnitBehaviour, IUnit, IConstructable,
     public void Sell(){
         GameManager.instance.IncreaseResourceValue( constructionCost / Utilities.SellRatio);
         UnSelectBuilding();
-        //RunSellAnimationAnimation();
+        RunSellAnimationAnimation();
     }
 
     public void SelectUnit(GameObject unit) {
@@ -158,5 +162,10 @@ public class DefenceBuildingManager : ClashUnitBehaviour, IUnit, IConstructable,
 
     public void UnSelectBuilding() {
         if (inGameMenuPrefab) inGameMenuPrefab.GetComponentInChildren<UnitUIManager>().RemoveUI();
+    }
+
+    public void Upgrade()
+    {
+        upgradeLevel++;
     }
 }

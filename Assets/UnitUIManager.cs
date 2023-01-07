@@ -8,9 +8,14 @@ public class UnitUIManager : MonoBehaviour
     public GameObject leftIcon;
     public GameObject centerIcon;
     private GameObject unit;
+    private bool isUpgradeable = false;
 
     public void SetUnit(GameObject unit) {
-        this.unit = unit;   
+        this.unit = unit;
+        this.isUpgradeable = this.unit.GetComponent<IUpgradeable>() != null;
+        if(!this.isUpgradeable){
+            HideMiddleBtn();
+        }   
     }
 
     public void OnRightBtnClockRotate() {
@@ -24,5 +29,14 @@ public class UnitUIManager : MonoBehaviour
 
     public void RemoveUI() {
         Destroy(this.transform.parent.gameObject);
+    }
+
+    public void OnMiddleBtnUpgradeClicked() {
+        if(!isUpgradeable) return;
+        this.unit.GetComponent<IUpgradeable>().Upgrade();
+    }
+
+    private void HideMiddleBtn() {
+        Destroy(centerIcon);
     }
 }
