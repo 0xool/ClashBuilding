@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 
-public abstract class SpawnBehaviour : MonoBehaviour, IUnit, IConstructable, ISelectable, ISellable
+public abstract class SpawnBehaviour : ClashUnitBehaviour, IUnit, IConstructable, ISelectable, ISellable
 {    
     RemoveFromTarget removeFromTarget;
     public Building buildingModel;
@@ -96,21 +96,6 @@ public abstract class SpawnBehaviour : MonoBehaviour, IUnit, IConstructable, ISe
         removeFromTarget(this.gameObject);        
         RunDestructionAnimation();
     }
-
-    private void RunDestructionAnimation() {
-        StartCoroutine(RunBeingDestroyedFunctionality(2));
-    }
-
-    private void RunSellAnimationAnimation() {
-        StartCoroutine(RunBeingDestroyedFunctionality(2));
-    }
- 
-    private IEnumerator RunBeingDestroyedFunctionality(int secs)
-    {
-        yield return new WaitForSeconds(secs);
-        Destroy(this.gameObject);
-    }
-
     public int GetReloadTime(){
         return -1;
     }
@@ -152,13 +137,12 @@ public abstract class SpawnBehaviour : MonoBehaviour, IUnit, IConstructable, ISe
         // hide 
         Destroy(inGameMenuPrefab.gameObject.transform.parent.gameObject);
     }
-
     public void AppendRemoveTargetDelegation( RemoveFromTarget removeFromTarget) {
         this.removeFromTarget += removeFromTarget;
     }
 
     public void Sell(){
-        GameManager.instance.IncreaseResourceValue(constructionCost / 3);
+        GameManager.instance.IncreaseResourceValue( constructionCost / Utilities.SellRatio);
         UnSelectBuilding();
         RunSellAnimationAnimation();
     }

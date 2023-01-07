@@ -2,8 +2,9 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class DefenceBuildingManager : MonoBehaviour, IUnit, IConstructable
+public class DefenceBuildingManager : ClashUnitBehaviour, IUnit, IConstructable, ISellable, ISelectable
 {
+    private GameObject inGameMenuPrefab;
     public Building buildingModel;
     public int hp;
     public int damage;
@@ -136,5 +137,24 @@ public class DefenceBuildingManager : MonoBehaviour, IUnit, IConstructable
 
     public void AppendRemoveTargetDelegation( RemoveFromTarget removeFromTarget) {
         this.removeFromTarget += removeFromTarget;
+    }
+
+    public void Sell(){
+        GameManager.instance.IncreaseResourceValue( constructionCost / Utilities.SellRatio);
+        UnSelectBuilding();
+        RunSellAnimationAnimation();
+    }
+
+    public void SelectUnit(GameObject unit) {
+        return;
+    }
+
+    public void SelectBuilding() {
+        inGameMenuPrefab = Instantiate(Utilities.GetInGameMenuUIGameObject(),this.transform.position, Quaternion.identity); 
+        inGameMenuPrefab.GetComponentInChildren<UnitUIManager>().SetUnit(this.gameObject);
+    }
+
+    public void UnSelectBuilding() {
+        Destroy(inGameMenuPrefab.transform.parent.gameObject);
     }
 }

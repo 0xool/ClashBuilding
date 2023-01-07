@@ -13,7 +13,7 @@ public static class Utilities {
         else
             return (buildingType == BuildingType.SPAWNER) ? "ZoneRightEnemy" : "ZoneEnemyDefence";
     }
-
+    public static int SellRatio = 2;
     public static string PlayerOneZoneTag = "PlayerOneZone";
     public static string PlayerTwoZoneTag = "PlayerTwoZone";
     public static string ObstacleTag = "Obstacle";
