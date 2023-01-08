@@ -31,12 +31,15 @@ public class GameManager : SingletonBehaviour<GameManager>
     }
     //============================================================================================================
     // Start is called before the first frame update
-    void Start()
-    {
+    protected override void Awake() {
+        base.Awake();
         playerOne = new Player();
         playerTwo = new Player();
-        SetCurrentPlayerOne();
+        SetCurrentPlayerTwo();
         SetTestPlayers();
+    }
+    void Start()
+    {        
         this.playerResourceText = GameObject.Find("ResourcePanel").GetComponentInChildren<TMP_Text>();
     }
     // Update is called once per frame
