@@ -5,7 +5,7 @@ using UnityEngine.UI;
 using GameModel;
 using TMPro;
 
-public class GameManager : SingletonBehaviour<GameManager>
+public class GameManager : NetworkSingletonBehaviour<GameManager>
 {
     public string PlayerOneTag = "Player1";
     public string PlayerTwoTag = "Player2";
