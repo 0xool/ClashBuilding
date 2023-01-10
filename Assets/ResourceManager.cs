@@ -3,12 +3,11 @@ using System;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class ResourceManager : ClashUnitBehaviour, IUnit, ISelectable, IConstructable, ISellable, IUpgradeable
+public class ResourceManager : BuildingBehaviour, IUnit, ISelectable, ISellable, IUpgradeable
 {
     private GameObject inGameMenuPrefab;
     private bool onResource = false;
     public int HP = 300;
-    private ConstructionComponent constructionComponent;
     private enum RefineryState
     {
         NotBuilt,
@@ -30,60 +29,16 @@ public class ResourceManager : ClashUnitBehaviour, IUnit, ISelectable, IConstruc
             _resourceValue = value;
         }
     }
-    private Building buildingModel;
     RemoveFromTarget removeFromTarget;
-    public BuildingType buildingType = BuildingType.REFINERY;
-    public BuildingMode _buildingMode = BuildingMode.CONSTRUCTION;
-    public BuildingMode buildingMode{
-        get{
-            return _buildingMode;
-        }set{
-            
-            if(value != BuildingMode.CONSTRUCTION){
-                
-            }
-
-            switch (value)
-            {
-                case BuildingMode.CONSTRUCTION:                    
-                    constructionComponent.EnableConstructionMode();
-                break;
-                
-                case BuildingMode.DESTRUCTION:
-                break;
-
-                case BuildingMode.IDLE:
-                    constructionComponent.DisableConstructionMode();
-                break;
-
-                default:
-                    constructionComponent.DisableConstructionMode();
-                    break;
-            }
-
-            _buildingMode = value;
-        }
-    }
-
-    // Start is called before the first frame update
-    void Awake()
-    {
+    private void Start() {
         this.buildingModel = new Building(this.name, HP, BuildingType.REFINERY, 0, 0, constructionCost);
         constructionComponent = this.GetComponentInChildren<ConstructionComponent>();
         constructionComponent.EnableConstructionMode();
+        
         constructionComponent.SetBuildingType(this.buildingType);
-    }
-
-    private void Start() {
         this.buildingModel.constructionCost = constructionCost; 
         this.buildingModel.upgradeCost = upgradeCost;    
     }
-
-    // Update is called once per frame
-    void Update()
-    {
-    }
-
 
     public int GetHP() {
         return this.buildingModel.hp;
@@ -136,22 +91,6 @@ public class ResourceManager : ClashUnitBehaviour, IUnit, ISelectable, IConstruc
     public void AppendRemoveTargetDelegation( RemoveFromTarget removeFromTarget) {
         this.removeFromTarget += removeFromTarget;
     }
-
-        public void Build() {        
-        if(constructionComponent.CanConstruct() && (GameManager.instance.GetPlayerResource() > buildingModel.constructionCost) && onResource)
-        {
-            if(GameManager.instance.UseResource(buildingModel.constructionCost)){
-                GameManager.instance.IncreaseResourceIncome(this.resourceValue);
-                this.tag = GameManager.instance.currentPlayer;
-                this.transform.position = resourceLockOnPos.position;
-                Destroy(resourceLockOnPos.gameObject);
-            }
-            else
-                Destroy(this.gameObject);
-        }else{
-            Destroy(this.gameObject);
-        }
-    }
     public void RemoveEnemyAsTarget(GameObject enemy){
         return;
     }
@@ -179,5 +118,18 @@ public class ResourceManager : ClashUnitBehaviour, IUnit, ISelectable, IConstruc
         GameManager.instance.IncreaseResourceValue( constructionCost / Utilities.SellRatio);
         UnSelectBuilding();
         RunSellAnimationAnimation();
+    }
+
+    protected override void SetBuildingType()
+    {
+        this.buildingType = BuildingType.REFINERY;
+    }
+
+    protected override int GetRefineryResourceValue(){
+        return this.resourceValue;
+    }
+
+    protected override Transform GetResourceLockOnPos(){
+        return this.resourceLockOnPos;
     }
 }

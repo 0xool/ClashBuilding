@@ -3,55 +3,18 @@ using System.Collections.Generic;
 using UnityEngine;
 
 
-public abstract class SpawnBehaviour : ClashUnitBehaviour, IUnit, IConstructable, ISelectable, ISellable
+public class SpawnBehaviour : BuildingBehaviour, IUnit, ISelectable, ISellable
 {    
     RemoveFromTarget removeFromTarget;
-    public Building buildingModel;
     private GameObject unit;
     public float offsetSpawn = 2;
     public int hp = 500;
     public float spawnInterval = 5.0f;
     public int constructionCost = 500;
     public GameObject[] units;
-    private ConstructionComponent constructionComponent;
-    public BuildingType buildingType = BuildingType.SPAWNER;
-    public BuildingMode _buildingMode = BuildingMode.CONSTRUCTION;
-    public BuildingMode buildingMode{
-        get{
-            return _buildingMode;
-        }set{
-            
-            if(value != BuildingMode.CONSTRUCTION){
-                
-            }
-
-            switch (value)
-            {
-                case BuildingMode.CONSTRUCTION:                    
-                    constructionComponent.EnableConstructionMode();
-                break;
-                
-                case BuildingMode.DESTRUCTION:
-                break;
-
-                case BuildingMode.IDLE:
-                    constructionComponent.DisableConstructionMode();
-                break;
-
-                case BuildingMode.SPAWNING:
-                    constructionComponent.DisableConstructionMode();
-                break;
-
-                default:
-                    break;
-            }
-
-            _buildingMode = value;
-        }
-    }
 
     private UnitUIManager inGameMenuPrefab;
-    void Awake() {
+    void Start() {
         constructionComponent = this.GetComponentInChildren<ConstructionComponent>();
         constructionComponent.EnableConstructionMode();
         constructionComponent.SetBuildingType(this.buildingType);
@@ -107,20 +70,6 @@ public abstract class SpawnBehaviour : ClashUnitBehaviour, IUnit, IConstructable
         this.transform.position = touchLocation;
     }
 
-    public void Build() {        
-        if(constructionComponent.CanConstruct() && (GameManager.instance.GetPlayerResource() > buildingModel.constructionCost))
-        {
-            if(GameManager.instance.UseResource(buildingModel.constructionCost)){
-                this.buildingMode = BuildingMode.IDLE;
-                this.tag = GameManager.instance.currentPlayer;
-            }
-            else
-                Destroy(this.gameObject);
-        }else{
-            Destroy(this.gameObject);
-        }
-    }
-
     public void SelectUnit(GameObject unit) {
         this.unit = unit;
         UnSelectBuilding();
@@ -146,5 +95,9 @@ public abstract class SpawnBehaviour : ClashUnitBehaviour, IUnit, IConstructable
         GameManager.instance.IncreaseResourceValue( constructionCost / Utilities.SellRatio);
         UnSelectBuilding();
         RunSellAnimationAnimation();
+    }
+    protected override void SetBuildingType()
+    {
+        this.buildingType = BuildingType.SPAWNER;
     }
 }

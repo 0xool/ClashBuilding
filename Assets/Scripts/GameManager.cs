@@ -1,7 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.UI;
+using Unity.Netcode;
 using GameModel;
 using TMPro;
 
@@ -45,6 +45,8 @@ public class GameManager : NetworkSingletonBehaviour<GameManager>
     // Update is called once per frame
     void Update()
     {
+        if(!IsOwner) return;
+
         if (resourceTimer >= addResourceInterval) {
             resourceTimer = resourceTimer - addResourceInterval;
             ManageTheResources();
@@ -73,6 +75,10 @@ public class GameManager : NetworkSingletonBehaviour<GameManager>
     public int GetPlayerResource() {
         return GetCurrentPlayer().resourceValue;
     }
+
+    public int GetPlayerResourceWithTag(string tag) {
+        return GetPlayerWithTag(tag).resourceValue;
+    }
     // TODO: Remove all toghether player1 and player2.
     // Enemy Can't call resource network will handel it.
     public bool UseResource(int amount) {
@@ -84,8 +90,21 @@ public class GameManager : NetworkSingletonBehaviour<GameManager>
         return true;
     }
 
+        public bool UsePlayerResource(int amount, string tag) {
+        var player = GetPlayerWithTag(tag);
+        if(player.resourceValue < amount) return false;
+        
+        player.resourceValue -= amount;
+        SetResourceText();
+        return true;
+    }
+
     public void IncreaseResourceIncome(int resource) {
         this.GetCurrentPlayer().IncreaseResourcePower(resource);
+    }
+
+    public void IncreaseResourceIncomeForPlayer(int resource, string playerTag) {
+        this.GetPlayerWithTag(playerTag).IncreaseResourcePower(resource);
     }
 
     public void IncreaseResourceValue(int resource) {
@@ -98,6 +117,10 @@ public class GameManager : NetworkSingletonBehaviour<GameManager>
 
     private Player GetCurrentPlayer() {
         return (currentPlayer == PlayerOneTag) ? playerOne : playerTwo;
+    }
+
+    private Player GetPlayerWithTag(string tag) {
+        return (tag == PlayerOneTag) ? playerOne : playerTwo;
     }
 
     public void SetCurrentPlayerOne() {
@@ -120,4 +143,20 @@ public class GameManager : NetworkSingletonBehaviour<GameManager>
     public string GetEnemyTag() {
         return (currentPlayer == PlayerOneTag) ? PlayerTwoTag : PlayerOneTag;
     }
+
+    [ServerRpc]
+    public void BuildConstructionServerRpc(string constructionName, Vector3 constructionPos, string playerTag, ServerRpcParams serverRpcParams = default) // This is considered a bad practice (Not Recommended)
+    {
+        var clientId = serverRpcParams.Receive.SenderClientId;
+        if (NetworkManager.ConnectedClients.ContainsKey(clientId))
+        {
+            var client = NetworkManager.ConnectedClients[clientId];
+            // Do things for this client
+            GameObject construction = Utilities.GetConstructionGameObject(constructionName);
+
+
+        }
+    }
+
 }
+

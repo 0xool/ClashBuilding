@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class DefenceBuildingManager : ClashUnitBehaviour, IUnit, IConstructable, ISellable, ISelectable, IUpgradeable
+public class DefenceBuildingManager : BuildingBehaviour, IUnit, ISellable, ISelectable, IUpgradeable
 {
     private GameObject inGameMenuPrefab;
     private int upgradeLevel{
@@ -15,7 +15,6 @@ public class DefenceBuildingManager : ClashUnitBehaviour, IUnit, IConstructable,
         }
     }
     private int _upgradeLevel = 1;
-    public Building buildingModel;
     public int hp;
     public int damage;
     private List<GameObject> enemiesInRange;
@@ -23,45 +22,13 @@ public class DefenceBuildingManager : ClashUnitBehaviour, IUnit, IConstructable,
     public int reloadTime = 0;
     public int constructionCost = 500;
     RemoveFromTarget removeFromTarget;
-    private ConstructionComponent constructionComponent;
-    public BuildingType buildingType = BuildingType.DEFENSE;
-    private BuildingMode _buildingMode = BuildingMode.CONSTRUCTION;
-    private BuildingMode buildingMode{
-        get{
-            return _buildingMode;
-        }set{
-            switch (value)
-            {
-                case BuildingMode.CONSTRUCTION:                    
-                    constructionComponent.EnableConstructionMode();
-                break;
-
-                case BuildingMode.ATTACKING:
-                    constructionComponent.DisableConstructionMode();
-                    break;
-                
-                case BuildingMode.DESTRUCTION:
-                    // Animate
-                break;
-
-                default:
-                    break;
-            }
-
-            _buildingMode = value;
-        }
-    }
-    // Start is called before the first frame update
-    void Awake()
+    void Start()
     {
         enemiesInRange = new List<GameObject>();
         constructionComponent = this.GetComponentInChildren<ConstructionComponent>();
         constructionComponent.EnableConstructionMode();
         constructionComponent.SetBuildingType(this.buildingType);
-    }
-    void Start()
-    {
-       buildingModel = new Building(this.name, hp, BuildingType.DEFENSE, damage, constructionCost);
+        buildingModel = new Building(this.name, hp, BuildingType.DEFENSE, damage, constructionCost);
     }
 
     // Update is called once per frame
@@ -125,7 +92,7 @@ public class DefenceBuildingManager : ClashUnitBehaviour, IUnit, IConstructable,
         this.buildingModel.hp -= damage;
     }
 
-    public void Build() {           
+    public void ServerBuild() {           
         if(constructionComponent.CanConstruct() && (GameManager.instance.GetPlayerResource() > buildingModel.constructionCost))
         {
             if(GameManager.instance.UseResource(buildingModel.constructionCost)){
@@ -167,5 +134,10 @@ public class DefenceBuildingManager : ClashUnitBehaviour, IUnit, IConstructable,
     public void Upgrade()
     {
         upgradeLevel++;
+    }
+
+    protected override void SetBuildingType()
+    {
+        this.buildingType = BuildingType.DEFENSE;
     }
 }

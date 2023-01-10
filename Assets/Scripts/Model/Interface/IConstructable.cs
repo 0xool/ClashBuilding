@@ -4,4 +4,5 @@ using UnityEngine;
 
 public interface IConstructable {
     public void Build();
+    public void ServerBuild(string playerTag);
 }
