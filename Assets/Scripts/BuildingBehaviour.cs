@@ -31,9 +31,18 @@ public abstract class BuildingBehaviour : ClashUnitBehaviour, IConstructable {
     protected ConstructionComponent constructionComponent;
     void Awake()
     {
+        constructionComponent = this.GetComponentInChildren<ConstructionComponent>();
+        constructionComponent.EnableConstructionMode();
+        constructionComponent.SetBuildingType(this.buildingType);
         SetBuildingType();
+        this.buildingMode = BuildingMode.CONSTRUCTION;
     }
-    public void Build() {           
+    public void Build() {  
+        if(!IsServer){
+            ServerBuild(GameManager.instance.currentPlayer);
+            return;
+        }
+
         if(constructionComponent.CanConstruct() && (GameManager.instance.GetPlayerResource() > buildingModel.constructionCost))
         {
             if(!GameManager.instance.IsOwnedByServer) return;
@@ -90,6 +99,7 @@ public abstract class BuildingBehaviour : ClashUnitBehaviour, IConstructable {
                         this.buildingMode = BuildingMode.IDLE;
                         break;
                 }
+                GameManager.instance.BuildConstructionServerRpc(this.name, this.transform.position, playerTag);
                 this.tag = playerTag;
             }
             else

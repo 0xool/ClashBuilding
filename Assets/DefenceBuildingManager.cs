@@ -33,7 +33,7 @@ public class DefenceBuildingManager : BuildingBehaviour, IUnit, ISellable, ISele
 
     // Update is called once per frame
     void Update()
-    {
+    {            
             if(buildingModel.buildingState == BuildingState.DYING){
                 return;
             }

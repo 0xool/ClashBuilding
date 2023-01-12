@@ -1,7 +1,8 @@
 using UnityEngine;
+using Unity.Netcode;
 using System.Collections;
 
-public abstract class ClashUnitBehaviour : MonoBehaviour{    
+public abstract class ClashUnitBehaviour : NetworkBehaviour{    
     protected void RunDestructionAnimation() {
         StartCoroutine(RunBeingDestroyedFunctionality(2));
     }

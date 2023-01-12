@@ -11,6 +11,8 @@ public class GameManager : NetworkSingletonBehaviour<GameManager>
     public string PlayerTwoTag = "Player2";
     private Player playerOne;
     private Player playerTwo;
+    private int playersConnected = 0;
+    private bool gameStart = false;
     private string _currentPlayer;
     public string currentPlayer {
         get{
@@ -35,17 +37,19 @@ public class GameManager : NetworkSingletonBehaviour<GameManager>
         base.Awake();
         playerOne = new Player();
         playerTwo = new Player();
-        SetCurrentPlayerTwo();
-        SetTestPlayers();
     }
+
     void Start()
     {        
+        SetCurrentPlayerOne();
         this.playerResourceText = GameObject.Find("ResourcePanel").GetComponentInChildren<TMP_Text>();
     }
     // Update is called once per frame
     void Update()
     {
         if(!IsOwner) return;
+        if(!gameStart) return;
+
 
         if (resourceTimer >= addResourceInterval) {
             resourceTimer = resourceTimer - addResourceInterval;
@@ -54,6 +58,11 @@ public class GameManager : NetworkSingletonBehaviour<GameManager>
         }
 
         resourceTimer += Time.deltaTime;
+    }
+
+    public void ConnectedPlayerSetup(){
+        playersConnected++;
+        gameStart = (playersConnected == 2);
     }
 
     void ManageTheResources() {
@@ -144,9 +153,11 @@ public class GameManager : NetworkSingletonBehaviour<GameManager>
         return (currentPlayer == PlayerOneTag) ? PlayerTwoTag : PlayerOneTag;
     }
 
-    [ServerRpc]
-    public void BuildConstructionServerRpc(string constructionName, Vector3 constructionPos, string playerTag, ServerRpcParams serverRpcParams = default) // This is considered a bad practice (Not Recommended)
+    [ServerRpc(RequireOwnership = false)]
+    public void BuildConstructionServerRpc(string constructionName, Vector3 constructionPos, string playerTag, ServerRpcParams serverRpcParams = default) 
     {
+        Debug.Log("Omg this WORKS!!");
+        if(!gameStart) return;
         var clientId = serverRpcParams.Receive.SenderClientId;
         if (NetworkManager.ConnectedClients.ContainsKey(clientId))
         {

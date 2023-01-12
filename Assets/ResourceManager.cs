@@ -28,6 +28,8 @@ public class ResourceManager : BuildingBehaviour, IUnit, ISelectable, ISellable,
         }set{
             _resourceValue = value;
         }
+
+        
     }
     RemoveFromTarget removeFromTarget;
     private void Start() {
@@ -70,6 +72,7 @@ public class ResourceManager : BuildingBehaviour, IUnit, ISelectable, ISellable,
     } 
 
     public int GetReloadTime(){
+        
         return -1;
     }
 

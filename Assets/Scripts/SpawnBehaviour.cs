@@ -15,9 +15,6 @@ public class SpawnBehaviour : BuildingBehaviour, IUnit, ISelectable, ISellable
 
     private UnitUIManager inGameMenuPrefab;
     void Start() {
-        constructionComponent = this.GetComponentInChildren<ConstructionComponent>();
-        constructionComponent.EnableConstructionMode();
-        constructionComponent.SetBuildingType(this.buildingType);
         unit = units[0];
     }
 
@@ -26,8 +23,8 @@ public class SpawnBehaviour : BuildingBehaviour, IUnit, ISelectable, ISellable
             this.buildingMode = BuildingMode.IDLE;
             return;
         }
-        if(GameManager.instance.GetPlayerResource() < GetUnitCost() || buildingMode != BuildingMode.SPAWNING) return;
-        
+        if(buildingMode != BuildingMode.SPAWNING) return;
+        if(GameManager.instance.GetPlayerResource() < GetUnitCost()) return;
         GameManager.instance.UseResource(buildingModel.spawnCost);
         var newUnit = Instantiate(unit, new Vector3(this.transform.position.x - offsetSpawn,this.transform.position.y - (this.transform.localScale.x/2 - unit.transform.localScale.x/2),this.transform.position.z), this.transform.rotation);
         newUnit.tag = this.gameObject.tag;
