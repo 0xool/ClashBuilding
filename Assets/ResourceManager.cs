@@ -37,7 +37,6 @@ public class ResourceManager : BuildingBehaviour, IUnit, ISelectable, ISellable,
         constructionComponent = this.GetComponentInChildren<ConstructionComponent>();
         constructionComponent.EnableConstructionMode();
         
-        constructionComponent.SetBuildingType(this.buildingType);
         this.buildingModel.constructionCost = constructionCost; 
         this.buildingModel.upgradeCost = upgradeCost;    
     }

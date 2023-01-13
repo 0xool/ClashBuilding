@@ -27,7 +27,6 @@ public class DefenceBuildingManager : BuildingBehaviour, IUnit, ISellable, ISele
         enemiesInRange = new List<GameObject>();
         constructionComponent = this.GetComponentInChildren<ConstructionComponent>();
         constructionComponent.EnableConstructionMode();
-        constructionComponent.SetBuildingType(this.buildingType);
         buildingModel = new Building(this.name, hp, BuildingType.DEFENSE, damage, constructionCost);
     }
 

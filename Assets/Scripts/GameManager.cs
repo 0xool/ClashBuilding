@@ -25,6 +25,8 @@ public class GameManager : NetworkSingletonBehaviour<GameManager>
     public float addResourceInterval = 1;
     private TMP_Text playerResourceText;
     private bool gameIsOver = false;
+    private NetworkVariable<int> playerOneResource = new NetworkVariable<int>(0);
+    private NetworkVariable<int> playerTwoResource = new NetworkVariable<int>(0); 
     //============================================================================================================
     private void SetTestPlayers()
     { 
@@ -47,17 +49,27 @@ public class GameManager : NetworkSingletonBehaviour<GameManager>
     // Update is called once per frame
     void Update()
     {
-        if(!IsOwner) return;
-        if(!gameStart) return;
+        // if(!IsOwner) return;
+        // if(!gameStart) return;
 
+        if(IsClient){
+            // this.playerOne.resourceValue = playerOneResource.Value;
+            // this.playerTwo.resourceValue = playerTwoResource.Value;
 
-        if (resourceTimer >= addResourceInterval) {
-            resourceTimer = resourceTimer - addResourceInterval;
-            ManageTheResources();
             SetResourceText();
         }
 
-        resourceTimer += Time.deltaTime;
+        if(IsServer){
+            if (resourceTimer >= addResourceInterval) {
+                    resourceTimer = resourceTimer - addResourceInterval;
+                    ManageTheResources();        
+                    
+                    // playerOneResource.Value = this.playerOne.resourceValue;
+                    // playerTwoResource.Value = this.playerTwo.resourceValue;                
+                }
+
+            resourceTimer += Time.deltaTime;
+        }
     }
 
     public void ConnectedPlayerSetup(){
@@ -157,17 +169,40 @@ public class GameManager : NetworkSingletonBehaviour<GameManager>
     public void BuildConstructionServerRpc(string constructionName, Vector3 constructionPos, string playerTag, ServerRpcParams serverRpcParams = default) 
     {
         Debug.Log("Omg this WORKS!!");
+        //if(!gameStart) return;
+        var clientId = serverRpcParams.Receive.SenderClientId;
+        if (NetworkManager.ConnectedClients.ContainsKey(clientId))
+        {
+            Debug.Log("we are in!!");
+            var client = NetworkManager.ConnectedClients[clientId];
+            // Do things for this client
+            GameObject construction = Utilities.GetConstructionGameObject(constructionName);
+            Instantiate(construction, constructionPos, Quaternion.identity).GetComponent<NetworkObject>().Spawn();
+        }
+    }
+
+    [ServerRpc(RequireOwnership = false)]
+    public void SpawnUnitServerRpc(string unitName, Vector3 spawnPos, string playerTag, ServerRpcParams serverRpcParams = default) 
+    {
+        Debug.Log("Omg this WORKS2!!");
         if(!gameStart) return;
         var clientId = serverRpcParams.Receive.SenderClientId;
         if (NetworkManager.ConnectedClients.ContainsKey(clientId))
         {
             var client = NetworkManager.ConnectedClients[clientId];
             // Do things for this client
-            GameObject construction = Utilities.GetConstructionGameObject(constructionName);
-
-
+            GameObject construction = Utilities.GetUnitGameObject(unitName);
         }
+    }
+    
+    [ServerRpc(RequireOwnership = false)]
+    public void UseResourceServerRpc(int amount, string playerTag) {
+        var player = GetPlayerWithTag(playerTag);
+        if(player.resourceValue < amount) return;
+        player.resourceValue -= amount; 
+        
+        // playerOneResource.Value = this.playerOne.resourceValue;
+        // playerTwoResource.Value = this.playerTwo.resourceValue;
     }
 
 }
-

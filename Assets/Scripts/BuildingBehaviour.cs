@@ -7,6 +7,7 @@ public abstract class BuildingBehaviour : ClashUnitBehaviour, IConstructable {
             get{
                 return _buildingMode;
             }set{
+                if(value != BuildingMode.CONSTRUCTION) constructionComponent.DisableConstructionMode();
                 switch (value)
                 {
                     case BuildingMode.CONSTRUCTION:                    
@@ -14,7 +15,6 @@ public abstract class BuildingBehaviour : ClashUnitBehaviour, IConstructable {
                     break;
 
                     case BuildingMode.ATTACKING:
-                        constructionComponent.DisableConstructionMode();
                         break;
                     
                     case BuildingMode.DESTRUCTION:
@@ -33,7 +33,6 @@ public abstract class BuildingBehaviour : ClashUnitBehaviour, IConstructable {
     {
         constructionComponent = this.GetComponentInChildren<ConstructionComponent>();
         constructionComponent.EnableConstructionMode();
-        constructionComponent.SetBuildingType(this.buildingType);
         SetBuildingType();
         this.buildingMode = BuildingMode.CONSTRUCTION;
     }
@@ -99,8 +98,9 @@ public abstract class BuildingBehaviour : ClashUnitBehaviour, IConstructable {
                         this.buildingMode = BuildingMode.IDLE;
                         break;
                 }
-                GameManager.instance.BuildConstructionServerRpc(this.name, this.transform.position, playerTag);
+                GameManager.instance.BuildConstructionServerRpc(TouchManager.instance.currentDragedPrefabName, this.transform.position, playerTag);
                 this.tag = playerTag;
+                Destroy(this.gameObject);
             }
             else
                 Destroy(this.gameObject);
@@ -115,7 +115,9 @@ public abstract class BuildingBehaviour : ClashUnitBehaviour, IConstructable {
         this.transform.position = resourceLockOnPos.position;
         Destroy(resourceLockOnPos.gameObject);
     }
-    protected abstract void SetBuildingType();
+    protected virtual void SetBuildingType(){
+        throw new System.NotImplementedException();
+    }
     protected virtual int GetRefineryResourceValue(){
         throw new System.NotImplementedException();
     }
@@ -123,5 +125,8 @@ public abstract class BuildingBehaviour : ClashUnitBehaviour, IConstructable {
         throw new System.NotImplementedException();
     }
 
-
+    public BuildingType GetBuildingType()
+    {
+        return this.buildingType;
+    }
 }

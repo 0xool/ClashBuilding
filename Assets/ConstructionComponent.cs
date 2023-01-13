@@ -44,6 +44,7 @@ public class ConstructionComponent : MonoBehaviour
     void Start()
     {
         this.gameObject.GetComponent<MeshRenderer>().material = CanNotConstructMaterial;
+        buildingType = this.transform.parent.GetComponent<IConstructable>().GetBuildingType();
     }
 
     // Update is called once per frame
@@ -79,10 +80,6 @@ public class ConstructionComponent : MonoBehaviour
     private void DisableMeshComponents(){ 
         this.gameObject.GetComponent<MeshCollider>().enabled = false;
         this.gameObject.GetComponent<MeshRenderer>().enabled = false;
-    }
-
-    public void SetBuildingType(BuildingType buildingType) {
-        this.buildingType = buildingType;
     }
 
     void OnTriggerExit(Collider collider) {

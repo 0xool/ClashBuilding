@@ -23,6 +23,7 @@ public class TouchManager : SingletonBehaviour<TouchManager>
     private Vector3 cameraPivotDirectionHorizontal;
     private bool isUiBlocked = false;
     private GameObject cameraPivot;
+    public string currentDragedPrefabName = "";
     // Start is called before the first frame update
     protected override void Awake() {
         base.Awake();

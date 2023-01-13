@@ -14,13 +14,16 @@ public static class Utilities {
         else
             return (buildingType == BuildingType.SPAWNER) ? "ZoneRightEnemy" : "ZoneEnemyDefence";
     }
-    private static string PrefabPath = "Prefab/UI/";
+    private static string PrefabPath = "Prefab/";
+    private static string UIPrefabPath = "Prefab/UI/";
     public static int SellRatio = 2;
     public static string PlayerOneZoneTag = "PlayerOneZone";
     public static string PlayerTwoZoneTag = "PlayerTwoZone";
     public static string ObstacleTag = "Obstacle";
     private static string InGameMenuUiFilePath = PrefabPath + "UnitInGameMenu";
     private static Func<string, string> GetConstructionGameObjectPath = (constructionName) => {return PrefabPath + constructionName;};
+    private static Func<string, string> GetUIGameObjectPath = (constructionName) => {return PrefabPath + constructionName;};
+
     private static GameObject GetGameObjectFromFile(string path) {
         return (GameObject) Resources.Load(path);
     }
@@ -28,7 +31,11 @@ public static class Utilities {
         return GetGameObjectFromFile(InGameMenuUiFilePath);
     }
 
-    public static GameObject GetConstructionGameObject(string constrionName){
-        return GetGameObjectFromFile(GetConstructionGameObjectPath(constrionName));
+    public static GameObject GetConstructionGameObject(string constructionName){
+        return GetGameObjectFromFile(GetConstructionGameObjectPath(constructionName));
+    }
+
+    public static GameObject GetUnitGameObject(string unitName){
+        return GetGameObjectFromFile(GetConstructionGameObjectPath(unitName));
     }
 }

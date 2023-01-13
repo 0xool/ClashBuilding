@@ -13,10 +13,8 @@ public class BuildingMenuItem :
     private bool isBuilding = false;
     public GameObject buildPrefab;
     private GameObject build;
-    private TouchManager touchManager;
 
     void Start() {
-        this.touchManager = GameObject.FindGameObjectWithTag("MainCamera").GetComponent<TouchManager>();
     }
 
     void Update() {
@@ -37,9 +35,10 @@ public class BuildingMenuItem :
      public void OnBeginDrag(PointerEventData data)
     {
         isBuilding = true;
+        TouchManager.instance.currentDragedPrefabName = buildPrefab.name;
         this.build = Instantiate(buildPrefab, new Vector3(-100, 0, -100), Quaternion.identity);            
         this.build.transform.position += new Vector3(0, this.build.transform.localScale.y / 2, 0);
-        touchManager.SetTouchState(TouchManager.TouchState.CONSTRUCTION);
+        TouchManager.instance.SetTouchState(TouchManager.TouchState.CONSTRUCTION);
     }
 
     public void OnDrag(PointerEventData data)
@@ -49,8 +48,9 @@ public class BuildingMenuItem :
     public void OnEndDrag(PointerEventData eventData)
     {
         IConstructable sb = this.build.GetComponent<IConstructable>();
-        touchManager.SetTouchState(TouchManager.TouchState.NORMAL);
+        TouchManager.instance.SetTouchState(TouchManager.TouchState.NORMAL);
         sb.Build();
+        TouchManager.instance.currentDragedPrefabName = "";
         isBuilding = false;
     }
 
