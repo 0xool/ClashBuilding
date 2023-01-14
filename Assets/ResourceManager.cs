@@ -2,6 +2,7 @@ using System.Collections;
 using System;
 using System.Collections.Generic;
 using UnityEngine;
+using Unity.Netcode;
 
 public class ResourceManager : BuildingBehaviour, IUnit, ISelectable, ISellable, IUpgradeable
 {
@@ -133,5 +134,11 @@ public class ResourceManager : BuildingBehaviour, IUnit, ISelectable, ISellable,
 
     protected override Transform GetResourceLockOnPos(){
         return this.resourceLockOnPos;
+    }
+    
+    [ServerRpc]
+    public void SelectUnitServerRpc(string unitName)
+    {
+        throw new NotImplementedException();
     }
 }

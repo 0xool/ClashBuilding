@@ -43,7 +43,7 @@ public class GameManager : NetworkSingletonBehaviour<GameManager>
 
     void Start()
     {        
-        SetCurrentPlayerOne();
+        SetCurrentPlayerTwo();
         this.playerResourceText = GameObject.Find("ResourcePanel").GetComponentInChildren<TMP_Text>();
     }
     // Update is called once per frame
@@ -53,8 +53,8 @@ public class GameManager : NetworkSingletonBehaviour<GameManager>
         // if(!gameStart) return;
 
         if(IsClient){
-            // this.playerOne.resourceValue = playerOneResource.Value;
-            // this.playerTwo.resourceValue = playerTwoResource.Value;
+            this.playerOne.resourceValue = playerOneResource.Value;
+            this.playerTwo.resourceValue = playerTwoResource.Value;
 
             SetResourceText();
         }
@@ -64,8 +64,8 @@ public class GameManager : NetworkSingletonBehaviour<GameManager>
                     resourceTimer = resourceTimer - addResourceInterval;
                     ManageTheResources();        
                     
-                    // playerOneResource.Value = this.playerOne.resourceValue;
-                    // playerTwoResource.Value = this.playerTwo.resourceValue;                
+                    playerOneResource.Value = this.playerOne.resourceValue;
+                    playerTwoResource.Value = this.playerTwo.resourceValue;                
                 }
 
             resourceTimer += Time.deltaTime;
@@ -113,11 +113,7 @@ public class GameManager : NetworkSingletonBehaviour<GameManager>
 
         public bool UsePlayerResource(int amount, string tag) {
         var player = GetPlayerWithTag(tag);
-        if(player.resourceValue < amount) return false;
-        
-        player.resourceValue -= amount;
-        SetResourceText();
-        return true;
+        return (player.resourceValue > amount);
     }
 
     public void IncreaseResourceIncome(int resource) {
@@ -166,18 +162,24 @@ public class GameManager : NetworkSingletonBehaviour<GameManager>
     }
 
     [ServerRpc(RequireOwnership = false)]
-    public void BuildConstructionServerRpc(string constructionName, Vector3 constructionPos, string playerTag, ServerRpcParams serverRpcParams = default) 
+    public void BuildConstructionServerRpc(string constructionName, Vector3 constructionPos, string playerTag, int amount, ServerRpcParams serverRpcParams = default) 
     {
-        Debug.Log("Omg this WORKS!!");
         //if(!gameStart) return;
         var clientId = serverRpcParams.Receive.SenderClientId;
         if (NetworkManager.ConnectedClients.ContainsKey(clientId))
         {
-            Debug.Log("we are in!!");
             var client = NetworkManager.ConnectedClients[clientId];
             // Do things for this client
-            GameObject construction = Utilities.GetConstructionGameObject(constructionName);
-            Instantiate(construction, constructionPos, Quaternion.identity).GetComponent<NetworkObject>().Spawn();
+            var player = GetPlayerWithTag(playerTag);
+            if(player.resourceValue < amount) return;
+            player.resourceValue -= amount; 
+        
+            playerOneResource.Value = this.playerOne.resourceValue;
+            playerTwoResource.Value = this.playerTwo.resourceValue;
+            GameObject construction = Instantiate(Utilities.GetConstructionGameObject(constructionName), constructionPos, Quaternion.identity);
+            construction.GetComponent<NetworkObject>().Spawn();
+            construction.GetComponent<IConstructable>().SetupConstructionClientRpc(playerTag);
+            construction.tag = playerTag;
         }
     }
 
@@ -193,16 +195,6 @@ public class GameManager : NetworkSingletonBehaviour<GameManager>
             // Do things for this client
             GameObject construction = Utilities.GetUnitGameObject(unitName);
         }
-    }
-    
-    [ServerRpc(RequireOwnership = false)]
-    public void UseResourceServerRpc(int amount, string playerTag) {
-        var player = GetPlayerWithTag(playerTag);
-        if(player.resourceValue < amount) return;
-        player.resourceValue -= amount; 
-        
-        // playerOneResource.Value = this.playerOne.resourceValue;
-        // playerTwoResource.Value = this.playerTwo.resourceValue;
     }
 
 }

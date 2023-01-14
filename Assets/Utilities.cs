@@ -20,7 +20,7 @@ public static class Utilities {
     public static string PlayerOneZoneTag = "PlayerOneZone";
     public static string PlayerTwoZoneTag = "PlayerTwoZone";
     public static string ObstacleTag = "Obstacle";
-    private static string InGameMenuUiFilePath = PrefabPath + "UnitInGameMenu";
+    private static string InGameMenuUiFilePath = UIPrefabPath + "UnitInGameMenu";
     private static Func<string, string> GetConstructionGameObjectPath = (constructionName) => {return PrefabPath + constructionName;};
     private static Func<string, string> GetUIGameObjectPath = (constructionName) => {return PrefabPath + constructionName;};
 

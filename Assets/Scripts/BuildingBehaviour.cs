@@ -1,4 +1,5 @@
 using UnityEngine;
+using Unity.Netcode;
 public abstract class BuildingBehaviour : ClashUnitBehaviour, IConstructable {
         public Building buildingModel;
         protected BuildingMode _buildingMode = BuildingMode.CONSTRUCTION;
@@ -98,7 +99,7 @@ public abstract class BuildingBehaviour : ClashUnitBehaviour, IConstructable {
                         this.buildingMode = BuildingMode.IDLE;
                         break;
                 }
-                GameManager.instance.BuildConstructionServerRpc(TouchManager.instance.currentDragedPrefabName, this.transform.position, playerTag);
+                GameManager.instance.BuildConstructionServerRpc(TouchManager.instance.currentDragedPrefabName, this.transform.position, playerTag, buildingModel.constructionCost);
                 this.tag = playerTag;
                 Destroy(this.gameObject);
             }
@@ -128,5 +129,10 @@ public abstract class BuildingBehaviour : ClashUnitBehaviour, IConstructable {
     public BuildingType GetBuildingType()
     {
         return this.buildingType;
+    }
+    [ClientRpc]
+    public void SetupConstructionClientRpc(string playerTag)
+    {
+        this.tag = playerTag;
     }
 }

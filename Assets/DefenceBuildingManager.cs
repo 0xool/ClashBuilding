@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Unity.Netcode;
 
 public class DefenceBuildingManager : BuildingBehaviour, IUnit, ISellable, ISelectable, IUpgradeable
 {
@@ -138,5 +139,10 @@ public class DefenceBuildingManager : BuildingBehaviour, IUnit, ISellable, ISele
     protected override void SetBuildingType()
     {
         this.buildingType = BuildingType.DEFENSE;
+    }
+    [ServerRpc(RequireOwnership = false)]
+    public void SelectUnitServerRpc(string unitName)
+    {
+        throw new System.NotImplementedException();
     }
 }

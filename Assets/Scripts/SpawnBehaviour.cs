@@ -1,6 +1,8 @@
 using System.Collections;
 using System.Collections.Generic;
+using System;
 using UnityEngine;
+using Unity.Netcode;
 
 
 public class SpawnBehaviour : BuildingBehaviour, IUnit, ISelectable, ISellable
@@ -68,8 +70,8 @@ public class SpawnBehaviour : BuildingBehaviour, IUnit, ISelectable, ISellable
     }
 
     public void SelectUnit(GameObject unit) {
-        this.unit = unit;
         UnSelectBuilding();
+        SelectUnitServerRpc((unit == null) ? "" : unit.name);
         this.buildingMode = BuildingMode.SPAWNING;
     }
 
@@ -96,5 +98,16 @@ public class SpawnBehaviour : BuildingBehaviour, IUnit, ISelectable, ISellable
     protected override void SetBuildingType()
     {
         this.buildingType = BuildingType.SPAWNER;
+    }
+    [ServerRpc(RequireOwnership = false)]
+    public void SelectUnitServerRpc(string unitName)
+    {
+        if(unitName == "")
+            this.unit = null;
+        else{
+            this.unit = Array.Find(units, unit => unit.name == unitName);
+            this.unit.tag = this.tag;
+            this.buildingMode = BuildingMode.SPAWNING;
+        }        
     }
 }

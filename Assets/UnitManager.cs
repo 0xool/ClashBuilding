@@ -3,10 +3,10 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
 
-public class UnitManager : MonoBehaviour, IUnit
+public class UnitManager : ClashUnitBehaviour, IUnit
 {
     private Unit unitModel;
-    [SerializeField] private Transform moveTransformPosition;
+    private Transform moveTransformPosition;
     private NavMeshAgent navMeshAgent;
     public int unitHP;
     public float movementSpeed;
@@ -17,25 +17,30 @@ public class UnitManager : MonoBehaviour, IUnit
     public int reloadTime;
     RemoveFromTarget removeFromTarget;
 
-
-    // Start is called before the first frame update
-    private void Awake() {
+    void Awake()
+    {
+        this.NetworkObject.Spawn();
+    }
+    void Start()
+    {
+        
         this.navMeshAgent = this.GetComponent<NavMeshAgent>();
         this.unitModel = new Unit(this.name, movementSpeed, unitHP, UnitState.MOVING, ZONE.RIGHTZONE, damage, cost);
         this.unitModel.hp = unitHP;
         this.unitModel.cost = cost;
 
         enemiesInRange = new List<GameObject>();
-    }
-    void Start()
-    {
-        SetupMovmentDestination();
-        navMeshAgent.speed = movementSpeed;
+                
+        if(IsServer){
+            SetupMovmentDestination();
+            navMeshAgent.speed = movementSpeed;
+        }
     }
 
     // Update is called once per frame
     void Update()
     {   
+
         if(unitModel.unitState == UnitState.DYING){
             return;
         }
@@ -48,14 +53,7 @@ public class UnitManager : MonoBehaviour, IUnit
             this.unitModel.unitState = UnitState.ATTACKING;
         }
 
-        if(unitModel.unitState == UnitState.MOVING){
-            float deltaPosToDestinationX = Mathf.Abs(this.transform.position.x - moveTransformPosition.position.x);
-            float deltaPosToDestinationY =  Mathf.Abs(this.transform.position.y - moveTransformPosition.position.y);
-            if(deltaPosToDestinationX + deltaPosToDestinationY < 3){
-                SetupMovmentDestinationHQ();
-            }
-            navMeshAgent.destination = moveTransformPosition.position;
-        }
+        MovmentHandling();
 
         if(unitModel.unitState == UnitState.ATTACKING){  
             this.navMeshAgent.isStopped = true;          
@@ -70,6 +68,18 @@ public class UnitManager : MonoBehaviour, IUnit
                 gun.Shoot(enemy, bulletPrefab, this.unitModel.damage);
             }
 
+        }
+    }
+
+    private void MovmentHandling() {
+        if(IsClient) return;
+        if(unitModel.unitState == UnitState.MOVING){
+            float deltaPosToDestinationX = Mathf.Abs(this.transform.position.x - moveTransformPosition.position.x);
+            float deltaPosToDestinationY =  Mathf.Abs(this.transform.position.y - moveTransformPosition.position.y);
+            if(deltaPosToDestinationX + deltaPosToDestinationY < 3){
+                SetupMovmentDestinationHQ();
+            }
+            navMeshAgent.destination = moveTransformPosition.position;
         }
     }
 
@@ -117,12 +127,6 @@ public class UnitManager : MonoBehaviour, IUnit
         removeFromTarget(this.gameObject);
         unitModel.unitState = UnitState.DYING;
         StartCoroutine(RunBeingDestroyedFunctionality(2));
-    }
- 
-    IEnumerator RunBeingDestroyedFunctionality(int secs)
-    {
-        yield return new WaitForSeconds(secs);
-        Destroy(this.gameObject);
     }
 
     public void AttackEnemy(GameObject enemy) {
