@@ -161,6 +161,10 @@ public class GameManager : NetworkSingletonBehaviour<GameManager>
         return (currentPlayer == PlayerOneTag) ? PlayerTwoTag : PlayerOneTag;
     }
 
+    public string GetEnemyTag(string tag) {
+        return (tag == PlayerOneTag) ? PlayerTwoTag : PlayerOneTag;
+    }
+
     [ServerRpc(RequireOwnership = false)]
     public void BuildConstructionServerRpc(string constructionName, Vector3 constructionPos, string playerTag, int amount, ServerRpcParams serverRpcParams = default) 
     {

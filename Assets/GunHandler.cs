@@ -7,11 +7,13 @@ public class GunHandler : MonoBehaviour
     private float reloadTime = 0;
     public float reloadCooldown = 10;
     private bool isReloading = false;
+    private string turrentOwnedBy;
 
     // Start is called before the first frame update
     void Start()
     {
         reloadCooldown = this.transform.parent.GetComponent<IUnit>().GetReloadTime();
+        this.turrentOwnedBy = transform.parent.tag;
     }
 
     // Update is called once per frame
@@ -30,7 +32,7 @@ public class GunHandler : MonoBehaviour
     public void Shoot(GameObject target, GameObject bulletPrefab, int damage) {
         BulletHandler bullet = Instantiate(bulletPrefab, this.transform.position, this.transform.rotation).GetComponent<BulletHandler>();
         bullet.target = target;
-        bullet.enemyTag = GameManager.instance.GetEnemyTag();
+        bullet.enemyTag = GameManager.instance.GetEnemyTag(this.turrentOwnedBy);
         bullet.bulletDamage = damage;
         isReloading = true;
     }
@@ -41,14 +43,16 @@ public class GunHandler : MonoBehaviour
 
     void OnTriggerEnter(Collider collisionInfo)
     {
-        if(collisionInfo.CompareTag(GameManager.instance.GetEnemyTag())){
+        Debug.Log("TAG:" + this.turrentOwnedBy + "Enemy:" + GameManager.instance.GetEnemyTag(this.turrentOwnedBy));
+
+        if(collisionInfo.CompareTag(GameManager.instance.GetEnemyTag(this.turrentOwnedBy))){
             this.transform.parent.GetComponent<IUnit>().AttackEnemy(collisionInfo.gameObject);            
         }
     }
 
     void OnTriggerExit(Collider collisionInfo)
     {
-        if(collisionInfo.gameObject.CompareTag(GameManager.instance.GetEnemyTag())){
+        if(collisionInfo.gameObject.CompareTag(GameManager.instance.GetEnemyTag(this.turrentOwnedBy))){
             this.transform.parent.GetComponent<IUnit>().RemoveEnemyAsTarget(collisionInfo.gameObject);
         }
     }
