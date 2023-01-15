@@ -17,10 +17,6 @@ public class UnitManager : ClashUnitBehaviour, IUnit
     public int reloadTime;
     RemoveFromTarget removeFromTarget;
 
-    void Awake()
-    {
-        this.NetworkObject.Spawn();
-    }
     void Start()
     {
         
@@ -34,6 +30,10 @@ public class UnitManager : ClashUnitBehaviour, IUnit
         if(IsServer){
             SetupMovmentDestination();
             navMeshAgent.speed = movementSpeed;
+        }
+
+        if(IsClient){
+            this.tag = GameManager.instance.currentPlayer;
         }
     }
 

@@ -26,7 +26,9 @@ public class GameManager : NetworkSingletonBehaviour<GameManager>
     private TMP_Text playerResourceText;
     private bool gameIsOver = false;
     private NetworkVariable<int> playerOneResource = new NetworkVariable<int>(0);
-    private NetworkVariable<int> playerTwoResource = new NetworkVariable<int>(0); 
+    private NetworkVariable<int> playerTwoResource = new NetworkVariable<int>(0);
+    private int connectedPlayers = 0; 
+    private bool connected = false;
     //============================================================================================================
     private void SetTestPlayers()
     { 
@@ -43,14 +45,23 @@ public class GameManager : NetworkSingletonBehaviour<GameManager>
 
     void Start()
     {        
-        SetCurrentPlayerTwo();
+        if(IsServer){
+
+        }
+
+
+
         this.playerResourceText = GameObject.Find("ResourcePanel").GetComponentInChildren<TMP_Text>();
     }
     // Update is called once per frame
     void Update()
     {
+        if(IsClient && !connected){
+            ConnectToServerRpc();
+            connected = true;
+        }
         // if(!IsOwner) return;
-        // if(!gameStart) return;
+        if(!gameStart) return;
 
         if(IsClient){
             this.playerOne.resourceValue = playerOneResource.Value;
@@ -199,6 +210,51 @@ public class GameManager : NetworkSingletonBehaviour<GameManager>
             // Do things for this client
             GameObject construction = Utilities.GetUnitGameObject(unitName);
         }
+    }
+
+    private void ConnectPlayer(ulong[] clientID){
+        connectedPlayers++;
+        ClientRpcParams clientRpcParams = new ClientRpcParams
+        {
+            Send = new ClientRpcSendParams
+            {
+                TargetClientIds = clientID
+            }
+        };
+
+        if(connectedPlayers == 1){
+            playerOne.cliendID = clientID;
+            SetupClientRpc(PlayerOneTag, playerOne.cliendID, clientRpcParams);
+        }else if (connectedPlayers == 2){
+            playerTwo.cliendID = clientID;
+            SetupClientRpc(PlayerTwoTag, playerTwo.cliendID, clientRpcParams);
+            gameStart = true;
+            GameObject.Find("LoadingImage").SetActive(false);
+            RemoveLoadingScreenClientRpc();
+        }
+    }
+
+    [ServerRpc(RequireOwnership = false)]
+    public void ConnectToServerRpc(ServerRpcParams serverRpcParams = default) {
+        if(!IsServer) return;
+        var clientId = new ulong[]{serverRpcParams.Receive.SenderClientId};
+        ConnectPlayer(clientId);
+    }
+
+    [ClientRpc]
+    public void SetupClientRpc(string playerTag, ulong[] clientID, ClientRpcParams clientRpcParams = default) {
+        if(playerTag == PlayerTwoTag){
+            SetCurrentPlayerOne();
+        }else if (playerTag == PlayerOneTag){
+            SetCurrentPlayerTwo();
+        }
+
+        connected = true;
+    }
+
+    [ClientRpc]
+    public void RemoveLoadingScreenClientRpc(ClientRpcParams clientRpcParams = default){
+        GameObject.Find("LoadingImage").SetActive(false);
     }
 
 }

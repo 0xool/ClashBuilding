@@ -14,7 +14,8 @@ public abstract class ClashUnitBehaviour : NetworkBehaviour{
     protected IEnumerator RunBeingDestroyedFunctionality(int secs)
     {
         yield return new WaitForSeconds(secs);
-        Destroy(this.gameObject);
+        if(IsServer)
+            Destroy(this.gameObject);
     }
     
 }

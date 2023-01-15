@@ -6,7 +6,14 @@ namespace GameModel
     public class Player
     {
         private string username;
-        private int ID;
+        private ulong[] _cliendID;
+        public ulong[] cliendID{
+            get{
+                return _cliendID;
+            }set{
+                _cliendID = value;
+            }
+        }
         private string _name;
         public string name
         {

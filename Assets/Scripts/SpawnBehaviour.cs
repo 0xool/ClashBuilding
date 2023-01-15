@@ -21,6 +21,7 @@ public class SpawnBehaviour : BuildingBehaviour, IUnit, ISelectable, ISellable
     }
 
     public void Spawn(){
+        if(IsClient) return;
         if(unit == null){
             this.buildingMode = BuildingMode.IDLE;
             return;
@@ -29,7 +30,9 @@ public class SpawnBehaviour : BuildingBehaviour, IUnit, ISelectable, ISellable
         if(GameManager.instance.GetPlayerResource() < GetUnitCost()) return;
         GameManager.instance.UseResource(buildingModel.spawnCost);
         var newUnit = Instantiate(unit, new Vector3(this.transform.position.x - offsetSpawn,this.transform.position.y - (this.transform.localScale.x/2 - unit.transform.localScale.x/2),this.transform.position.z), this.transform.rotation);
-        newUnit.tag = this.gameObject.tag;
+        newUnit.tag = this.gameObject.tag;  
+        newUnit.GetComponent<NetworkObject>().Spawn();
+
     }
     public int GetHP() {
         return this.buildingModel.hp;

@@ -43,7 +43,6 @@ public class GunHandler : MonoBehaviour
 
     void OnTriggerEnter(Collider collisionInfo)
     {
-        Debug.Log("TAG:" + this.turrentOwnedBy + "Enemy:" + GameManager.instance.GetEnemyTag(this.turrentOwnedBy));
 
         if(collisionInfo.CompareTag(GameManager.instance.GetEnemyTag(this.turrentOwnedBy))){
             this.transform.parent.GetComponent<IUnit>().AttackEnemy(collisionInfo.gameObject);            
