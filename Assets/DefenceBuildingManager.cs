@@ -39,14 +39,13 @@ public class DefenceBuildingManager : BuildingBehaviour, IUnit, ISellable, ISele
             }
 
             if(enemiesInRange.Count > 0){
+                // enemy can be destroyed at any momentf
                 GameObject enemy = enemiesInRange[0];
+                if(enemy == null) RemoveEnemyAsTarget(enemy);
                 var gun = this.gameObject.GetComponentInChildren<GunHandler>();
 
                 if(gun.CanShoot()){
                     gun.Shoot(enemy, bulletPrefab, this.buildingModel.damage);
-                    if(enemy.GetComponent<IUnit>().GetHP() - damage <= 0 ){
-                        RemoveEnemyAsTarget(enemy);
-                    }
                 }
             }
     }

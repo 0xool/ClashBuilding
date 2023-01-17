@@ -244,9 +244,9 @@ public class GameManager : NetworkSingletonBehaviour<GameManager>
     [ClientRpc]
     public void SetupClientRpc(string playerTag, ulong[] clientID, ClientRpcParams clientRpcParams = default) {
         if(playerTag == PlayerTwoTag){
-            SetCurrentPlayerOne();
-        }else if (playerTag == PlayerOneTag){
             SetCurrentPlayerTwo();
+        }else if (playerTag == PlayerOneTag){            
+            SetCurrentPlayerOne();
         }
 
         connected = true;

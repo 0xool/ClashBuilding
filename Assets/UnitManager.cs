@@ -16,7 +16,7 @@ public class UnitManager : ClashUnitBehaviour, IUnit
     public GameObject bulletPrefab;
     public int reloadTime;
     RemoveFromTarget removeFromTarget;
-
+    private const int middleSectionX = -20;
     void Start()
     {
         
@@ -33,7 +33,11 @@ public class UnitManager : ClashUnitBehaviour, IUnit
         }
 
         if(IsClient){
-            this.tag = GameManager.instance.currentPlayer;
+            if(this.transform.position.x < middleSectionX)
+                this.tag = GameManager.instance.currentPlayer;
+            else
+                this.tag = GameManager.instance.GetEnemyTag();
+
         }
     }
 
