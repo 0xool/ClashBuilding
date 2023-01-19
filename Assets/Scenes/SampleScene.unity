@@ -622,7 +622,7 @@ GameObject:
   m_Component:
   - component: {fileID: 219379732}
   m_Layer: 0
-  m_Name: Enemy_Zone_HQ
+  m_Name: PlayerTwo_Zone_HQ
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -636,7 +636,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 219379731}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -42.2, y: -0.4, z: -5.0899997}
+  m_LocalPosition: {x: -42.2, y: -0.4, z: -7.74}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -768,7 +768,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 296699080}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
   m_Name: 
@@ -1306,7 +1306,7 @@ GameObject:
   m_Component:
   - component: {fileID: 394132385}
   m_Layer: 0
-  m_Name: Enemy_Zone_Left
+  m_Name: PlayerTwo_Zone_Left
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1449,7 +1449,7 @@ GameObject:
   m_Component:
   - component: {fileID: 422935114}
   m_Layer: 0
-  m_Name: Friendly_Zone_Left
+  m_Name: PlayerOne_Zone_Left
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1872,6 +1872,37 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   menuPrefab: {fileID: 5863698199613285590, guid: 06bf43cc917ca4ded946e046aeaae9cc,
     type: 3}
+--- !u!1 &594065877
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 594065878}
+  m_Layer: 0
+  m_Name: PlayerOne_Zone_Right
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &594065878
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 594065877}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: -0.8500004, y: -0.4, z: -25.7}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 764123682}
+  m_RootOrder: -1
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &609208618
 GameObject:
   m_ObjectHideFlags: 0
@@ -2477,8 +2508,10 @@ Transform:
   - {fileID: 362007166}
   - {fileID: 1929460934}
   - {fileID: 394132385}
+  - {fileID: 925354426}
   - {fileID: 2022450267}
   - {fileID: 2134335014}
+  - {fileID: 594065878}
   - {fileID: 422935114}
   - {fileID: 419340935}
   - {fileID: 794355076}
@@ -2650,6 +2683,37 @@ BoxCollider:
   serializedVersion: 2
   m_Size: {x: 25, y: 1, z: 48}
   m_Center: {x: 0, y: 0, z: 0}
+--- !u!1 &925354425
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 925354426}
+  m_Layer: 0
+  m_Name: PlayerTwo_Zone_Right
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &925354426
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 925354425}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: -38.08, y: -0.4, z: -24.9}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 764123682}
+  m_RootOrder: -1
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &953819803
 GameObject:
   m_ObjectHideFlags: 0
@@ -3589,7 +3653,7 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1430349232}
-  m_LocalRotation: {x: 0.23911765, y: 0.36964378, z: -0.09904577, w: 0.8923991}
+  m_LocalRotation: {x: 0.09904577, y: 0.8923991, z: -0.23911765, w: 0.36964378}
   m_LocalPosition: {x: -23.35, y: 4.6, z: -7.03}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
@@ -3597,7 +3661,7 @@ Transform:
   - {fileID: 963194228}
   m_Father: {fileID: 0}
   m_RootOrder: 0
-  m_LocalEulerAnglesHint: {x: 30, y: 45, z: 0}
+  m_LocalEulerAnglesHint: {x: 30, y: 135, z: 0}
 --- !u!1 &1524715527
 GameObject:
   m_ObjectHideFlags: 0
@@ -3759,7 +3823,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1594736582}
   m_Layer: 0
-  m_Name: Friendly_Zone_HQ
+  m_Name: PlayerOne_Zone_HQ
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -3773,7 +3837,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1594736581}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 1.2999992, y: -0.4, z: -5.1899996}
+  m_LocalPosition: {x: 1.2999992, y: -0.4, z: -7.3}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []

@@ -89,17 +89,23 @@ public class UnitManager : ClashUnitBehaviour, IUnit
 
     void SetupMovmentDestination() {
         if(this.gameObject.CompareTag(GameManager.instance.PlayerOneTag)){
-            this.moveTransformPosition = GameObject.Find(UnitMovmentLocation.ZoneEnemyLeft).transform;
+            if(this.transform.position.z > -7)
+                this.moveTransformPosition = GameObject.Find(UnitMovmentLocation.ZonePlayerTwoLeft).transform;
+            else
+                this.moveTransformPosition = GameObject.Find(UnitMovmentLocation.ZonePlayerTwoRight).transform;
         }else if (this.gameObject.CompareTag(GameManager.instance.PlayerTwoTag)) {
-            this.moveTransformPosition = GameObject.Find(UnitMovmentLocation.ZoneFriendlyLeft).transform;
+            if(this.transform.position.z > -7)
+                this.moveTransformPosition = GameObject.Find(UnitMovmentLocation.ZonePlayerOneLeft).transform;
+            else
+                this.moveTransformPosition = GameObject.Find(UnitMovmentLocation.ZonePlayerOneRight).transform;
         }
     }
 
     void SetupMovmentDestinationHQ() {
         if(this.gameObject.CompareTag(GameManager.instance.PlayerOneTag)){
-            this.moveTransformPosition = GameObject.Find(UnitMovmentLocation.ZoneEnemyHQ).transform;
+            this.moveTransformPosition = GameObject.Find(UnitMovmentLocation.ZonePlayerTwoHQ).transform;
         }else if (this.gameObject.CompareTag(GameManager.instance.PlayerTwoTag)) {
-            this.moveTransformPosition = GameObject.Find(UnitMovmentLocation.ZoneFriendlyHQ).transform;
+            this.moveTransformPosition = GameObject.Find(UnitMovmentLocation.ZonePlayerOneHQ).transform;
         }
     }
 

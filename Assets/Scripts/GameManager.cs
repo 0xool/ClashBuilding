@@ -48,9 +48,7 @@ public class GameManager : NetworkSingletonBehaviour<GameManager>
         if(IsServer){
 
         }
-
-
-
+        
         this.playerResourceText = GameObject.Find("ResourcePanel").GetComponentInChildren<TMP_Text>();
     }
     // Update is called once per frame
@@ -201,7 +199,6 @@ public class GameManager : NetworkSingletonBehaviour<GameManager>
     [ServerRpc(RequireOwnership = false)]
     public void SpawnUnitServerRpc(string unitName, Vector3 spawnPos, string playerTag, ServerRpcParams serverRpcParams = default) 
     {
-        Debug.Log("Omg this WORKS2!!");
         if(!gameStart) return;
         var clientId = serverRpcParams.Receive.SenderClientId;
         if (NetworkManager.ConnectedClients.ContainsKey(clientId))
@@ -229,6 +226,7 @@ public class GameManager : NetworkSingletonBehaviour<GameManager>
             playerTwo.cliendID = clientID;
             SetupClientRpc(PlayerTwoTag, playerTwo.cliendID, clientRpcParams);
             gameStart = true;
+            
             GameObject.Find("LoadingImage").SetActive(false);
             RemoveLoadingScreenClientRpc();
         }
