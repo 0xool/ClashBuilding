@@ -812,6 +812,11 @@ PrefabInstance:
       propertyPath: GlobalObjectIdHash
       value: 377529796
       objectReference: {fileID: 0}
+    - target: {fileID: 492635953382142104, guid: 0aa99ab0ba50f411e88d64f03e7c1ec3,
+        type: 3}
+      propertyPath: AlwaysReplicateAsRoot
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 1844789523983158996, guid: 0aa99ab0ba50f411e88d64f03e7c1ec3,
         type: 3}
       propertyPath: m_Name
@@ -821,6 +826,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_TagString
       value: Player1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1844789523983158997, guid: 0aa99ab0ba50f411e88d64f03e7c1ec3,
+        type: 3}
+      propertyPath: isBaseBuilding
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 1844789523983159017, guid: 0aa99ab0ba50f411e88d64f03e7c1ec3,
         type: 3}
@@ -3243,6 +3253,11 @@ PrefabInstance:
       propertyPath: GlobalObjectIdHash
       value: 4252623757
       objectReference: {fileID: 0}
+    - target: {fileID: 492635953382142104, guid: 0aa99ab0ba50f411e88d64f03e7c1ec3,
+        type: 3}
+      propertyPath: AlwaysReplicateAsRoot
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 1844789523983158996, guid: 0aa99ab0ba50f411e88d64f03e7c1ec3,
         type: 3}
       propertyPath: m_Name
@@ -3252,6 +3267,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_TagString
       value: Player2
+      objectReference: {fileID: 0}
+    - target: {fileID: 1844789523983158997, guid: 0aa99ab0ba50f411e88d64f03e7c1ec3,
+        type: 3}
+      propertyPath: isBaseBuilding
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 1844789523983159017, guid: 0aa99ab0ba50f411e88d64f03e7c1ec3,
         type: 3}
@@ -3710,6 +3730,11 @@ PrefabInstance:
       propertyPath: GlobalObjectIdHash
       value: 1638272562
       objectReference: {fileID: 0}
+    - target: {fileID: 492635953382142104, guid: 0aa99ab0ba50f411e88d64f03e7c1ec3,
+        type: 3}
+      propertyPath: AlwaysReplicateAsRoot
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 1844789523610549892, guid: 0aa99ab0ba50f411e88d64f03e7c1ec3,
         type: 3}
       propertyPath: m_Layer
@@ -3734,6 +3759,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_TagString
       value: Player2
+      objectReference: {fileID: 0}
+    - target: {fileID: 1844789523983158997, guid: 0aa99ab0ba50f411e88d64f03e7c1ec3,
+        type: 3}
+      propertyPath: isBaseBuilding
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 1844789523983159017, guid: 0aa99ab0ba50f411e88d64f03e7c1ec3,
         type: 3}
@@ -4861,6 +4891,11 @@ PrefabInstance:
       propertyPath: GlobalObjectIdHash
       value: 4270200719
       objectReference: {fileID: 0}
+    - target: {fileID: 492635953382142104, guid: 0aa99ab0ba50f411e88d64f03e7c1ec3,
+        type: 3}
+      propertyPath: AlwaysReplicateAsRoot
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 1844789523983158996, guid: 0aa99ab0ba50f411e88d64f03e7c1ec3,
         type: 3}
       propertyPath: m_Name
@@ -4870,6 +4905,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_TagString
       value: Player1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1844789523983158997, guid: 0aa99ab0ba50f411e88d64f03e7c1ec3,
+        type: 3}
+      propertyPath: isBaseBuilding
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 1844789523983159017, guid: 0aa99ab0ba50f411e88d64f03e7c1ec3,
         type: 3}

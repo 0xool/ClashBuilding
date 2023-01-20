@@ -23,6 +23,7 @@ public class DefenceBuildingManager : BuildingBehaviour, IUnit, ISellable, ISele
     public int reloadTime = 0;
     public int constructionCost = 500;
     RemoveFromTarget removeFromTarget;
+    public bool isBaseBuilding = false;
     void Start()
     {
         enemiesInRange = new List<GameObject>();
@@ -64,7 +65,7 @@ public class DefenceBuildingManager : BuildingBehaviour, IUnit, ISellable, ISele
         this.gameObject.tag = "BeingDestroyed";
         removeFromTarget(this.gameObject);
         buildingModel.buildingState = BuildingState.DYING;
-        StartCoroutine(RunBeingDestroyedFunctionality(3));
+        StartCoroutine(RunBeingDestroyedFunctionality(3, true));
     }
 
     public int GetHP() {
@@ -84,6 +85,7 @@ public class DefenceBuildingManager : BuildingBehaviour, IUnit, ISellable, ISele
     }
 
     public void RemoveEnemyAsTarget(GameObject enemy) {
+        if (enemy == null) return;
         enemiesInRange.Remove(enemy);
     }
 
@@ -139,6 +141,7 @@ public class DefenceBuildingManager : BuildingBehaviour, IUnit, ISellable, ISele
     {
         this.buildingType = BuildingType.DEFENSE;
     }
+
     [ServerRpc(RequireOwnership = false)]
     public void SelectUnitServerRpc(string unitName)
     {

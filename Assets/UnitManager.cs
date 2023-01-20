@@ -19,12 +19,11 @@ public class UnitManager : ClashUnitBehaviour, IUnit
     private const int middleSectionX = -20;
     void Start()
     {
-        
         this.navMeshAgent = this.GetComponent<NavMeshAgent>();
         this.unitModel = new Unit(this.name, movementSpeed, unitHP, UnitState.MOVING, ZONE.RIGHTZONE, damage, cost);
         this.unitModel.hp = unitHP;
+        
         this.unitModel.cost = cost;
-
         enemiesInRange = new List<GameObject>();
                 
         if(IsServer){
@@ -34,10 +33,9 @@ public class UnitManager : ClashUnitBehaviour, IUnit
 
         if(IsClient){
             if(this.transform.position.x < middleSectionX)
-                this.tag = GameManager.instance.currentPlayer;
+                this.tag = GameManager.instance.PlayerTwoTag;
             else
-                this.tag = GameManager.instance.GetEnemyTag();
-
+                this.tag = GameManager.instance.PlayerOneTag;
         }
     }
 
