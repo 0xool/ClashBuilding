@@ -14,7 +14,7 @@ public class GameManager : NetworkSingletonBehaviour<GameManager>
     private int playersConnected = 0;
     private bool gameStart = false;
     private string _currentPlayer;
-    public string currentPlayer {
+    private string currentPlayer {
         get{
             return _currentPlayer;
         }set{
@@ -152,10 +152,12 @@ public class GameManager : NetworkSingletonBehaviour<GameManager>
     public void SetCurrentPlayerOne() {
         currentPlayer = PlayerOneTag;
         this.transform.parent.transform.eulerAngles = new Vector3(30, -135, 0);
+        TouchManager.instance.SetUpConstructionMovmentDirection();
     }
 
     public void SetCurrentPlayerTwo() {
         currentPlayer = PlayerTwoTag;
+        TouchManager.instance.SetUpConstructionMovmentDirection();
     }
 
     public bool IsPlayerOne() {
@@ -164,6 +166,10 @@ public class GameManager : NetworkSingletonBehaviour<GameManager>
 
     public bool IsPlayerTwo() {
         return currentPlayer == PlayerTwoTag;
+    }
+
+    public string GetCurrentPlayerTag(){
+        return (currentPlayer == PlayerOneTag) ? PlayerOneTag : PlayerTwoTag;
     }
 
     public string GetEnemyTag() {

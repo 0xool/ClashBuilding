@@ -39,7 +39,7 @@ public abstract class BuildingBehaviour : ClashUnitBehaviour, IConstructable {
     }
     public void Build() {  
         if(!IsServer){
-            ServerBuild(GameManager.instance.currentPlayer);
+            ServerBuild(GameManager.instance.GetCurrentPlayerTag());
             return;
         }
 
@@ -68,7 +68,7 @@ public abstract class BuildingBehaviour : ClashUnitBehaviour, IConstructable {
                         break;
                 }
                 
-                this.tag = GameManager.instance.currentPlayer;
+                this.tag = GameManager.instance.GetCurrentPlayerTag();
             }
             else
                 Destroy(this.gameObject);

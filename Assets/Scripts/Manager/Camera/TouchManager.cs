@@ -28,18 +28,21 @@ public class TouchManager : SingletonBehaviour<TouchManager>
     protected override void Awake() {
         base.Awake();
         touchState = TouchState.NORMAL;  
-        cameraPivotDirectionVertical = (GameManager.instance.IsPlayerTwo()) ? new Vector3(1, 0, 1) : new Vector3(-1, 0, -1);  
-        cameraPivotDirectionVertical *= cameraMovmentSpeed;
-
-        cameraPivotDirectionHorizontal = (GameManager.instance.IsPlayerTwo()) ? new Vector3(1, 0, -1) : new Vector3(-1, 0, 1);  
-        cameraPivotDirectionHorizontal *= cameraMovmentSpeed; 
-
+        SetUpConstructionMovmentDirection();
         cameraPivot = this.transform.parent.gameObject;
     }
     void Start()
     {
         this.selectableMask =  LayerMask.GetMask("Unit");
         this.unitMenuHandler = GameObject.FindGameObjectWithTag("UnitMenuHandler").GetComponent<UnitMenuHandler>();
+    }
+
+    public void SetUpConstructionMovmentDirection(){
+        cameraPivotDirectionVertical = (GameManager.instance.IsPlayerTwo()) ? new Vector3(1, 0, -1) : new Vector3(-1, 0, -1);  
+        cameraPivotDirectionVertical *= cameraMovmentSpeed;
+
+        cameraPivotDirectionHorizontal = (GameManager.instance.IsPlayerTwo()) ? new Vector3(-1, 0, -1) : new Vector3(-1, 0, 1);  
+        cameraPivotDirectionHorizontal *= cameraMovmentSpeed; 
     }
 
     // Update is called once per frame
@@ -53,7 +56,7 @@ public class TouchManager : SingletonBehaviour<TouchManager>
                     ray = Camera.main.ScreenPointToRay(Input.mousePosition);
                     if (Physics.Raycast(ray, out hit, 1000.0f, selectableMask))
                     {
-                        if(!hit.transform.gameObject.CompareTag(GameManager.instance.currentPlayer)) break;
+                        if(!hit.transform.gameObject.CompareTag(GameManager.instance.GetCurrentPlayerTag())) break;
                         this.selectedUnit = hit.transform.gameObject.GetComponent<ISelectable>();                        
                         if(selectedUnit != null){
                             this.touchState = TouchState.UNITSELECTED;
