@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using Unity.Netcode;
 
-public class ResourceManager : BuildingBehaviour, IUnit, ISelectable, ISellable, IUpgradeable
+public class ResourceManager : BuildingBehaviour, IUnit, ISelectable, IUpgradeable
 {
     private GameObject inGameMenuPrefab;
     private bool onResource = false;
@@ -87,7 +87,7 @@ public class ResourceManager : BuildingBehaviour, IUnit, ISelectable, ISellable,
         return false;
     }
 
-    public void UnSelectBuilding() {
+    public override void UnSelectBuilding() {
         if (inGameMenuPrefab) inGameMenuPrefab.GetComponentInChildren<UnitUIManager>().RemoveUI();
     }
 
@@ -115,12 +115,6 @@ public class ResourceManager : BuildingBehaviour, IUnit, ISelectable, ISellable,
 
     public void Upgrade(){
         this.upgradeLevel += 1;
-    }
-
-    public void Sell(){
-        GameManager.instance.IncreaseResourceValue( constructionCost / Utilities.SellRatio);
-        UnSelectBuilding();
-        RunSellAnimationAnimation();
     }
 
     protected override void SetBuildingType()

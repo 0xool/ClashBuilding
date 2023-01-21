@@ -5,7 +5,7 @@ using UnityEngine;
 using Unity.Netcode;
 
 
-public class SpawnBehaviour : BuildingBehaviour, IUnit, ISelectable, ISellable
+public class SpawnBehaviour : BuildingBehaviour, IUnit, ISelectable
 {    
     RemoveFromTarget removeFromTarget;
     private GameObject unit;
@@ -86,17 +86,11 @@ public class SpawnBehaviour : BuildingBehaviour, IUnit, ISelectable, ISellable
         return true;
     }
 
-    public void UnSelectBuilding() {
+    public override void UnSelectBuilding() {
         inGameMenuPrefab.GetComponentInChildren<UnitUIManager>().RemoveUI();
     }
     public void AppendRemoveTargetDelegation( RemoveFromTarget removeFromTarget) {
         this.removeFromTarget += removeFromTarget;
-    }
-
-    public void Sell(){
-        GameManager.instance.IncreaseResourceValue( constructionCost / Utilities.SellRatio);
-        UnSelectBuilding();
-        RunSellAnimationAnimation();
     }
     protected override void SetBuildingType()
     {

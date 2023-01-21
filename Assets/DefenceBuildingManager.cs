@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using Unity.Netcode;
 
-public class DefenceBuildingManager : BuildingBehaviour, IUnit, ISellable, ISelectable, IUpgradeable
+public class DefenceBuildingManager : BuildingBehaviour, IUnit, ISelectable, IUpgradeable
 {
     private GameObject inGameMenuPrefab;
     private int upgradeLevel{
@@ -110,13 +110,6 @@ public class DefenceBuildingManager : BuildingBehaviour, IUnit, ISellable, ISele
     public void AppendRemoveTargetDelegation( RemoveFromTarget removeFromTarget) {
         this.removeFromTarget += removeFromTarget;
     }
-
-    public void Sell(){
-        GameManager.instance.IncreaseResourceValue( constructionCost / Utilities.SellRatio);
-        UnSelectBuilding();
-        RunSellAnimationAnimation();
-    }
-
     public void SelectUnit(GameObject unit) {
         return;
     }
@@ -128,7 +121,7 @@ public class DefenceBuildingManager : BuildingBehaviour, IUnit, ISellable, ISele
         return false;
     }
 
-    public void UnSelectBuilding() {
+    public override void UnSelectBuilding() {
         if (inGameMenuPrefab) inGameMenuPrefab.GetComponentInChildren<UnitUIManager>().RemoveUI();
     }
 

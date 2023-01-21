@@ -132,6 +132,11 @@ public class GameManager : NetworkSingletonBehaviour<GameManager>
     public void IncreaseResourceIncomeForPlayer(int resource, string playerTag) {
         this.GetPlayerWithTag(playerTag).IncreaseResourcePower(resource);
     }
+    
+
+    public void IncreaseResourceValueForPlayer(int resource, string playerTag) {
+        this.GetPlayerWithTag(playerTag).IncreaseResourceValue(resource);
+    }
 
     public void IncreaseResourceValue(int resource) {
         this.GetCurrentPlayer().IncreaseResourceValue(resource);

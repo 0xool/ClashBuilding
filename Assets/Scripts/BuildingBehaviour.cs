@@ -1,6 +1,6 @@
 using UnityEngine;
 using Unity.Netcode;
-public abstract class BuildingBehaviour : ClashUnitBehaviour, IConstructable {
+public abstract class BuildingBehaviour : ClashUnitBehaviour, IConstructable, ISellable {
         public Building buildingModel;
         protected BuildingMode _buildingMode = BuildingMode.CONSTRUCTION;
         protected BuildingType buildingType = BuildingType.DEFENSE;
@@ -110,6 +110,14 @@ public abstract class BuildingBehaviour : ClashUnitBehaviour, IConstructable {
         }
     }
 
+    public void Sell(){
+        UnSelectBuilding();
+        RunSellAnimationAnimation();
+        SellServerRpc(GameManager.instance.GetCurrentPlayerTag());
+    }
+
+    public abstract void UnSelectBuilding();
+
     private void SetResourceObjects() {
         this.buildingMode = BuildingMode.IDLE;
         var resourceLockOnPos = GetResourceLockOnPos();
@@ -134,5 +142,10 @@ public abstract class BuildingBehaviour : ClashUnitBehaviour, IConstructable {
     public void SetupConstructionClientRpc(string playerTag)
     {
         this.tag = playerTag;
+    }
+
+    [ServerRpc]
+    public void SellServerRpc(string playerTag){
+        GameManager.instance.IncreaseResourceValueForPlayer( buildingModel.constructionCost / Utilities.SellRatio, playerTag);
     }
 }
