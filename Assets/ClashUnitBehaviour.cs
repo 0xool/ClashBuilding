@@ -15,6 +15,10 @@ public abstract class ClashUnitBehaviour : NetworkBehaviour{
     protected void RunSellAnimationAnimation() {
         StartCoroutine(RunBeingDestroyedFunctionality(timeToDestroy));
     }
+
+    protected void RunDestroyForServer() {
+        StartCoroutine(RunBeingDestroyedFunctionality(timeToDestroy + 2, true));
+    }
  
     protected IEnumerator RunBeingDestroyedFunctionality(int secs, bool isNonServerDestroy = false)
     {

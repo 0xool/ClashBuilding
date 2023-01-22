@@ -144,8 +144,9 @@ public abstract class BuildingBehaviour : ClashUnitBehaviour, IConstructable, IS
         this.tag = playerTag;
     }
 
-    [ServerRpc]
+    [ServerRpc(RequireOwnership = false)]
     public void SellServerRpc(string playerTag){
+        if(IsServer) RunDestroyForServer();
         GameManager.instance.IncreaseResourceValueForPlayer( buildingModel.constructionCost / Utilities.SellRatio, playerTag);
     }
 }

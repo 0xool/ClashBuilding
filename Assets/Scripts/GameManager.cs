@@ -257,13 +257,13 @@ public class GameManager : NetworkSingletonBehaviour<GameManager>
         }else if (playerTag == PlayerOneTag){            
             SetCurrentPlayerOne();
         }
-
         connected = true;
     }
 
     [ClientRpc]
     public void RemoveLoadingScreenClientRpc(ClientRpcParams clientRpcParams = default){
         GameObject.Find("LoadingImage").SetActive(false);
+        gameStart = true;
     }
 
 }
