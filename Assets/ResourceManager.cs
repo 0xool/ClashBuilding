@@ -68,7 +68,7 @@ public class ResourceManager : BuildingBehaviour, IUnit, ISelectable, IUpgradeab
         this.gameObject.tag = "BeingDestroyed";
         removeFromTarget(this.gameObject);
         GameManager.instance.DescreaseResourceIncome(this.resourceValue);
-        StartCoroutine(RunBeingDestroyedFunctionality(2));
+        StartCoroutine(RunBeingDestroyedFunctionalityForClient(2));
     } 
 
     public int GetReloadTime(){

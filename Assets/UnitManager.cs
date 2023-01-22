@@ -134,7 +134,7 @@ public class UnitManager : ClashUnitBehaviour, IUnit
         this.gameObject.tag = "BeingDestroyed";
         removeFromTarget(this.gameObject);
         unitModel.unitState = UnitState.DYING;
-        StartCoroutine(RunBeingDestroyedFunctionality(2));
+        StartCoroutine(RunBeingDestroyedFunctionalityForClient(2));
     }
 
     public void AttackEnemy(GameObject enemy) {

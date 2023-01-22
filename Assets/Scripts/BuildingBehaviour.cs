@@ -112,7 +112,7 @@ public abstract class BuildingBehaviour : ClashUnitBehaviour, IConstructable, IS
 
     public void Sell(){
         UnSelectBuilding();
-        RunSellAnimationAnimation();
+        RunClientSellAnimation();
         SellServerRpc(GameManager.instance.GetCurrentPlayerTag());
     }
 

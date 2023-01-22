@@ -65,7 +65,7 @@ public class DefenceBuildingManager : BuildingBehaviour, IUnit, ISelectable, IUp
         this.gameObject.tag = "BeingDestroyed";
         removeFromTarget(this.gameObject);
         buildingModel.buildingState = BuildingState.DYING;
-        StartCoroutine(RunBeingDestroyedFunctionality(3, true));
+        StartCoroutine(RunBeingDestroyedFunctionalityForClient(3));
     }
 
     public int GetHP() {
