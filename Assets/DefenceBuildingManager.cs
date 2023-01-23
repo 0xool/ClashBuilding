@@ -24,12 +24,19 @@ public class DefenceBuildingManager : BuildingBehaviour, IUnit, ISelectable, IUp
     public int constructionCost = 500;
     RemoveFromTarget removeFromTarget;
     public bool isBaseBuilding = false;
+    
+    public override void OnNetworkSpawn(){
+        base.OnNetworkSpawn();
+        if(!IsOwnedByServer) this.GetComponent<NetworkObject>().RemoveOwnership();
+    }
+
     void Start()
     {
         enemiesInRange = new List<GameObject>();
         constructionComponent = this.GetComponentInChildren<ConstructionComponent>();
         constructionComponent.EnableConstructionMode();
         buildingModel = new Building(this.name, hp, BuildingType.DEFENSE, damage, constructionCost);
+        if(IsServer) this.NetworkObject.Spawn();
     }
 
     // Update is called once per frame
