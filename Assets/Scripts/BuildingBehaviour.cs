@@ -30,8 +30,9 @@ public abstract class BuildingBehaviour : ClashUnitBehaviour, IConstructable, IS
             }
         }
     protected ConstructionComponent constructionComponent;
-    void Awake()
+    protected override void Awake()
     {
+        base.Awake();
         constructionComponent = this.GetComponentInChildren<ConstructionComponent>();
         constructionComponent.EnableConstructionMode();
         SetBuildingType();

@@ -16,7 +16,6 @@ public class DefenceBuildingManager : BuildingBehaviour, IUnit, ISelectable, IUp
         }
     }
     private int _upgradeLevel = 1;
-    public int hp;
     public int damage;
     private List<GameObject> enemiesInRange;
     public GameObject bulletPrefab;
@@ -35,8 +34,8 @@ public class DefenceBuildingManager : BuildingBehaviour, IUnit, ISelectable, IUp
         enemiesInRange = new List<GameObject>();
         constructionComponent = this.GetComponentInChildren<ConstructionComponent>();
         constructionComponent.EnableConstructionMode();
-        buildingModel = new Building(this.name, hp, BuildingType.DEFENSE, damage, constructionCost);
-        if(IsServer) this.NetworkObject.Spawn();
+        buildingModel = new Building(BuildingType.DEFENSE, damage, constructionCost);
+        if(IsServer) this.NetworkObject.Spawn();        
     }
 
     // Update is called once per frame
@@ -63,7 +62,7 @@ public class DefenceBuildingManager : BuildingBehaviour, IUnit, ISelectable, IUp
     }
 
     void LateUpdate() {
-        if(this.buildingModel.hp <= 0){
+        if(this.clashUnit.hp <= 0){
             IsBeingDestroyed();
         }    
     }
@@ -76,7 +75,7 @@ public class DefenceBuildingManager : BuildingBehaviour, IUnit, ISelectable, IUp
     }
 
     public int GetHP() {
-        return this.buildingModel.hp;
+        return this.clashUnit.hp;
     }
 
     public int GetCost() {
@@ -97,7 +96,7 @@ public class DefenceBuildingManager : BuildingBehaviour, IUnit, ISelectable, IUp
     }
 
     public void InflictDamage(int damage) {
-        this.buildingModel.hp -= damage;
+        this.clashUnit.hp -= damage;
     }
 
     public void ServerBuild() {           

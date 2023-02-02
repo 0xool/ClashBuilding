@@ -130,9 +130,9 @@ GameObject:
   - component: {fileID: 4887951768194950302}
   - component: {fileID: 7664403287492425022}
   - component: {fileID: 5629177749322674783}
-  - component: {fileID: 2036774724839304929}
   - component: {fileID: 947529014394097809}
   - component: {fileID: -4536572025526224578}
+  - component: {fileID: 2467843645297590115}
   m_Layer: 0
   m_Name: Refinery
   m_TagString: Construction
@@ -154,7 +154,7 @@ Transform:
   m_Children:
   - {fileID: 331281653}
   m_Father: {fileID: 0}
-  m_RootOrder: 30
+  m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!33 &4887951768194950302
 MeshFilter:
@@ -219,21 +219,6 @@ BoxCollider:
   serializedVersion: 2
   m_Size: {x: 1, y: 1, z: 1}
   m_Center: {x: 0, y: 0, z: 0}
---- !u!114 &2036774724839304929
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8421965542702109402}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: a1a4d317d43d644869693560fecddf30, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  HP: 300
-  constructionCost: 600
-  upgradeCost: 400
 --- !u!54 &947529014394097809
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -266,3 +251,18 @@ MonoBehaviour:
   AlwaysReplicateAsRoot: 0
   DontDestroyWithOwner: 0
   AutoObjectParentSync: 1
+--- !u!114 &2467843645297590115
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8421965542702109402}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d306abe67d05a4358b695841ef6b7ba5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  HP: 300
+  constructionCost: 600
+  upgradeCost: 200

@@ -92,7 +92,7 @@ public class GameManager : NetworkSingletonBehaviour<GameManager>
     }
 
     private void SetResourceText() {
-        playerResourceText.text = playerTwo.resourceValue.ToString();
+        playerResourceText.text = GetCurrentPlayer().resourceValue.ToString();
     }
 
     public void GameOver(string player){
@@ -101,6 +101,7 @@ public class GameManager : NetworkSingletonBehaviour<GameManager>
         GameObject.Find("GameOverText").GetComponent<TMP_Text>().enabled = true ;
         GameObject.Find("GameOverPlayerName").GetComponent<TMP_Text>().text = (player == PlayerOneTag) ? "Player One Won" : "Player Two Won";
     }
+
 
     public int GetPlayerResource() {
         return GetCurrentPlayer().resourceValue;
@@ -120,7 +121,7 @@ public class GameManager : NetworkSingletonBehaviour<GameManager>
         return true;
     }
 
-        public bool UsePlayerResource(int amount, string tag) {
+    public bool UsePlayerResource(int amount, string tag) {
         var player = GetPlayerWithTag(tag);
         return (player.resourceValue > amount);
     }

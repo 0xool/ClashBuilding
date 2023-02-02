@@ -8,7 +8,7 @@ public class InfantrySpawnBuildingManager : SpawnBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        this.buildingModel = new Building(this.name, hp, BuildingType.SPAWNER, 0, 0, constructionCost);
+        this.buildingModel = new Building(BuildingType.SPAWNER, 0, 0, constructionCost);
     }
     
     // Update is called once per frame

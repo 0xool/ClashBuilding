@@ -10,7 +10,6 @@ public class SpawnBehaviour : BuildingBehaviour, IUnit, ISelectable
     RemoveFromTarget removeFromTarget;
     private GameObject unit;
     public float offsetSpawn = 2;
-    public int hp = 500;
     public float spawnInterval = 5.0f;
     public int constructionCost = 500;
     public GameObject[] units;
@@ -35,15 +34,15 @@ public class SpawnBehaviour : BuildingBehaviour, IUnit, ISelectable
 
     }
     public int GetHP() {
-        return this.buildingModel.hp;
+        return this.clashUnit.hp;
     }
 
     public void AttackEnemy(GameObject enemy){
 
     }
     public void InflictDamage(int bulletDamage){
-        this.buildingModel.hp -= bulletDamage;
-        if (this.buildingModel.hp <= 0){
+        this.clashUnit.hp -= bulletDamage;
+        if (this.clashUnit.hp <= 0){
             IsBeingDestroyed();
         }
     }

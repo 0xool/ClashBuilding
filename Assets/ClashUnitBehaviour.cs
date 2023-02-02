@@ -4,6 +4,25 @@ using System.Collections;
 
 public abstract class ClashUnitBehaviour : NetworkBehaviour{    
     private int timeToDestroy = 2;
+    public int hp;
+    private ClashUnit _clashUnit;
+    public ClashUnit clashUnit {
+        get {
+            return _clashUnit;
+        }
+        set {
+            if(_clashUnit.hp != value.hp) SetHpBar(value.hp);
+            _clashUnit = value;
+        }
+    }
+
+    protected virtual void Awake() {
+        this.clashUnit = new ClashUnit(this.name, hp);
+    }
+    private void SetHpBar(int hp) {
+
+    }
+
     protected void RunDestructionAnimation() {
         StartCoroutine(RunBeingDestroyedFunctionalityForServer(timeToDestroy));
     }

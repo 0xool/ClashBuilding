@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using Unity.Netcode;
 
-public class ResourceManager : BuildingBehaviour, IUnit, ISelectable, IUpgradeable
+public class RefineryManager : BuildingBehaviour, IUnit, ISelectable, IUpgradeable
 {
     private GameObject inGameMenuPrefab;
     private bool onResource = false;
@@ -34,7 +34,7 @@ public class ResourceManager : BuildingBehaviour, IUnit, ISelectable, IUpgradeab
     }
     RemoveFromTarget removeFromTarget;
     private void Start() {
-        this.buildingModel = new Building(this.name, HP, BuildingType.REFINERY, 0, 0, constructionCost);
+        this.buildingModel = new Building(BuildingType.REFINERY, 0, 0, constructionCost);
         constructionComponent = this.GetComponentInChildren<ConstructionComponent>();
         constructionComponent.EnableConstructionMode();
         
@@ -43,15 +43,15 @@ public class ResourceManager : BuildingBehaviour, IUnit, ISelectable, IUpgradeab
     }
 
     public int GetHP() {
-        return this.buildingModel.hp;
+        return this.clashUnit.hp;
     }
 
     public void AttackEnemy(GameObject enemy){
 
     }
     public void InflictDamage(int bulletDamage){
-        this.buildingModel.hp -= bulletDamage;
-        if (this.buildingModel.hp <= 0){
+        this.clashUnit.hp -= bulletDamage;
+        if (this.clashUnit.hp <= 0){
             IsBeingDestroyed();
         }
     }

@@ -12,7 +12,7 @@ public class HeadQuarterManager : MonoBehaviour, IUnit
     // Start is called before the first frame update
     void Start()
     {
-        buidlingModel = new Building(this.name, this.hp, BuildingType.HQ, 0, constructionCost);
+        buidlingModel = new Building(BuildingType.HQ, 0, constructionCost);
     }
 
     // Update is called once per frame
@@ -21,7 +21,7 @@ public class HeadQuarterManager : MonoBehaviour, IUnit
 
     }
     public int GetHP(){
-        return buidlingModel.hp;
+        return hp;
     }
 
     public int GetCost(){
@@ -31,8 +31,8 @@ public class HeadQuarterManager : MonoBehaviour, IUnit
         return;
     }
     public void InflictDamage(int bulletDamage){
-        this.buidlingModel.hp -= bulletDamage;
-        if(this.buidlingModel.hp <= 0){
+        hp -= bulletDamage;
+        if(hp <= 0){
             //Game Over for this player
             GameObject.Find("Main Camera").GetComponent<GameManager>().GameOver(this.gameObject.tag);
         }
