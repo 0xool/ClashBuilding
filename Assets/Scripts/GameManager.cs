@@ -46,7 +46,7 @@ public class GameManager : NetworkSingletonBehaviour<GameManager>
     void Start()
     {    
         /// MArk: This is for testing
-        // SetCurrentPlayerOne();
+        //  SetCurrentPlayerOne();
 
 
         if(IsServer){

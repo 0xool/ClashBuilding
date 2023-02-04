@@ -34,14 +34,14 @@ public class SpawnBehaviour : BuildingBehaviour, IUnit, ISelectable
 
     }
     public int GetHP() {
-        return this.clashUnit.hp;
+        return GetHp();
     }
 
     public void AttackEnemy(GameObject enemy){
 
     }
     public void InflictDamage(int bulletDamage){
-        this.clashUnit.hp -= bulletDamage;
+            DeacreaseHp(bulletDamage);
         if (this.clashUnit.hp <= 0){
             IsBeingDestroyed();
         }

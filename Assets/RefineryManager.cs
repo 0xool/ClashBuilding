@@ -50,7 +50,7 @@ public class RefineryManager : BuildingBehaviour, IUnit, ISelectable, IUpgradeab
 
     }
     public void InflictDamage(int bulletDamage){
-        this.clashUnit.hp -= bulletDamage;
+        this.DeacreaseHp(bulletDamage);
         if (this.clashUnit.hp <= 0){
             IsBeingDestroyed();
         }

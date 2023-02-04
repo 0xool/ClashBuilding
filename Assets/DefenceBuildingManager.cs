@@ -75,7 +75,7 @@ public class DefenceBuildingManager : BuildingBehaviour, IUnit, ISelectable, IUp
     }
 
     public int GetHP() {
-        return this.clashUnit.hp;
+        return GetHp();
     }
 
     public int GetCost() {
@@ -96,7 +96,7 @@ public class DefenceBuildingManager : BuildingBehaviour, IUnit, ISelectable, IUp
     }
 
     public void InflictDamage(int damage) {
-        this.clashUnit.hp -= damage;
+        this.DeacreaseHp(damage);
     }
 
     public void ServerBuild() {           

@@ -8,7 +8,6 @@ public class UnitManager : ClashUnitBehaviour, IUnit
     private Unit unitModel;
     private Transform moveTransformPosition;
     private NavMeshAgent navMeshAgent;
-    public int unitHP;
     public float movementSpeed;
     public int damage;
     public int cost;
@@ -21,7 +20,6 @@ public class UnitManager : ClashUnitBehaviour, IUnit
     {
         this.navMeshAgent = this.GetComponent<NavMeshAgent>();
         this.unitModel = new Unit(movementSpeed, UnitState.MOVING, ZONE.RIGHTZONE, damage, cost);
-        this.clashUnit.hp = unitHP;
         
         this.unitModel.cost = cost;
         enemiesInRange = new List<GameObject>();
@@ -112,11 +110,11 @@ public class UnitManager : ClashUnitBehaviour, IUnit
     }
 
     public void InflictDamage(int damage) {
-        this.clashUnit.hp -= damage;
+        DeacreaseHp(damage);
     }
 
     public int GetHP() {
-        return clashUnit.hp;
+        return GetHP();
     }
 
     public int GetCost() {

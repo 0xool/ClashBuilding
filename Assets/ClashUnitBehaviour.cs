@@ -13,13 +13,25 @@ public abstract class ClashUnitBehaviour : NetworkBehaviour{
     protected virtual void Awake() {
         this.clashUnit = new ClashUnit(this.name, hp);
     }
-    private void SetHpBar(int hp) {
+
+    private void SetHpBar() {
+        if (this.clashUnit.hp <= 0){
+            GameObject.Destroy(hpBarPrefab);
+            return;
+        }
         if (hpBarPrefab == null) AddHpBarObject();
 
-        this.hpBarPrefab.GetComponentsInChildren<Image>()[0].fillAmount = (float)this.clashUnit.hp / (float)hp;        
+        this.hpBarPrefab.GetComponentsInChildren<Image>()[1].fillAmount = (float)this.clashUnit.hp / (float)hp;        
     }
-    public void SetHp(int hp){
-        this.clashUnit.hp = hp;
+
+    public void DeacreaseHp(int hp){
+        this.clashUnit.hp -= hp;
+        SetHpBar();
+    }
+
+    public void IncreaseHp(int hp){
+        this.clashUnit.hp += hp;
+        SetHpBar();
     }
 
     public int GetHp(){
@@ -32,6 +44,7 @@ public abstract class ClashUnitBehaviour : NetworkBehaviour{
         } else {
             hpBarPrefab = Instantiate(Utilities.GetHpBarUIGameObject(), this.transform.position,  Quaternion.identity); 
         }
+        hpBarPrefab.GetComponent<HpBarManager>().Unit = this.gameObject;
     }
 
     protected void RunDestructionAnimation() {
