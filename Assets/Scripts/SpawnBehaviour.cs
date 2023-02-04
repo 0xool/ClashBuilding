@@ -77,7 +77,7 @@ public class SpawnBehaviour : BuildingBehaviour, IUnit, ISelectable
         this.buildingMode = BuildingMode.SPAWNING;
     }
 
-    public bool SelectBuildingWithMenu() {
+    public bool  SelectBuildingWithMenu() {
         GameObject.FindGameObjectWithTag("UnitMenuHandler").GetComponent<UnitMenuHandler>().CreateSelectUnitMenuItems(this.units);
         inGameMenuPrefab = Instantiate(Utilities.GetInGameMenuUIGameObject(),this.transform.position,  Quaternion.identity).GetComponentInChildren<UnitUIManager>(); 
         inGameMenuPrefab.SetUnit(this.gameObject);
