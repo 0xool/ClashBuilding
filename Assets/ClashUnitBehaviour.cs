@@ -15,6 +15,8 @@ public abstract class ClashUnitBehaviour : NetworkBehaviour{
     }
 
     private void SetHpBar() {
+        if(IsServer) return;
+        
         if (this.clashUnit.hp <= 0){
             GameObject.Destroy(hpBarPrefab);
             return;
@@ -39,12 +41,12 @@ public abstract class ClashUnitBehaviour : NetworkBehaviour{
     }
 
     private void AddHpBarObject(){
-        if (GameManager.instance.GetCurrentPlayerTag() == GameManager.instance.PlayerOneTag) {
+        // if (GameManager.instance.GetCurrentPlayerTag() == GameManager.instance.PlayerOneTag) {
             hpBarPrefab = Instantiate(Utilities.GetHpBarUIGameObject(), this.transform.position,  Quaternion.identity); 
-        } else {
-            hpBarPrefab = Instantiate(Utilities.GetHpBarUIGameObject(), this.transform.position,  Quaternion.identity); 
-        }
-        hpBarPrefab.GetComponent<HpBarManager>().Unit = this.gameObject;
+        // } else {
+            // hpBarPrefab = Instantiate(Utilities.GetHpBarUIGameObject(), this.transform.position,  Quaternion.identity); 
+        // }
+        hpBarPrefab.GetComponent<HpBarManager>().SetUnit(this.gameObject);
     }
 
     protected void RunDestructionAnimation() {
