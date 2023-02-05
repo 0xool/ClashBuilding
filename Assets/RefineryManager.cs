@@ -51,9 +51,6 @@ public class RefineryManager : BuildingBehaviour, IUnit, ISelectable, IUpgradeab
     }
     public void InflictDamage(int bulletDamage){
         this.DeacreaseHp(bulletDamage);
-        if (this.clashUnit.hp <= 0){
-            IsBeingDestroyed();
-        }
     }
 
     public int GetUnitCost() {
@@ -64,11 +61,10 @@ public class RefineryManager : BuildingBehaviour, IUnit, ISelectable, IUpgradeab
         return this.buildingModel.constructionCost;
     }
     
-    public void IsBeingDestroyed() {
+    public override void IsBeingDestroyed() {
         this.gameObject.tag = "BeingDestroyed";
         removeFromTarget(this.gameObject);
         GameManager.instance.DescreaseResourceIncome(this.resourceValue);
-        StartCoroutine(RunBeingDestroyedFunctionalityForClient(2));
     } 
 
     public int GetReloadTime(){

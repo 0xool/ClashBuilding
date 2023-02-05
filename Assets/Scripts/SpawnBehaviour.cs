@@ -41,10 +41,7 @@ public class SpawnBehaviour : BuildingBehaviour, IUnit, ISelectable
 
     }
     public void InflictDamage(int bulletDamage){
-            DeacreaseHp(bulletDamage);
-        if (this.clashUnit.hp <= 0){
-            IsBeingDestroyed();
-        }
+        DeacreaseHp(bulletDamage);
     }
 
     public int GetUnitCost() {
@@ -55,10 +52,9 @@ public class SpawnBehaviour : BuildingBehaviour, IUnit, ISelectable
         return this.constructionCost;
     }
     
-    public void IsBeingDestroyed() {
+    public override void IsBeingDestroyed() {
         this.gameObject.tag = "BeingDestroyed";
         removeFromTarget(this.gameObject);        
-        RunDestructionAnimation();
     }
     public int GetReloadTime(){
         return -1;

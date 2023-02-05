@@ -61,17 +61,10 @@ public class DefenceBuildingManager : BuildingBehaviour, IUnit, ISelectable, IUp
         return this.reloadTime;
     }
 
-    void LateUpdate() {
-        if(this.clashUnit.hp <= 0){
-            IsBeingDestroyed();
-        }    
-    }
-
-    public void IsBeingDestroyed() {
+    public override void IsBeingDestroyed() {
         this.gameObject.tag = "BeingDestroyed";
         removeFromTarget(this.gameObject);
         buildingModel.buildingState = BuildingState.DYING;
-        StartCoroutine(RunBeingDestroyedFunctionalityForClient(3));
     }
 
     public int GetHP() {

@@ -16,11 +16,8 @@ public abstract class ClashUnitBehaviour : NetworkBehaviour{
 
     private void SetHpBar() {
         if(IsServer) return;
-        
-        if (this.clashUnit.hp <= 0){
-            GameObject.Destroy(hpBarPrefab);
-            return;
-        }
+
+
         if (hpBarPrefab == null) AddHpBarObject();
 
         this.hpBarPrefab.GetComponentsInChildren<Image>()[1].fillAmount = (float)this.clashUnit.hp / (float)hp;        
@@ -28,6 +25,12 @@ public abstract class ClashUnitBehaviour : NetworkBehaviour{
 
     public void DeacreaseHp(int hp){
         this.clashUnit.hp -= hp;
+        if (this.clashUnit.hp <= 0){
+            GameObject.Destroy(hpBarPrefab);
+            IsBeingDestroyed();
+            RunDestructionAnimation();
+            return;
+        }
         SetHpBar();
     }
 
@@ -36,16 +39,14 @@ public abstract class ClashUnitBehaviour : NetworkBehaviour{
         SetHpBar();
     }
 
+    public abstract void IsBeingDestroyed();
+
     public int GetHp(){
         return this.clashUnit.hp;
     }
 
-    private void AddHpBarObject(){
-        // if (GameManager.instance.GetCurrentPlayerTag() == GameManager.instance.PlayerOneTag) {
-            hpBarPrefab = Instantiate(Utilities.GetHpBarUIGameObject(), this.transform.position,  Quaternion.identity); 
-        // } else {
-            // hpBarPrefab = Instantiate(Utilities.GetHpBarUIGameObject(), this.transform.position,  Quaternion.identity); 
-        // }
+    private void AddHpBarObject(){    
+        hpBarPrefab = Instantiate(Utilities.GetHpBarUIGameObject(), this.transform.position,  Quaternion.identity); 
         hpBarPrefab.GetComponent<HpBarManager>().SetUnit(this.gameObject);
     }
 

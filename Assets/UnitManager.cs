@@ -120,19 +120,12 @@ public class UnitManager : ClashUnitBehaviour, IUnit
     public int GetCost() {
         return cost;
     }
-
-    void LateUpdate()
-    {
-        if(clashUnit.hp <= 0){
-            IsBeingDestroyed();
-        }
-    }
-
-    public void IsBeingDestroyed() {
+    
+    public override void IsBeingDestroyed() {
         this.gameObject.tag = "BeingDestroyed";
         removeFromTarget(this.gameObject);
         unitModel.unitState = UnitState.DYING;
-        StartCoroutine(RunBeingDestroyedFunctionalityForClient(2));
+        //StartCoroutine(RunBeingDestroyedFunctionalityForClient(2));
     }
 
     public void AttackEnemy(GameObject enemy) {
@@ -149,5 +142,4 @@ public class UnitManager : ClashUnitBehaviour, IUnit
     public void AppendRemoveTargetDelegation( RemoveFromTarget removeFromTarget) {
         this.removeFromTarget += removeFromTarget;
     }
-
 }
