@@ -20,7 +20,8 @@ public class UnitManager : ClashUnitBehaviour, IUnit
     {
         this.navMeshAgent = this.GetComponent<NavMeshAgent>();
         this.unitModel = new Unit(movementSpeed, UnitState.MOVING, ZONE.RIGHTZONE, damage, cost);
-        
+        SetUnitState(UnitState.MOVING);
+
         this.unitModel.cost = cost;
         enemiesInRange = new List<GameObject>();
                 
@@ -47,10 +48,10 @@ public class UnitManager : ClashUnitBehaviour, IUnit
 
         if(enemiesInRange.Count == 0){
             this.navMeshAgent.isStopped = false;
-            this.unitModel.unitState = UnitState.MOVING;
+            SetUnitState(UnitState.MOVING);
         }else{
             this.navMeshAgent.isStopped = true;
-            this.unitModel.unitState = UnitState.ATTACKING;
+            SetUnitState(UnitState.ATTACKING);
         }
 
         MovmentHandling();
@@ -124,7 +125,7 @@ public class UnitManager : ClashUnitBehaviour, IUnit
     public override void IsBeingDestroyed() {
         this.gameObject.tag = "BeingDestroyed";
         removeFromTarget(this.gameObject);
-        unitModel.unitState = UnitState.DYING;
+        SetUnitState(UnitState.DYING);
         //StartCoroutine(RunBeingDestroyedFunctionalityForClient(2));
     }
 
@@ -134,12 +135,27 @@ public class UnitManager : ClashUnitBehaviour, IUnit
         this.AppendRemoveTargetDelegation(enemy.GetComponent<IUnit>().RemoveEnemyAsTarget);
     }
 
-    public void RemoveEnemyAsTarget(GameObject enemy){
-        this.unitModel.unitState = UnitState.MOVING;
+    public void RemoveEnemyAsTarget(GameObject enemy){        
+        SetUnitState(UnitState.MOVING);
         enemiesInRange.Remove(enemy);
     }
 
     public void AppendRemoveTargetDelegation( RemoveFromTarget removeFromTarget) {
         this.removeFromTarget += removeFromTarget;
+    }
+
+    public void SetUnitState(UnitState unitState) {
+        switch(unitState){
+            case UnitState.MOVING:
+                this.navMeshAgent.isStopped = false;
+                break;
+            case UnitState.ATTACKING:
+                this.navMeshAgent.isStopped = true;
+                break;
+            case UnitState.DYING:
+                this.navMeshAgent.isStopped = true;
+                break;
+        }
+        this.unitModel.unitState = unitState;
     }
 }
