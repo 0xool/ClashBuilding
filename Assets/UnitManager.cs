@@ -16,8 +16,10 @@ public class UnitManager : ClashUnitBehaviour, IUnit
     public int reloadTime;
     RemoveFromTarget removeFromTarget;
     private const int middleSectionX = -20;
+    private Animator animator;
     void Start()
     {
+        this.animator = GetComponentInChildren<Animator>();
         this.navMeshAgent = this.GetComponent<NavMeshAgent>();
         this.unitModel = new Unit(movementSpeed, UnitState.MOVING, ZONE.RIGHTZONE, damage, cost);
         SetUnitState(UnitState.MOVING);
@@ -66,10 +68,15 @@ public class UnitManager : ClashUnitBehaviour, IUnit
             var gun = this.gameObject.GetComponentInChildren<GunHandler>();
 
             if(gun.CanShoot()){
-                gun.Shoot(enemy, bulletPrefab, this.unitModel.damage);
+                Shoot(gun, enemy);
             }
 
         }
+    }
+
+    private void Shoot(GunHandler gun, GameObject enemy) {
+        animator.Play("Recoil_Arm_R");
+        gun.Shoot(enemy, bulletPrefab, this.unitModel.damage);
     }
 
     private void MovmentHandling() {
@@ -147,13 +154,16 @@ public class UnitManager : ClashUnitBehaviour, IUnit
     public void SetUnitState(UnitState unitState) {
         switch(unitState){
             case UnitState.MOVING:
+                animator.Play("Walk_Slow");
                 this.navMeshAgent.isStopped = false;
                 break;
             case UnitState.ATTACKING:
                 this.navMeshAgent.isStopped = true;
+                animator.Play("Idle");
                 break;
             case UnitState.DYING:
                 this.navMeshAgent.isStopped = true;
+                animator.Play("Die");
                 break;
         }
         this.unitModel.unitState = unitState;

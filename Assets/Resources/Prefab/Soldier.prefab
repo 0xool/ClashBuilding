@@ -78,7 +78,7 @@ GameObject:
   - component: {fileID: -770926537110590534}
   m_Layer: 0
   m_Name: Soldier
-  m_TagString: Player1
+  m_TagString: Player2
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -298,7 +298,7 @@ PrefabInstance:
     - target: {fileID: 46095211882461148, guid: 38289233ba4b947b9913608ba2e142b6,
         type: 3}
       propertyPath: m_LocalPosition.y
-      value: 0
+      value: -0.52
       objectReference: {fileID: 0}
     - target: {fileID: 46095211882461148, guid: 38289233ba4b947b9913608ba2e142b6,
         type: 3}
@@ -349,6 +349,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: Mech_Walker_Legs_Lt
+      objectReference: {fileID: 0}
+    - target: {fileID: 46095211890169916, guid: 38289233ba4b947b9913608ba2e142b6,
+        type: 3}
+      propertyPath: m_ApplyRootMotion
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_AddedGameObjects: []
