@@ -152,6 +152,7 @@ public class UnitManager : ClashUnitBehaviour, IUnit
     }
 
     public void SetUnitState(UnitState unitState) {
+        if (this == null || animator == null) return;
         switch(unitState){
             case UnitState.MOVING:
                 animator.Play("Walk_Slow");

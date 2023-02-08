@@ -11,7 +11,6 @@ public class BulletHandler : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        
     }
 
     // Update is called once per frame
@@ -21,6 +20,7 @@ public class BulletHandler : MonoBehaviour
             Destroy(this.gameObject);
         }else{
             transform.position = Vector3.MoveTowards(transform.position, target.transform.position, bulletSpeed * Time.deltaTime);
+            this.transform.LookAt(target.transform);
         }
     }
 
