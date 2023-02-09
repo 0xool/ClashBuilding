@@ -37,6 +37,15 @@ public abstract class BuildingBehaviour : ClashUnitBehaviour, IConstructable, IS
         constructionComponent.EnableConstructionMode();
         SetBuildingType();
         this.buildingMode = BuildingMode.CONSTRUCTION;
+        SetBuildingDirection();
+    }
+    private void SetBuildingDirection() {
+        if (GameManager.instance == null) return;
+        if (GameManager.instance.IsPlayerTwo()) {
+            this.transform.rotation = Quaternion.Euler(0, 90, 0);
+        }else{
+            this.transform.rotation = Quaternion.Euler(0, -90, 0);
+        }
     }
     public void Build() {  
         if(!IsServer){

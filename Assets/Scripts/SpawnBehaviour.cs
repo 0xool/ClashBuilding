@@ -30,7 +30,8 @@ public class SpawnBehaviour : BuildingBehaviour, IUnit, ISelectable
         GameManager.instance.UseResource(buildingModel.spawnCost);
         var newUnit = Instantiate(unit, new Vector3(this.transform.position.x - offsetSpawn,this.transform.position.y - (this.transform.localScale.x/2 - unit.transform.localScale.x/2),this.transform.position.z), this.transform.rotation);
         newUnit.tag = this.gameObject.tag;  
-        newUnit.GetComponent<NetworkObject>().Spawn();
+        var newUnitNetworkObj = newUnit.GetComponent<NetworkObject>();
+        if(!newUnitNetworkObj.IsSpawned) newUnitNetworkObj.Spawn();
 
     }
     public int GetHP() {

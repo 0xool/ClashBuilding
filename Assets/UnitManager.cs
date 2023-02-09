@@ -70,7 +70,6 @@ public class UnitManager : ClashUnitBehaviour, IUnit
             if(gun.CanShoot()){
                 Shoot(gun, enemy);
             }
-
         }
     }
 
