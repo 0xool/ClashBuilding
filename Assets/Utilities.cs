@@ -24,6 +24,7 @@ public static class Utilities {
     private static string InHpBarFilePath = UIPrefabPath + "HpBarCanvas";    
     private static Func<string, string> GetConstructionGameObjectPath = (constructionName) => {return PrefabPath + constructionName;};
     private static Func<string, string> GetUIGameObjectPath = (constructionName) => {return PrefabPath + constructionName;};
+    private static Func<string, string> GetAbilityGameObjectPath = (abilityName) => {return PrefabPath + abilityName;};
 
     private static GameObject GetGameObjectFromFile(string path) {
         return (GameObject) Resources.Load(path);
@@ -40,5 +41,9 @@ public static class Utilities {
 
     public static GameObject GetUnitGameObject(string unitName){
         return GetGameObjectFromFile(GetConstructionGameObjectPath(unitName));
+    }
+
+    public static GameObject GetAbilityGameObject(string abilityName){
+        return GetGameObjectFromFile(GetAbilityGameObjectPath(abilityName));
     }
 }

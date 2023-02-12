@@ -53,6 +53,12 @@ public class TouchManager : SingletonBehaviour<TouchManager>
             case TouchState.NORMAL:
                 if (Input.GetMouseButtonDown(0))
                 {
+                    if (Input.GetMouseButton(1))
+                    {
+                        // zoom out camera when scrolling
+                        Camera.main.orthographicSize += 1;                        
+                    }
+
                     ray = Camera.main.ScreenPointToRay(Input.mousePosition);
                     if (Physics.Raycast(ray, out hit, 1000.0f, selectableMask))
                     {
