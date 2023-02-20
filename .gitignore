@@ -75,5 +75,8 @@ crashlytics-build.properties
 /Assets/Mech_Constructor_Humanoids.meta
 Assets/SimpleNaturePack.meta
 Assets/SimpleNaturePack/
+Assets/FEY_Particles/
+Assets/FEY_Particles.meta
+
 /[Aa]ssets/[Ss]treamingAssets/aa/*
 /Assets/SciFi/

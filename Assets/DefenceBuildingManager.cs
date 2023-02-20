@@ -35,7 +35,7 @@ public class DefenceBuildingManager : BuildingBehaviour, IUnit, ISelectable, IUp
         constructionComponent = this.GetComponentInChildren<ConstructionComponent>();
         constructionComponent.EnableConstructionMode();
         buildingModel = new Building(BuildingType.DEFENSE, damage, constructionCost);
-        if(IsServer) this.NetworkObject.Spawn();        
+        if(IsServer && !IsSpawned) this.NetworkObject.Spawn();        
     }
 
     // Update is called once per frame

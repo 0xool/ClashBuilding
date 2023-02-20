@@ -1,4 +1,4 @@
 interface IAbility
 {
-    void Use();
+    void Use(string playerTag);
 }

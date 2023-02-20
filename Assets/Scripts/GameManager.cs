@@ -29,6 +29,8 @@ public class GameManager : NetworkSingletonBehaviour<GameManager>
     private NetworkVariable<int> playerTwoResource = new NetworkVariable<int>(0);
     private int connectedPlayers = 0; 
     private bool connected = false;
+    private Energy playerOneEnergy;
+    private Energy playerTwoEnergy;
     //============================================================================================================
     private void SetTestPlayers()
     { 
@@ -206,7 +208,8 @@ public class GameManager : NetworkSingletonBehaviour<GameManager>
             playerOneResource.Value = this.playerOne.resourceValue;
             playerTwoResource.Value = this.playerTwo.resourceValue;
             GameObject construction = Instantiate(Utilities.GetConstructionGameObject(constructionName), constructionPos, Quaternion.identity);
-            construction.GetComponent<NetworkObject>().Spawn();
+            var constructionNetworkObject = construction.GetComponent<NetworkObject>();
+            if(!constructionNetworkObject.IsSpawned) constructionNetworkObject.Spawn();
             construction.GetComponent<IConstructable>().SetupConstructionClientRpc(playerTag);
             construction.tag = playerTag;
         }
@@ -269,6 +272,22 @@ public class GameManager : NetworkSingletonBehaviour<GameManager>
     public void RemoveLoadingScreenClientRpc(ClientRpcParams clientRpcParams = default){
         GameObject.Find("LoadingImage").SetActive(false);
         gameStart = true;
+    }
+
+    [ServerRpc(RequireOwnership = false)]
+    public void UseAbilityServerRpc(string abilityName, Vector3 abilityPos, string playerTag, ServerRpcParams serverRpcParams = default) {
+        if(!gameStart) return;
+        var clientId = serverRpcParams.Receive.SenderClientId;
+        if (NetworkManager.ConnectedClients.ContainsKey(clientId))
+        {
+            var client = NetworkManager.ConnectedClients[clientId];
+            // Do things for this client
+            GameObject ability = Instantiate(Utilities.GetAbilityGameObject(abilityName), abilityPos, Quaternion.identity);
+            var abilityNetworkObject = ability.GetComponent<NetworkObject>();
+            if(!abilityNetworkObject.IsSpawned) abilityNetworkObject.Spawn();
+            ability.GetComponent<IAbility>().Use(playerTag);
+            ability.tag = playerTag;
+        }
     }
 
 }

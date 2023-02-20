@@ -25,7 +25,7 @@ class Ability {
         }
     }
 
-    public void Cast() {
+    public void Cast(string playerTag) {
         if (isReady) {
             isReady = false;
             currentCooldown = cooldown;
