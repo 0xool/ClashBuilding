@@ -31,7 +31,7 @@ TagManager:
   - UI
   - MainPlane
   - Unit
-  - 
+  - Prefabs
   - 
   - 
   - 
@@ -58,4 +58,7 @@ TagManager:
   m_SortingLayers:
   - name: Default
     uniqueID: 0
+    locked: 0
+  - name: MainPlane
+    uniqueID: 272532571
     locked: 0
