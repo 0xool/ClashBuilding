@@ -47,10 +47,9 @@ public class GameManager : NetworkSingletonBehaviour<GameManager>
 
     void Start()
     {    
-        /// MArk: This is for testing
-        //SetCurrentPlayerOne();
-
-
+        /// Mark: This is for testing
+        // SetCurrentPlayerOne();
+        
         if(IsServer){
 
         }
@@ -64,7 +63,7 @@ public class GameManager : NetworkSingletonBehaviour<GameManager>
             ConnectToServerRpc();
             connected = true;
         }
-        // if(!IsOwner) return;
+
         if(!gameStart) return;
 
         if(IsClient){
