@@ -4,7 +4,6 @@ using UnityEngine;
 
 public class ConstructionComponent : MonoBehaviour
 {
-    // Start is called before the first frame update
     public bool _inConstructZone = false;
     public bool inConstructZone{
         get{
@@ -36,6 +35,8 @@ public class ConstructionComponent : MonoBehaviour
             ChangeConstructionPlaneMaterial();
         }
     }
+    [SerializeField]
+    private bool buildingConstructed = false;
     private int collisionNumber = 0;
     private int refineryContact = 0;
     public Material CanConstructMaterial;
@@ -47,29 +48,26 @@ public class ConstructionComponent : MonoBehaviour
         buildingType = this.transform.parent.GetComponent<IConstructable>().GetBuildingType();
     }
 
-    // Update is called once per frame
-    void Update()
-    {
-    }
-
     private void ChangeConstructionPlaneMaterial() {
-        if(CanConstruct()){
-            this.gameObject.GetComponent<MeshRenderer>().material = CanConstructMaterial;
-        }else{
-            this.gameObject.GetComponent<MeshRenderer>().material = CanNotConstructMaterial;
-        }
+        this.gameObject.GetComponent<MeshRenderer>().material = CanConstruct() ? CanConstructMaterial : CanNotConstructMaterial;
     }
 
     public bool CanConstruct() {
-        return canConstructWithoutCollision && inConstructZone && inPlayerZone;
+        return canConstructWithoutCollision && inConstructZone && inPlayerZone && !buildingConstructed;
     }
 
     public void EnableConstructionMode() {
+        if (buildingConstructed){
+            DisableConstructionMode();
+            return;
+        }
+
         EnableMeshComponents();
     }
 
     public void DisableConstructionMode() {
         DisableMeshComponents();
+        buildingConstructed = true;
     }
 
     private void EnableMeshComponents() {
@@ -106,7 +104,7 @@ public class ConstructionComponent : MonoBehaviour
                 return;
             }
 
-            if(collider.CompareTag(GameManager.instance.GetEnemyTag()) || (collider.GetComponent<SpawnBehaviour>() != null) || collider.CompareTag(Utilities.ObstacleTag)){
+            if(collider.CompareTag(GameManager.instance.GetEnemyTagString()) || (collider.GetComponent<SpawnBehaviour>() != null) || collider.CompareTag(Utilities.ObstacleTag)){
                 collisionNumber--;
                 if(collisionNumber == 0) canConstructWithoutCollision = true;
             }
@@ -138,7 +136,7 @@ public class ConstructionComponent : MonoBehaviour
                 return;
             }
 
-            if(collider.CompareTag(GameManager.instance.GetEnemyTag()) || (collider.GetComponent<SpawnBehaviour>() != null) || collider.CompareTag(Utilities.ObstacleTag)){
+            if(collider.CompareTag(GameManager.instance.GetEnemyTagString()) || (collider.GetComponent<SpawnBehaviour>() != null) || collider.CompareTag(Utilities.ObstacleTag)){
                 collisionNumber++;
                 canConstructWithoutCollision = false;
             }

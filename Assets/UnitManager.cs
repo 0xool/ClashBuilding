@@ -34,9 +34,9 @@ public class UnitManager : ClashUnitBehaviour, IUnit
 
         if(IsClient){
             if(this.transform.position.x < middleSectionX)
-                this.tag = GameManager.instance.PlayerTwoTag;
+                this.tag = PlayerTag.PlayerTwo.ToString();
             else
-                this.tag = GameManager.instance.PlayerOneTag;
+                this.tag = PlayerTag.PlayerOne.ToString();
         }
     }
 
@@ -91,12 +91,12 @@ public class UnitManager : ClashUnitBehaviour, IUnit
     }
 
     void SetupMovmentDestination() {
-        if(this.gameObject.CompareTag(GameManager.instance.PlayerOneTag)){
+        if(this.gameObject.CompareTag(PlayerTag.PlayerOne.ToString())){
             if(this.transform.position.z > -7)
                 this.moveTransformPosition = GameObject.Find(UnitMovmentLocation.ZonePlayerTwoLeft).transform;
             else
                 this.moveTransformPosition = GameObject.Find(UnitMovmentLocation.ZonePlayerTwoRight).transform;
-        }else if (this.gameObject.CompareTag(GameManager.instance.PlayerTwoTag)) {
+        }else if (this.gameObject.CompareTag(PlayerTag.PlayerOne.ToString())) {
             if(this.transform.position.z > -7)
                 this.moveTransformPosition = GameObject.Find(UnitMovmentLocation.ZonePlayerOneLeft).transform;
             else
@@ -105,9 +105,9 @@ public class UnitManager : ClashUnitBehaviour, IUnit
     }
 
     void SetupMovmentDestinationHQ() {
-        if(this.gameObject.CompareTag(GameManager.instance.PlayerOneTag)){
+        if(this.gameObject.CompareTag(PlayerTag.PlayerOne.ToString())){
             this.moveTransformPosition = GameObject.Find(UnitMovmentLocation.ZonePlayerTwoHQ).transform;
-        }else if (this.gameObject.CompareTag(GameManager.instance.PlayerTwoTag)) {
+        }else if (this.gameObject.CompareTag(PlayerTag.PlayerTwo.ToString())) {
             this.moveTransformPosition = GameObject.Find(UnitMovmentLocation.ZonePlayerOneHQ).transform;
         }
     }

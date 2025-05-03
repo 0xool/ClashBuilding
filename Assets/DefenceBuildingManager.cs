@@ -97,7 +97,7 @@ public class DefenceBuildingManager : BuildingBehaviour, IUnit, ISelectable, IUp
         {
             if(GameManager.instance.UseResource(buildingModel.constructionCost)){
                 this.buildingMode = BuildingMode.ATTACKING;
-                this.tag = GameManager.instance.GetCurrentPlayerTag();
+                this.tag = GameManager.instance.GetCurrentPlayerTagString();
             }
             else
                 Destroy(this.gameObject);

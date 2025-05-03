@@ -1,5 +1,6 @@
 using UnityEngine;
 using Unity.Netcode;
+using Unity.VisualScripting;
 public abstract class BuildingBehaviour : ClashUnitBehaviour, IConstructable, ISellable {
         public Building buildingModel;
         protected BuildingMode _buildingMode = BuildingMode.CONSTRUCTION;
@@ -9,6 +10,7 @@ public abstract class BuildingBehaviour : ClashUnitBehaviour, IConstructable, IS
                 return _buildingMode;
             }set{
                 if(value != BuildingMode.CONSTRUCTION) constructionComponent.DisableConstructionMode();
+                
                 switch (value)
                 {
                     case BuildingMode.CONSTRUCTION:                    
@@ -35,21 +37,22 @@ public abstract class BuildingBehaviour : ClashUnitBehaviour, IConstructable, IS
         base.Awake();
         constructionComponent = this.GetComponentInChildren<ConstructionComponent>();
         constructionComponent.EnableConstructionMode();
+        
         SetBuildingType();
         this.buildingMode = BuildingMode.CONSTRUCTION;
         SetBuildingDirection();
     }
     private void SetBuildingDirection() {
         if (GameManager.instance == null) return;
-        if (GameManager.instance.IsPlayerTwo()) {
+        if (GameManager.instance.GetCurrentPlayerTag() == PlayerTag.PlayerOne){
             this.transform.rotation = Quaternion.Euler(0, 90, 0);
         }else{
             this.transform.rotation = Quaternion.Euler(0, -90, 0);
         }
     }
     public void Build() {  
-        if(!IsServer){
-            ServerBuild(GameManager.instance.GetCurrentPlayerTag());
+        if(!IsServer){            
+            ServerBuild(GameManager.instance.GetCurrentPlayerTagString());
             return;
         }
 
@@ -78,7 +81,7 @@ public abstract class BuildingBehaviour : ClashUnitBehaviour, IConstructable, IS
                         break;
                 }
                 
-                this.tag = GameManager.instance.GetCurrentPlayerTag();
+                this.tag = GameManager.instance.GetCurrentPlayerTagString();
             }
             else
                 Destroy(this.gameObject);
@@ -86,7 +89,8 @@ public abstract class BuildingBehaviour : ClashUnitBehaviour, IConstructable, IS
             Destroy(this.gameObject);
         }
     }
-    public void ServerBuild(string playerTag){
+    public void ServerBuild(string playerTagString){
+        PlayerTag playerTag = GameManager.GetPlayerTag(playerTagString);
         if(constructionComponent.CanConstruct() && (GameManager.instance.GetPlayerResourceWithTag(playerTag) > buildingModel.constructionCost))
         {
             if(GameManager.instance.UsePlayerResource(buildingModel.constructionCost, playerTag)){
@@ -110,7 +114,7 @@ public abstract class BuildingBehaviour : ClashUnitBehaviour, IConstructable, IS
                         break;
                 }
                 GameManager.instance.BuildConstructionServerRpc(TouchManager.instance.currentDragedPrefabName, this.transform.position, playerTag, buildingModel.constructionCost);
-                this.tag = playerTag;
+                this.tag = playerTagString;
                 Destroy(this.gameObject);
             }
             else
@@ -123,7 +127,7 @@ public abstract class BuildingBehaviour : ClashUnitBehaviour, IConstructable, IS
     public void Sell(){
         UnSelectBuilding();
         RunClientSellAnimation();
-        SellServerRpc(GameManager.instance.GetCurrentPlayerTag());
+        SellServerRpc(GameManager.instance.GetCurrentPlayerTagString());
     }
 
     public abstract void UnSelectBuilding();
@@ -155,8 +159,9 @@ public abstract class BuildingBehaviour : ClashUnitBehaviour, IConstructable, IS
     }
 
     [ServerRpc(RequireOwnership = false)]
-    public void SellServerRpc(string playerTag){
+    public void SellServerRpc(string playerTagString){
         if(IsServer) RunDestroyForServer();
+        PlayerTag playerTag = GameManager.GetPlayerTag(playerTagString);
         GameManager.instance.IncreaseResourceValueForPlayer( buildingModel.constructionCost / Utilities.SellRatio, playerTag);
     }
 }

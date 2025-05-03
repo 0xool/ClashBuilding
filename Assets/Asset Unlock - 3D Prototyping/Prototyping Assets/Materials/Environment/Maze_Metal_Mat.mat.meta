@@ -1,0 +1,16 @@
+fileFormatVersion: 2
+guid: c7ba1f44961f316469701cf3fdfc5388
+timeCreated: 1491488339
+licenseType: Store
+NativeFormatImporter:
+  mainObjectFileID: 2100000
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 183069
+  packageName: 'Asset Unlock: 3D Prototyping Pack'
+  packageVersion: 1.0
+  assetPath: Assets/Asset Unlock - 3D Prototyping/Prototyping Assets/Materials/Environment/Maze_Metal_Mat.mat
+  uploadId: 519948

@@ -16,24 +16,49 @@ public class SpawnBehaviour : BuildingBehaviour, IUnit, ISelectable
 
     private UnitUIManager inGameMenuPrefab;
     void Start() {
+        print(units.Length);
         unit = units[0];
     }
 
     public void Spawn(){
+        print("Spawned unit");
         if(IsClient) return;
+
+        print("Spawned unit on server");
+        
         if(unit == null){
-            this.buildingMode = BuildingMode.IDLE;
+            if (units.Length == 0) {
+                print("No unit selected to spawn");
+                this.buildingMode = BuildingMode.IDLE;
+                return;
+            }
+            
+            unit = units[0];
+        }
+        
+        if(buildingMode != BuildingMode.SPAWNING){
+            print("Building mode is not spawning, cannot spawn unit");
             return;
         }
-        if(buildingMode != BuildingMode.SPAWNING) return;
-        if(GameManager.instance.GetPlayerResource() < GetUnitCost()) return;
+        
+        if(GameManager.instance.GetPlayerResource() < GetUnitCost()) {
+            NotEnoughResources();            
+            return;
+        }
+        
         GameManager.instance.UseResource(buildingModel.spawnCost);
         var newUnit = Instantiate(unit, new Vector3(this.transform.position.x - offsetSpawn,this.transform.position.y - (this.transform.localScale.x/2 - unit.transform.localScale.x/2),this.transform.position.z), this.transform.rotation);
         newUnit.tag = this.gameObject.tag;  
+        
         var newUnitNetworkObj = newUnit.GetComponent<NetworkObject>();
         if(!newUnitNetworkObj.IsSpawned) newUnitNetworkObj.Spawn();
 
     }
+
+    private void NotEnoughResources() {
+        print("Not enough resources to spawn unit");
+    }
+    
     public int GetHP() {
         return GetHp();
     }
@@ -83,6 +108,7 @@ public class SpawnBehaviour : BuildingBehaviour, IUnit, ISelectable
     }
 
     public override void UnSelectBuilding() {
+        if (inGameMenuPrefab == null) return;
         inGameMenuPrefab.GetComponentInChildren<UnitUIManager>().RemoveUI();
     }
     public void AppendRemoveTargetDelegation( RemoveFromTarget removeFromTarget) {
@@ -92,9 +118,11 @@ public class SpawnBehaviour : BuildingBehaviour, IUnit, ISelectable
     {
         this.buildingType = BuildingType.SPAWNER;
     }
+    
     [ServerRpc(RequireOwnership = false)]
     public void SelectUnitServerRpc(string unitName)
     {
+        print("Selected unit: " + unitName);
         if(unitName == "")
             this.unit = null;
         else{

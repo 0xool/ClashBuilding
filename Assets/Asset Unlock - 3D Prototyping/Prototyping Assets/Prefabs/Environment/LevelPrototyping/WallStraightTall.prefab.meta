@@ -1,0 +1,16 @@
+fileFormatVersion: 2
+guid: 80d1367295ec94f4e8c7ee9b5f66079a
+timeCreated: 1495014475
+licenseType: Store
+NativeFormatImporter:
+  mainObjectFileID: 100100000
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 183069
+  packageName: 'Asset Unlock: 3D Prototyping Pack'
+  packageVersion: 1.0
+  assetPath: Assets/Asset Unlock - 3D Prototyping/Prototyping Assets/Prefabs/Environment/LevelPrototyping/WallStraightTall.prefab
+  uploadId: 519948

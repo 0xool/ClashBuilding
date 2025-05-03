@@ -1,0 +1,16 @@
+fileFormatVersion: 2
+guid: 87d7260b9c9de304ba395949900b1a11
+timeCreated: 1490871786
+licenseType: Store
+NativeFormatImporter:
+  mainObjectFileID: 2100000
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 183069
+  packageName: 'Asset Unlock: 3D Prototyping Pack'
+  packageVersion: 1.0
+  assetPath: Assets/Asset Unlock - 3D Prototyping/Prototyping Assets/Materials/Environment/Maze_Floor_Mat.mat
+  uploadId: 519948

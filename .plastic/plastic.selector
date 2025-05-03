@@ -1,0 +1,4 @@
+repository "ClashBuilding 2025-04-17_13-32-16/ClashBuilding@20066812328453@cloud"
+  path "/"
+    br "/main"
+    co "/main"

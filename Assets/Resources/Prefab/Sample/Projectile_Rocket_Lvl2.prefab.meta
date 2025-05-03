@@ -33,3 +33,10 @@ NativeFormatImporter:
   userData: 
   assetBundleName: 
   assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 112002
+  packageName: Sci-Fi Turret Constructor
+  packageVersion: 2.1
+  assetPath: Assets/Resources/Prefab/Sample/Projectile_Rocket_Lvl2.prefab
+  uploadId: 609071

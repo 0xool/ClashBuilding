@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.EventSystems;
 
 public class TouchManager : SingletonBehaviour<TouchManager>
 {
@@ -24,6 +25,8 @@ public class TouchManager : SingletonBehaviour<TouchManager>
     private bool isUiBlocked = false;
     private GameObject cameraPivot;
     public string currentDragedPrefabName = "";
+    [SerializeField]
+    private int zoomOutSpeed = 1;
     // Start is called before the first frame update
     protected override void Awake() {
         base.Awake();
@@ -44,26 +47,24 @@ public class TouchManager : SingletonBehaviour<TouchManager>
         cameraPivotDirectionHorizontal = (GameManager.instance.IsPlayerTwo()) ? new Vector3(-1, 0, -1) : new Vector3(-1, 0, 1);  
         cameraPivotDirectionHorizontal *= cameraMovmentSpeed; 
     }
-
     // Update is called once per frame
     void Update()
     {
+        ZoomOutFunctionality();
+        
         switch (touchState)
         {
             case TouchState.NORMAL:
                 if (Input.GetMouseButtonDown(0))
                 {
-                    if (Input.GetMouseButton(1))
-                    {
-                        // zoom out camera when scrolling
-                        Camera.main.orthographicSize += 1;                        
-                    }
 
                     ray = Camera.main.ScreenPointToRay(Input.mousePosition);
                     if (Physics.Raycast(ray, out hit, 1000.0f, selectableMask))
                     {
-                        if(!hit.transform.gameObject.CompareTag(GameManager.instance.GetCurrentPlayerTag())) break;
+                        if(!hit.transform.gameObject.CompareTag(GameManager.instance.GetCurrentPlayerTagString())) break;
+                        
                         this.selectedUnit = hit.transform.gameObject.GetComponent<ISelectable>();                        
+                        
                         if(selectedUnit != null){
                             this.touchState = TouchState.UNITSELECTED;
                             if (this.selectedUnit.SelectBuildingWithMenu()) this.unitMenuHandler.AnimateInMenu();
@@ -87,12 +88,13 @@ public class TouchManager : SingletonBehaviour<TouchManager>
                     touchPos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
                 }
 
-                if (Input.GetMouseButtonUp(0))
+                if (Input.GetMouseButtonDown(0) && !EventSystem.current.IsPointerOverGameObject())
                 {
                     if(isUiBlocked) {
                         isUiBlocked = !isUiBlocked;
                         return;
                     }
+
                     ray = Camera.main.ScreenPointToRay(Input.mousePosition);
                     if (Physics.Raycast(ray, out hit, 1000.0f, selectableMask))
                     {
@@ -114,10 +116,10 @@ public class TouchManager : SingletonBehaviour<TouchManager>
                     return;
                 }
 
-                if(Input.GetMouseButton(0)){
-                    direction = touchPos - Camera.main.ScreenToWorldPoint(Input.mousePosition);
-                    Camera.main.transform.position += direction;
-                }
+                // if(Input.GetMouseButton(0)){
+                //     direction = touchPos - Camera.main.ScreenToWorldPoint(Input.mousePosition);
+                //     Camera.main.transform.position += direction;
+                // }
 
                 break;
 
@@ -150,6 +152,14 @@ public class TouchManager : SingletonBehaviour<TouchManager>
 
                 break;
 
+        }
+    }
+
+    private void ZoomOutFunctionality(){
+        if (Input.GetMouseButton(1))
+        {
+            // zoom out camera when scrolling
+            Camera.main.orthographicSize += zoomOutSpeed * Input.GetAxis("Mouse Y") * Time.deltaTime;                        
         }
     }
 

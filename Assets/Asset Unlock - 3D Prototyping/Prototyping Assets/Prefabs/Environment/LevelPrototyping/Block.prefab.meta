@@ -1,0 +1,16 @@
+fileFormatVersion: 2
+guid: 207ade7b2f633eb468ca66c61473a72c
+timeCreated: 1493038878
+licenseType: Store
+NativeFormatImporter:
+  mainObjectFileID: 100100000
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 183069
+  packageName: 'Asset Unlock: 3D Prototyping Pack'
+  packageVersion: 1.0
+  assetPath: Assets/Asset Unlock - 3D Prototyping/Prototyping Assets/Prefabs/Environment/LevelPrototyping/Block.prefab
+  uploadId: 519948

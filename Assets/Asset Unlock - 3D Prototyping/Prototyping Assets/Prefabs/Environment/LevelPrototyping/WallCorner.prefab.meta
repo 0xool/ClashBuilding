@@ -1,0 +1,16 @@
+fileFormatVersion: 2
+guid: 737e54f7cf918c341b7c1b8e0b5c2d1d
+timeCreated: 1493038744
+licenseType: Store
+NativeFormatImporter:
+  mainObjectFileID: 100100000
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 183069
+  packageName: 'Asset Unlock: 3D Prototyping Pack'
+  packageVersion: 1.0
+  assetPath: Assets/Asset Unlock - 3D Prototyping/Prototyping Assets/Prefabs/Environment/LevelPrototyping/WallCorner.prefab
+  uploadId: 519948

@@ -1,0 +1,16 @@
+fileFormatVersion: 2
+guid: a41620e4eb6dce4479530e260f5e3ebc
+timeCreated: 1493036729
+licenseType: Store
+NativeFormatImporter:
+  mainObjectFileID: 7400000
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 183069
+  packageName: 'Asset Unlock: 3D Prototyping Pack'
+  packageVersion: 1.0
+  assetPath: Assets/Asset Unlock - 3D Prototyping/Prototyping Assets/Animation/Clips/Environment/Door_Opening.anim
+  uploadId: 519948

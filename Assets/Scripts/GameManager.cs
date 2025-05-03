@@ -4,20 +4,26 @@ using UnityEngine;
 using Unity.Netcode;
 using GameModel;
 using TMPro;
+using System;
+
+public enum PlayerTag
+{
+    PlayerOne,
+    PlayerTwo
+}
 
 public class GameManager : NetworkSingletonBehaviour<GameManager>
 {
-    public string PlayerOneTag = "Player1";
-    public string PlayerTwoTag = "Player2";
     private Player playerOne;
     private Player playerTwo;
     private int playersConnected = 0;
     private bool gameStart = false;
-    private string _currentPlayer;
-    private string currentPlayer {
-        get{
+    private PlayerTag _currentPlayer;
+    private PlayerTag currentPlayer {
+        get {
             return _currentPlayer;
-        }set{
+        }
+        set {
             _currentPlayer = value;
         }
     }
@@ -27,7 +33,7 @@ public class GameManager : NetworkSingletonBehaviour<GameManager>
     private bool gameIsOver = false;
     private NetworkVariable<int> playerOneResource = new NetworkVariable<int>(0);
     private NetworkVariable<int> playerTwoResource = new NetworkVariable<int>(0);
-    private int connectedPlayers = 0; 
+    private int connectedPlayers = 0; 
     private bool connected = false;
     private Energy playerOneEnergy;
     private Energy playerTwoEnergy;
@@ -101,10 +107,11 @@ public class GameManager : NetworkSingletonBehaviour<GameManager>
     }
 
     public void GameOver(string player){
+        PlayerTag playerTag = GetPlayerTag(player);
         if(gameIsOver) return;
         GameObject.Find("GameOverPlayerName").GetComponent<TMP_Text>().enabled = true;
         GameObject.Find("GameOverText").GetComponent<TMP_Text>().enabled = true ;
-        GameObject.Find("GameOverPlayerName").GetComponent<TMP_Text>().text = (player == PlayerOneTag) ? "Player One Won" : "Player Two Won";
+        GameObject.Find("GameOverPlayerName").GetComponent<TMP_Text>().text = (playerTag == PlayerTag.PlayerOne) ? "Player One Won" : "Player Two Won";
     }
 
 
@@ -112,9 +119,15 @@ public class GameManager : NetworkSingletonBehaviour<GameManager>
         return GetCurrentPlayer().resourceValue;
     }
 
-    public int GetPlayerResourceWithTag(string tag) {
+    public int GetPlayerResourceWithTag(PlayerTag tag) {
         return GetPlayerWithTag(tag).resourceValue;
     }
+
+    public int GetPlayerResourceWithTagString(string tag) {
+        PlayerTag playerTag = (PlayerTag)Enum.Parse(typeof(PlayerTag), tag);
+        return GetPlayerWithTag(playerTag).resourceValue;
+    }
+
     // TODO: Remove all toghether player1 and player2.
     // Enemy Can't call resource network will handel it.
     public bool UseResource(int amount) {
@@ -126,7 +139,7 @@ public class GameManager : NetworkSingletonBehaviour<GameManager>
         return true;
     }
 
-    public bool UsePlayerResource(int amount, string tag) {
+    public bool UsePlayerResource(int amount, PlayerTag tag) {
         var player = GetPlayerWithTag(tag);
         return (player.resourceValue > amount);
     }
@@ -135,12 +148,12 @@ public class GameManager : NetworkSingletonBehaviour<GameManager>
         this.GetCurrentPlayer().IncreaseResourcePower(resource);
     }
 
-    public void IncreaseResourceIncomeForPlayer(int resource, string playerTag) {
+    public void IncreaseResourceIncomeForPlayer(int resource, PlayerTag playerTag) {
         this.GetPlayerWithTag(playerTag).IncreaseResourcePower(resource);
     }
     
 
-    public void IncreaseResourceValueForPlayer(int resource, string playerTag) {
+    public void IncreaseResourceValueForPlayer(int resource, PlayerTag playerTag) {
         this.GetPlayerWithTag(playerTag).IncreaseResourceValue(resource);
     }
 
@@ -153,46 +166,91 @@ public class GameManager : NetworkSingletonBehaviour<GameManager>
     }
 
     private Player GetCurrentPlayer() {
-        return (currentPlayer == PlayerOneTag) ? playerOne : playerTwo;
+        return (currentPlayer == PlayerTag.PlayerOne) ? playerOne : playerTwo;
     }
 
-    private Player GetPlayerWithTag(string tag) {
-        return (tag == PlayerOneTag) ? playerOne : playerTwo;
+    private Player GetPlayerWithTag(PlayerTag tag) {
+        return (tag == PlayerTag.PlayerOne) ? playerOne : playerTwo;
     }
 
     public void SetCurrentPlayerOne() {
-        currentPlayer = PlayerOneTag;
+        currentPlayer = PlayerTag.PlayerOne;
         this.transform.parent.transform.eulerAngles = new Vector3(30, -135, 0);
         TouchManager.instance.SetUpConstructionMovmentDirection();
     }
 
     public void SetCurrentPlayerTwo() {
-        currentPlayer = PlayerTwoTag;
+        currentPlayer = PlayerTag.PlayerTwo;
         TouchManager.instance.SetUpConstructionMovmentDirection();
     }
 
     public bool IsPlayerOne() {
-        return currentPlayer == PlayerOneTag;
+        return currentPlayer == PlayerTag.PlayerOne;
     }
 
     public bool IsPlayerTwo() {
-        return currentPlayer == PlayerTwoTag;
+        return currentPlayer == PlayerTag.PlayerTwo;
     }
 
-    public string GetCurrentPlayerTag(){
-        return (currentPlayer == PlayerOneTag) ? PlayerOneTag : PlayerTwoTag;
+    public string GetCurrentPlayerTagString(){
+        return GetPlayerTagString(this.currentPlayer);
     }
 
-    public string GetEnemyTag() {
-        return (currentPlayer == PlayerOneTag) ? PlayerTwoTag : PlayerOneTag;
+    public PlayerTag GetCurrentPlayerTag(){
+        return this.currentPlayer;
+    }
+
+    public static string GetPlayerTagString(PlayerTag tag){
+        switch (tag) {
+            case PlayerTag.PlayerOne:
+                return "PlayerOne";
+            case PlayerTag.PlayerTwo:
+                return "PlayerTwo";
+            default:
+                throw new ArgumentOutOfRangeException();
+        }
+    }
+
+    public static PlayerTag GetPlayerTag(string tag){
+        switch (tag) {
+            case "PlayerOne":
+                return PlayerTag.PlayerOne;
+            case "PlayerTwo":
+                return PlayerTag.PlayerTwo;
+            default:
+                throw new ArgumentOutOfRangeException();
+        }
+    }
+
+    public PlayerTag GetEnemyTag() {
+        return (currentPlayer == PlayerTag.PlayerOne) ? PlayerTag.PlayerTwo : PlayerTag.PlayerOne;
+    }
+
+    public string GetEnemyTagString() {
+        return GetPlayerTagString(GetEnemyTag());
+    }
+
+    public PlayerTag GetEnemyTag(PlayerTag tag) {
+        return (tag == PlayerTag.PlayerOne) ? PlayerTag.PlayerTwo : PlayerTag.PlayerOne;
     }
 
     public string GetEnemyTag(string tag) {
-        return (tag == PlayerOneTag) ? PlayerTwoTag : PlayerOneTag;
+        if (tag == PlayerTag.PlayerOne.ToString())
+        {
+            return PlayerTag.PlayerTwo.ToString();
+        }
+        else if (tag == PlayerTag.PlayerTwo.ToString())
+        {
+            return PlayerTag.PlayerOne.ToString();
+        }
+        else
+        {
+            throw new ArgumentOutOfRangeException();
+        }
     }
 
     [ServerRpc(RequireOwnership = false)]
-    public void BuildConstructionServerRpc(string constructionName, Vector3 constructionPos, string playerTag, int amount, ServerRpcParams serverRpcParams = default) 
+    public void BuildConstructionServerRpc(string constructionName, Vector3 constructionPos, PlayerTag playerTag, int amount, ServerRpcParams serverRpcParams = default) 
     {
         //if(!gameStart) return;
         var clientId = serverRpcParams.Receive.SenderClientId;
@@ -209,13 +267,13 @@ public class GameManager : NetworkSingletonBehaviour<GameManager>
             GameObject construction = Instantiate(Utilities.GetConstructionGameObject(constructionName), constructionPos, Quaternion.identity);
             var constructionNetworkObject = construction.GetComponent<NetworkObject>();
             if(!constructionNetworkObject.IsSpawned) constructionNetworkObject.Spawn();
-            construction.GetComponent<IConstructable>().SetupConstructionClientRpc(playerTag);
-            construction.tag = playerTag;
+            construction.GetComponent<IConstructable>().SetupConstructionClientRpc(playerTag.ToString());
+            construction.tag = playerTag.ToString();
         }
     }
 
     [ServerRpc(RequireOwnership = false)]
-    public void SpawnUnitServerRpc(string unitName, Vector3 spawnPos, string playerTag, ServerRpcParams serverRpcParams = default) 
+    public void SpawnUnitServerRpc(string unitName, Vector3 spawnPos, PlayerTag playerTag, ServerRpcParams serverRpcParams = default) 
     {
         if(!gameStart) return;
         var clientId = serverRpcParams.Receive.SenderClientId;
@@ -239,10 +297,10 @@ public class GameManager : NetworkSingletonBehaviour<GameManager>
 
         if(connectedPlayers == 1){
             playerOne.cliendID = clientID;
-            SetupClientRpc(PlayerOneTag, playerOne.cliendID, clientRpcParams);
+            SetupClientRpc(PlayerTag.PlayerOne, playerOne.cliendID, clientRpcParams);
         }else if (connectedPlayers == 2){
             playerTwo.cliendID = clientID;
-            SetupClientRpc(PlayerTwoTag, playerTwo.cliendID, clientRpcParams);
+            SetupClientRpc(PlayerTag.PlayerTwo, playerTwo.cliendID, clientRpcParams);
             gameStart = true;
             
             GameObject.Find("LoadingImage").SetActive(false);
@@ -258,10 +316,10 @@ public class GameManager : NetworkSingletonBehaviour<GameManager>
     }
 
     [ClientRpc]
-    public void SetupClientRpc(string playerTag, ulong[] clientID, ClientRpcParams clientRpcParams = default) {
-        if(playerTag == PlayerTwoTag){
+    public void SetupClientRpc(PlayerTag playerTag, ulong[] clientID, ClientRpcParams clientRpcParams = default) {
+        if(playerTag == PlayerTag.PlayerTwo){
             SetCurrentPlayerTwo();
-        }else if (playerTag == PlayerOneTag){            
+        }else if (playerTag == PlayerTag.PlayerOne){            
             SetCurrentPlayerOne();
         }
         connected = true;
@@ -274,7 +332,7 @@ public class GameManager : NetworkSingletonBehaviour<GameManager>
     }
 
     [ServerRpc(RequireOwnership = false)]
-    public void UseAbilityServerRpc(string abilityName, Vector3 abilityPos, string playerTag, ServerRpcParams serverRpcParams = default) {
+    public void UseAbilityServerRpc(string abilityName, Vector3 abilityPos, PlayerTag playerTag, ServerRpcParams serverRpcParams = default) {
         if(!gameStart) return;
         var clientId = serverRpcParams.Receive.SenderClientId;
         if (NetworkManager.ConnectedClients.ContainsKey(clientId))
@@ -284,8 +342,8 @@ public class GameManager : NetworkSingletonBehaviour<GameManager>
             GameObject ability = Instantiate(Utilities.GetAbilityGameObject(abilityName), abilityPos, Quaternion.identity);
             var abilityNetworkObject = ability.GetComponent<NetworkObject>();
             if(!abilityNetworkObject.IsSpawned) abilityNetworkObject.Spawn();
-            ability.GetComponent<IAbility>().Use(playerTag);
-            ability.tag = playerTag;
+            ability.GetComponent<IAbility>().Use(playerTag.ToString());
+            ability.tag = playerTag.ToString();
         }
     }
 
